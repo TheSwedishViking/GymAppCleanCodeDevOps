@@ -20,5 +20,11 @@
 
             SemanticScreenReader.Announce(CounterBtn.Text);
         }
+
+        private void onUserPageBtnClicked(object? sender, EventArgs e)
+        {
+            userPageBtn.Text = "clickedToTravel";
+
+        }
     }
 }
