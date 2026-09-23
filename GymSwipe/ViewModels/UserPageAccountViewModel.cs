@@ -30,7 +30,6 @@ namespace GymSwipe.ViewModels
             {
                 _buttonText = value;
                 OnPropertyChanged(nameof(ButtonText));
-                _ = GreetUser();
             }
         }
         public ICommand GreetUserCommand { get; }
