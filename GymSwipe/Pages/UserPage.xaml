@@ -11,6 +11,23 @@
         <Button
             Text="{Binding ButtonText}"
             Command="{Binding GreetUserCommand}"
+            Clicked="OnClickGetUser"
             />
+        <Label
+            Text ="{Binding LblText.Name}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Label
+            Text ="{Binding LblText.Age, StringFormat='Years old: {0}'}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Label
+            Text ="{Binding LblText.Height , StringFormat='cm: {0}'}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Label
+            Text ="{Binding LblText.Athlete, StringFormat='Is athlete: {0}'}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
     </VerticalStackLayout>
 </ContentPage>
