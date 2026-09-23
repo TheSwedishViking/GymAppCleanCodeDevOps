@@ -21,10 +21,10 @@
             SemanticScreenReader.Announce(CounterBtn.Text);
         }
 
-        private void onUserPageBtnClicked(object? sender, EventArgs e)
+        private async void onUserPageBtnClicked(object? sender, EventArgs e)
         {
             userPageBtn.Text = "clickedToTravel";
-
+            await Shell.Current.GoToAsync(nameof(Pages.UserPage));
         }
     }
 }
