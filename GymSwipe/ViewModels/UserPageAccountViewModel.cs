@@ -1,8 +1,6 @@
 ﻿using GymSwipe.Domain.Domain;
-using System;
-using System.Collections.Generic;
+using GymSwipe.ExampleData;
 using System.ComponentModel;
-using System.Text;
 using System.Windows.Input;
 
 namespace GymSwipe.ViewModels
@@ -10,7 +8,7 @@ namespace GymSwipe.ViewModels
     public class UserPageAccountViewModel : INotifyPropertyChanged
     {
         private GymUser _gymUser;
-        public GymUser GymUser 
+        public GymUser GymUser
         {
             get { return _gymUser; }
             set
@@ -19,10 +17,21 @@ namespace GymSwipe.ViewModels
                 OnPropertyChanged(nameof(GymUser));
                 _ = GreetUser();
             }
-        
+
+        }
+        private UserClass _Lbllabel;
+        public UserClass LblText
+        {
+            get { return _Lbllabel; }
+            set
+            {
+                _Lbllabel = value;
+                OnPropertyChanged(nameof(LblText));
+            }
         }
 
-        private string _buttonText;
+
+        private string _buttonText = "Login";
         public string ButtonText
         {
             get { return _buttonText; }
@@ -38,8 +47,9 @@ namespace GymSwipe.ViewModels
 
         public UserPageAccountViewModel()
         {
-            GreetUserCommand = new Command(async () => { 
-                await GreetUser(); 
+            GreetUserCommand = new Command(async () =>
+            {
+                await GreetUser();
             });
         }
 
@@ -49,9 +59,10 @@ namespace GymSwipe.ViewModels
         }
         public async Task GreetUser()
         {
-            Console.WriteLine("Hello!");
-            ButtonText = "Heelo user! FUCCAK";
 
+            var user = userLoginTest.ExampleData();
+            ButtonText = "Logout";
+            LblText = user;
         }
     }
 }
