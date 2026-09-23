@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../GymSwipe.Domain/GymSwipe.Domain.csproj" Id="8eab47d1-1837-4df8-8302-2c6f6528d7de" />
   <Project Path="GymSwipe.csproj" />
 </Solution>

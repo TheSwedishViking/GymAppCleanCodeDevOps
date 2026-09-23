@@ -8,5 +8,9 @@
             Text="UsersPage!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Button
+            Text="{Binding ButtonText}"
+            BindingContext="{Binding GreetUserCommand}"
+            />
     </VerticalStackLayout>
 </ContentPage>

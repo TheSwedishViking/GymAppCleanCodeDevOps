@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using GymSwipe.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace GymSwipe
 {
@@ -15,8 +16,10 @@ namespace GymSwipe
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+
 #if DEBUG
     		builder.Logging.AddDebug();
+            builder.Services.AddTransient<UserPageAccountViewModel>();
 #endif
 
             return builder.Build();
