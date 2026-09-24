@@ -5,7 +5,8 @@
              Title="UserPage">
     <VerticalStackLayout>
         <Label 
-            Text="UsersPage!"
+            Text="User Registration Page!"
+            FontSize="Large"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <Button
