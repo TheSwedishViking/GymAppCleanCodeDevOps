@@ -29,6 +29,7 @@ namespace GymSwipe.ViewModels
         public async Task TryRegisterNewUser()
         {
             Console.WriteLine(NewUser);
+            NewUser.SetFriendCode();
         }
 
         public void OnPropertyChanged(string prop)
