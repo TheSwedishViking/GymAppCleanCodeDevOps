@@ -14,8 +14,8 @@ namespace GymSwipe.Domain.Domain
         public int HeightCm { get; set; }
         public double WeightKg { get; set; }
         public bool? Gender { get; set; }
-        public virtual ICollection<GymPlaylist> UserPlaylists { get; set; } = new List<GymPlaylist>();
-        public virtual ICollection<ExerciseRecords> UserRecords { get; set; } = new List<ExerciseRecords>();
+        public virtual ICollection<GymPlaylist>? UserPlaylists { get; set; } = new List<GymPlaylist>();
+        public virtual ICollection<ExerciseRecords>? UserRecords { get; set; } = new List<ExerciseRecords>();
         public string FriendCode { get; set; } = "";
         //NNNN-NNNN-NNNN-NNNN
         //1337-6969-4201-6767

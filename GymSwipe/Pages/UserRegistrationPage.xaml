@@ -3,14 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymSwipe.Pages.UserRegistrationPage"
              Title="UserRegistrationPage">
-    <Grid Margin="50,25,20,20" RowSpacing="50">
+    <Grid Margin="50,25,20,20" RowSpacing="25">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -21,7 +22,11 @@
             Text="Register as new user... 🫠"
             Grid.Row="0"
             Grid.Column="0"
+            FontSize="Large"
+             VerticalOptions="Center" 
+ HorizontalOptions="Center"
             />
+        <!--Name-->
         <Label
             Text="Firstname" 
             VerticalOptions="Center" 
@@ -31,6 +36,7 @@
             />
         <Entry
             x:Name="FirstNameEntry"
+            Text="{Binding NewUser.Firstname}"
              Grid.Row="1"
             Grid.Column="1"/>
         <Label
@@ -42,8 +48,59 @@
             />
         <Entry
             x:Name="SurNameEntry"
+             Text="{Binding NewUser.Surname}"
              Grid.Row="2"
- Grid.Column="1"/>
+            Grid.Column="1"/>
+        <!--Body-->
+        <Label
+            
+    Text="Height (cm)" 
+    VerticalOptions="Center" 
+    HorizontalOptions="Center"
+     Grid.Row="3"
+    Grid.Column="0"
+    />
+        <Entry
+              Keyboard="Numeric"
+            x:DataType="x:Int16"
+    x:Name="HeightCmEntry"
+                         Text="{Binding NewUser.HeightCm}"
+
+     Grid.Row="3"
+    Grid.Column="1"/>
+        <Label
+Text="Weight (kg)" 
+VerticalOptions="Center" 
+HorizontalOptions="Center"
+ Grid.Row="4"
+Grid.Column="0"
+/>
+        <Entry
+            Keyboard="Numeric"
+        x:DataType="x:Double"
+x:Name="WeightKgEntry"
+                                     Text="{Binding NewUser.WeightKg}"
+
+ Grid.Row="4"
+Grid.Column="1"/>
+        <Label
+Text="Gender (for caloric calculation)" 
+VerticalOptions="Center" 
+HorizontalOptions="Center"
+ Grid.Row="5"
+Grid.Column="0"
+/>
+        <HorizontalStackLayout Grid.Row="5" Grid.Column="1" RadioButtonGroup.GroupName="Gender"
+                       RadioButtonGroup.SelectedValue="{Binding NewUser.Gender}">
+            <RadioButton Content="Male"         Margin="25,0" Value="{x:Boolean True}" />
+            <RadioButton Content="Female"       Margin="25,0" Value="{x:Boolean False}" />
+        </HorizontalStackLayout>
+        <Button
+            Command="{Binding RegisterUserCommand}"
+            Text="Register!"
+            Grid.Row="6"
+            Grid.Column="1"/>
+
     </Grid>
 
 </ContentPage>

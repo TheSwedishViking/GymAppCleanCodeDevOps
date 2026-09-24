@@ -20,6 +20,8 @@ namespace GymSwipe
 #if DEBUG
     		builder.Logging.AddDebug();
             builder.Services.AddTransient<UserPageAccountViewModel>();
+            builder.Services.AddTransient<UserRegisterViewModel>();
+
 #endif
 
             return builder.Build();
