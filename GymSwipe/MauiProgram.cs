@@ -1,4 +1,7 @@
-﻿using GymSwipe.ViewModels;
+﻿using GymSwipe.Application.Facades;
+using GymSwipe.Application.Interfaces;
+using GymSwipe.Application.Services;
+using GymSwipe.ViewModels;
 using Microsoft.Extensions.Logging;
 
 namespace GymSwipe
@@ -19,6 +22,23 @@ namespace GymSwipe
 
 #if DEBUG
     		builder.Logging.AddDebug();
+
+            //*******SERVICES*******
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IExerciseService, ExerciseService>();
+            builder.Services.AddScoped<IPlaylistService, PlaylistService>();
+
+            //*******REPOSITORIES*******
+            builder.Services.AddScoped<IUserRepository>();
+            builder.Services.AddScoped<IExerciseRepository>();
+            builder.Services.AddScoped<IPlaylistRepository>();
+
+            //*******FACADES*******
+            builder.Services.AddScoped<IUserFacade, UserActionsFacade>();
+            builder.Services.AddScoped<IExerciseFacade>();
+            builder.Services.AddScoped<IPlaylistFacade>();  
+
+            //*******VIEW MODELS*******
             builder.Services.AddTransient<UserPageAccountViewModel>();
             builder.Services.AddTransient<UserRegisterViewModel>();
 

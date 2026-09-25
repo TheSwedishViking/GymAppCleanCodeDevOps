@@ -11,6 +11,8 @@ namespace GymSwipe.Domain.Domain
         public int Id { get; set; }
         public string Firstname { get; set; } = "";
         public string Surname { get; set; } = "";
+        public string Email { get; set; } = "";
+        public string PasswordHash { get; set; } = "";
         public int HeightCm { get; set; }
         public double WeightKg { get; set; }
         public bool? Gender { get; set; }
