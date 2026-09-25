@@ -8,7 +8,7 @@ namespace GymSwipe.Domain.Domain
     {
         public int Id { get; set; }
         public int TargetAreaId { get; set; }
-        public virtual ExerciseTargetArea TargetArea { get; set; } = null!;
+        public ICollection< ExerciseTargetArea> TargetAreas { get; set; } = new List<ExerciseTargetArea>();
         public string Name { get; set; } = "";
         public string VideoSourceLink { get; set; } = "";
     }
