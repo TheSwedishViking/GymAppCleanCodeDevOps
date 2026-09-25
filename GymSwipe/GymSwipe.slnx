@@ -1,4 +1,7 @@
 <Solution>
+  <Project Path="../GymSwipe.Application/GymSwipe.ApplicationLayer.csproj" Id="87d90ef6-c541-47d3-8af7-152d79dce07b" />
   <Project Path="../GymSwipe.Domain/GymSwipe.Domain.csproj" Id="8eab47d1-1837-4df8-8302-2c6f6528d7de" />
+  <Project Path="../GymSwipe.Infrastructure/GymSwipe.Infrastructure.csproj" Id="43d6ff33-c6b0-4eb2-84f6-621af5ac3425" />
+  <Project Path="../GymSwipe.UserTests/GymSwipe.UserTests.csproj" Id="69b42952-6fd2-4b91-9e00-cc62b1234d6d" />
   <Project Path="GymSwipe.csproj" />
 </Solution>

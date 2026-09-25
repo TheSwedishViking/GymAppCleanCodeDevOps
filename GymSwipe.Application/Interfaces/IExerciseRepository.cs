@@ -1,9 +1,9 @@
-﻿using GymSwipe.Application.DTOs;
+﻿using GymSwipe.ApplicationLayer.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GymSwipe.Application.Interfaces
+namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface IExerciseRepository
     {

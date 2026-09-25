@@ -1,5 +1,5 @@
-﻿using GymSwipe.Application.DTOs;
-using GymSwipe.Application.Interfaces;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;

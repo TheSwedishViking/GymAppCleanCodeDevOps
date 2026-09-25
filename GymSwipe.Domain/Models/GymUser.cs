@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace GymSwipe.Domain.Domain
+namespace GymSwipe.Domain.Models
 {
     public class GymUser
     {

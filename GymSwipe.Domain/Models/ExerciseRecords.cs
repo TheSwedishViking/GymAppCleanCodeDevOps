@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GymSwipe.Domain.Domain
+namespace GymSwipe.Domain.Models
 {
     //Users recorded exercises, i e Johns Leg Press on the 23 sep
     public class ExerciseRecords

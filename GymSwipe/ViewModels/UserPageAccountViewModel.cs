@@ -1,4 +1,4 @@
-﻿using GymSwipe.Domain.Domain;
+﻿using GymSwipe.Domain.Models;
 using GymSwipe.ExampleData;
 using System.ComponentModel;
 using System.Windows.Input;

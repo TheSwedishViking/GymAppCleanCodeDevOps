@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GymSwipe.Application.DTOs.RequestDTOs
+namespace GymSwipe.ApplicationLayer.DTOs.RequestDTOs
 {
     public class LoginRequestDTO
     {

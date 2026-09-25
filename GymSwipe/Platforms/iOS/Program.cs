@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace GymSwipe
+namespace GymSwipe.Platforms.iOS
 {
     public class Program
     {

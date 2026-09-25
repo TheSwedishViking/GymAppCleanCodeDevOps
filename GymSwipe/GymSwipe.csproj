@@ -71,7 +71,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\GymSwipe.Application\GymSwipe.ApplicationLayer.csproj" />
 	  <ProjectReference Include="..\GymSwipe.Domain\GymSwipe.Domain.csproj" />
+	  <ProjectReference Include="..\GymSwipe.Infrastructure\GymSwipe.Infrastructure.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

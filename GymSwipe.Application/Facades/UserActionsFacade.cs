@@ -1,11 +1,11 @@
-﻿using GymSwipe.Application.DTOs;
-using GymSwipe.Application.DTOs.RequestDTOs;
-using GymSwipe.Application.Interfaces;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GymSwipe.Application.Facades
+namespace GymSwipe.ApplicationLayer.Facades
 {
     public class UserActionsFacade : IUserFacade
     {

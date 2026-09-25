@@ -1,10 +1,11 @@
-﻿using GymSwipe.Application.DTOs;
-using GymSwipe.Application.Interfaces;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GymSwipe.Application.Services
+namespace GymSwipe.ApplicationLayer.Services
 {
     public class UserService : IUserService
     {
@@ -33,6 +34,12 @@ namespace GymSwipe.Application.Services
         public Task<GymUserDTO> GetUserById(string id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<GymUserDTO>? TryAndCreateUserThroughRequestModelAsync(RequestCreateGymUserDTO request)
+        {
+            return null;
+            return new GymUserDTO();
         }
     }
 }

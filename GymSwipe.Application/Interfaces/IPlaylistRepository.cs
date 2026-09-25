@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GymSwipe.Application.Interfaces
+namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface IPlaylistRepository
     {

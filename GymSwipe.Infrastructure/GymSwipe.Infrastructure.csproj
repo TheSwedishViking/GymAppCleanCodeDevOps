@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GymSwipe.Application\GymSwipe.Application.csproj" />
+    <ProjectReference Include="..\GymSwipe.Application\GymSwipe.ApplicationLayer.csproj" />
     <ProjectReference Include="..\GymSwipe.Domain\GymSwipe.Domain.csproj" />
   </ItemGroup>
 

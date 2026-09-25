@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GymSwipe.Domain.Domain
+namespace GymSwipe.Domain.Models
 {
     public class GymPlaylist
     {

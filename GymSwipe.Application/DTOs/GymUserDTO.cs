@@ -1,10 +1,9 @@
-﻿using GymSwipe.Domain.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace GymSwipe.Application.DTOs
+namespace GymSwipe.ApplicationLayer.DTOs
 {
     public class GymUserDTO
     {

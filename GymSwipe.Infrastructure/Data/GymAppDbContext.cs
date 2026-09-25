@@ -1,4 +1,4 @@
-﻿using GymSwipe.Domain.Domain;
+﻿using GymSwipe.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
