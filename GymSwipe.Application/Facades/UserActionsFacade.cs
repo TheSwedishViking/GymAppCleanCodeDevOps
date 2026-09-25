@@ -19,8 +19,22 @@ namespace GymSwipe.Application.Facades
         public async Task<GymUserDTO?> CreateGymUser(RequestCreateGymUserDTO request)
         {
             var existing = await _userService.GetUserByEmail(request.Email);
-            if (existing is not null) return null;
-            throw new NotImplementedException();
+            if (existing is not null) return null; //Return other error code if its over an API, or inform user of email already used
+
+            var dto = new GymUserDTO
+            {
+                Id = Random.Shared.Next(1, 51231), //Replace later
+                Firstname = request.Firstname,
+                Surname = request.Surname,
+                Email = request.Email,
+                Gender = request.Gender,
+                HeightCm = request.HeightCm,
+                WeightKg = request.WeightKg,
+                FriendCode = await _userService.GenerateFriendCode()
+            };
+
+            await _userRepository.AddUser(dto);
+            return dto;
         }
 
         public Task<GymUserDTO> GetGymUserDTOAsync(int id)

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GymSwipe.Application.Services
 {
-    public class PlaylistService:IPlaylistService
+    public class PlaylistService : IPlaylistService
     {
     }
 }

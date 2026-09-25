@@ -1,6 +1,7 @@
 ﻿using GymSwipe.Application.Facades;
 using GymSwipe.Application.Interfaces;
 using GymSwipe.Application.Services;
+using GymSwipe.Infrastructure.Repos;
 using GymSwipe.ViewModels;
 using Microsoft.Extensions.Logging;
 
@@ -29,7 +30,7 @@ namespace GymSwipe
             builder.Services.AddScoped<IPlaylistService, PlaylistService>();
 
             //*******REPOSITORIES*******
-            builder.Services.AddScoped<IUserRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IExerciseRepository>();
             builder.Services.AddScoped<IPlaylistRepository>();
 

@@ -15,6 +15,6 @@ namespace GymSwipe.Application.DTOs
         public int HeightCm { get; set; }
         public double WeightKg { get; set; }
         public bool? Gender { get; set; }
-        public string FriendCode { get; private set; } = "";
+        public string FriendCode { get;  set; } = "";
     }
 }
