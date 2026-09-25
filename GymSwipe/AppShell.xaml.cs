@@ -7,6 +7,8 @@
             InitializeComponent();
 
             Routing.RegisterRoute(nameof(Pages.UserPage), typeof(Pages.UserPage));
+            Routing.RegisterRoute(nameof(Pages.UserRegistrationPage), typeof(Pages.UserRegistrationPage));
+
         }
     }
 }

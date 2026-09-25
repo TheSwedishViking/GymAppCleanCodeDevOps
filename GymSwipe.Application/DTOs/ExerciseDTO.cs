@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GymSwipe.Domain.Domain
+namespace GymSwipe.ApplicationLayer.DTOs
 {
-    public class Exercise
+    public class ExerciseDTO
     {
         public int Id { get; set; }
         public int TargetAreaId { get; set; }
-        public virtual ExerciseTargetArea TargetArea { get; set; } = null!;
+        public string TargetAreaName { get; set; }
         public string Name { get; set; } = "";
         public string VideoSourceLink { get; set; } = "";
     }

@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace GymSwipe
+namespace GymSwipe.Platforms.MacCatalyst
 {
     public class Program
     {
