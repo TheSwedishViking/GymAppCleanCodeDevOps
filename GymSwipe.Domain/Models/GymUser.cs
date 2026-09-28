@@ -35,7 +35,8 @@ namespace GymSwipe.Domain.Models
                     friendCode += "-";
                 }
             }
-
+            CurrentUser.FriendCode = friendCode;
+            FriendCode = friendCode;
             Console.WriteLine(friendCode);
         }
         //NNNN-NNNN-NNNN-NNNN
