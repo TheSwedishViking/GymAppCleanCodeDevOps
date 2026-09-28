@@ -15,20 +15,20 @@
             Clicked="OnClickGetUser"
             />
         <Label
-            Text ="{Binding LblText.Name}"
+            Text ="{Binding GymUser.Name}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <Label
-            Text ="{Binding LblText.Age, StringFormat='Years old: {0}'}"
+            Text ="{Binding GymUser.Age, StringFormat='Years old: {0}'}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <Label
-            Text ="{Binding LblText.Height , StringFormat='cm: {0}'}"
+            Text ="{Binding GymUser.Height , StringFormat='cm: {0}'}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Label
+        <!--<Label
             Text ="{Binding LblText.Athlete, StringFormat='Is athlete: {0}'}"
             VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            HorizontalOptions="Center" />-->
     </VerticalStackLayout>
 </ContentPage>

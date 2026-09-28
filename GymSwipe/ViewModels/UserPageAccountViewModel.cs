@@ -19,16 +19,16 @@ namespace GymSwipe.ViewModels
             }
 
         }
-        private UserClass _Lbllabel;
-        public UserClass LblText
-        {
-            get { return _Lbllabel; }
-            set
-            {
-                _Lbllabel = value;
-                OnPropertyChanged(nameof(LblText));
-            }
-        }
+        //private UserClass _Lbllabel;
+        //public UserClass LblText
+        //{
+        //    get { return _Lbllabel; }
+        //    set
+        //    {
+        //        _Lbllabel = value;
+        //        OnPropertyChanged(nameof(LblText));
+        //    }
+        //}
 
 
         private string _buttonText = "Login";
@@ -62,7 +62,7 @@ namespace GymSwipe.ViewModels
 
             var user = userLoginTest.ExampleData();
             ButtonText = "Logout";
-            LblText = user;
+            //LblText = user;
         }
     }
 }
