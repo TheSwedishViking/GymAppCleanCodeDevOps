@@ -1,24 +1,32 @@
-﻿using GymSwipe.Domain.Models;
-using System;
-using System.Collections.Generic;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.Domain.Models;
 using System.ComponentModel;
-using System.Text;
 using System.Windows.Input;
 
 namespace GymSwipe.ViewModels
 {
     public class UserRegisterViewModel : INotifyPropertyChanged
     {
-        private GymUser _gymUser = new();
-        public GymUser NewUser
+        //private GymUser _gymUser = new();
+        //public GymUser NewUser
+        //{
+        //    get { return _gymUser; }
+        //    set
+        //    {
+        //        _gymUser = value;
+        //        OnPropertyChanged(nameof(NewUser));
+        //    }
+        //}
+
+        public GymUserDTO NewUser
         {
-            get { return _gymUser; }
-            set 
+            set
             {
-                _gymUser = value;
-                OnPropertyChanged(nameof(NewUser));
+                GymUser.CurrentUser = value;
+                OnPropertyChanged(nameof(GymUser.CurrentUser));
             }
         }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public ICommand RegisterUserCommand { get; }
@@ -26,10 +34,11 @@ namespace GymSwipe.ViewModels
         {
             RegisterUserCommand = new Command(async () => await TryRegisterNewUser());
         }
+
         public async Task TryRegisterNewUser()
         {
-            Console.WriteLine(NewUser);
-            NewUser.SetFriendCode();
+            Console.WriteLine(GymUser.CurrentUser);
+            GymUser.CurrentUser.SetFriendCode();
         }
 
         public void OnPropertyChanged(string prop)

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GymSwipe.Domain.Models
 {
     public class GymUser
     {
+        public static GymUser CurrentUser { get; } = new GymUser();
+
         [Key]
         public int Id { get; set; }
         public string Firstname { get; set; } = "";
@@ -19,15 +18,15 @@ namespace GymSwipe.Domain.Models
         public virtual ICollection<GymPlaylist>? UserPlaylists { get; set; } = new List<GymPlaylist>();
         public virtual ICollection<ExerciseRecords>? UserRecords { get; set; } = new List<ExerciseRecords>();
         public string FriendCode { get; private set; } = "";
-        public GymUser()
+        private GymUser()
         {
         }
         public void SetFriendCode()
         {
             string friendCode = "";
-            for(int i = 0; i<4; i++)
+            for (int i = 0; i < 4; i++)
             {
-                for(int y  = 0; y<4; y++)
+                for (int y = 0; y < 4; y++)
                 {
                     friendCode += Random.Shared.Next(0, 9);
                 }
