@@ -5,27 +5,43 @@
              Title="UserPage">
     <VerticalStackLayout>
         <Label 
-            Text="User Registration Page!"
+            Text="{Binding CurrentUser.Firstname, StringFormat='Hello {0} !'}" 
             FontSize="Large"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Label
+            Text ="{Binding CurrentUser.Surname ,StringFormat='Surname :  {0} !'}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Label
+            Text ="{Binding CurrentUser.HeightCm , StringFormat=' {0} : cm'}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Label
+            Text ="{Binding CurrentUser.WeightKg , StringFormat=' {0}   : KG'}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Label
+            Text ="{Binding CurrentUser.Gender , StringFormat='Male ?  :  {0}'}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Label
+            Text ="{Binding CurrentUser.FriendCode , StringFormat='FriendCode:    {0}'}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
         <Button
-            Text="{Binding ButtonText}"
-            Command="{Binding GreetUserCommand}"
-            Clicked="OnClickGetUser"
-            />
+        Text="{Binding ButtonText}"
+        Command="{Binding GreetUserCommand}"
+        Clicked="OnClickGetUser"/>
+
         <Label
-            Text ="{Binding GymUser.Name}"
+            x:Name="lblGreeted"
+            Text ="{Binding CurrentUser.FriendCode , StringFormat='FriendCode:    {0}'}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Label
-            Text ="{Binding GymUser.Age, StringFormat='Years old: {0}'}"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <Label
-            Text ="{Binding GymUser.Height , StringFormat='cm: {0}'}"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+
+
         <!--<Label
             Text ="{Binding LblText.Athlete, StringFormat='Is athlete: {0}'}"
             VerticalOptions="Center" 

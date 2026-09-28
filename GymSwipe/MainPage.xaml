@@ -25,6 +25,11 @@
                 Text="UserPage" 
                 Clicked="onUserPageBtnClicked"
                 HorizontalOptions="Fill" />
+
+            <Label
+            Text="{Binding Firstname}">
+            </Label>
+
                 <Button
               x:Name="UserRegistrationButton"
               Text="Register as new user" 

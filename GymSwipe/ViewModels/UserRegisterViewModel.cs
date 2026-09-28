@@ -8,6 +8,10 @@ namespace GymSwipe.ViewModels
     {
         public GymUser CurrentUser => GymUser.CurrentUser;
 
+
+
+
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public ICommand RegisterUserCommand { get; }
