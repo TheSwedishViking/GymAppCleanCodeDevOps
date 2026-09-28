@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymSwipe.Pages.CardSwipe"
+             Title="CardSwipe">
+    <VerticalStackLayout>
+        <Image
+            x:Name="ExampleCard"
+            Source="sceptile_card.jpg"
+            HeightRequest="300"
+            WidthRequest="140"
+            >
+            <Image.GestureRecognizers>
+                <DragGestureRecognizer/>
+            </Image.GestureRecognizers>
+            
+            
+        </Image>
+    </VerticalStackLayout>
+</ContentPage>

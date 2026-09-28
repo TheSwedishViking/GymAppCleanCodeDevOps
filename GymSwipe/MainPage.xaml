@@ -30,7 +30,11 @@
               Text="Register as new user" 
               Clicked="RegisterUserNavigationButtonClicked"
               HorizontalOptions="Fill" />
-
+            <Button
+                x:Name="CardButton"
+                Text="Card swipe test" 
+                Clicked="CardSwipeNavigationButtonClicked"
+                HorizontalOptions="Fill" /> 
         </VerticalStackLayout>
     </ScrollView>
 
