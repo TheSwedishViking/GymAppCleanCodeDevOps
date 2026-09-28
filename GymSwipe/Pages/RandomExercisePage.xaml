@@ -21,10 +21,11 @@
             </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="10" Padding="10">
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" Padding="10">
                         <Label Grid.Column="0" Text="{Binding Name}" FontAttributes="Bold"/>
-                        <Label Grid.Column="1" Text="{Binding Id}" FontAttributes="Italic"/>
-                        <Label Grid.Column="2" Text="{Binding VideoSourceLink}" FontAttributes="Italic"/>
+                        <Label Grid.Column="1" Text="{Binding Id}" FontAttributes="Italic"/> 
+                        <Label Grid.Column="2" Text="{Binding TargetAreaName}" FontAttributes="Italic"/> 
+                        <Label Grid.Column="3" Text="{Binding VideoSourceLink}" FontAttributes="Italic"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

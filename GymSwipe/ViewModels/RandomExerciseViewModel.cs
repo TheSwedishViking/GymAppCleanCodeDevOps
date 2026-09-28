@@ -13,6 +13,7 @@ namespace GymSwipe.ViewModels
     public class RandomExerciseViewModel : INotifyPropertyChanged
     {
         private IExerciseFacade _exerciseFacade;
+        //ObservableCollection => MAUI list
         private ObservableCollection<ExerciseDTO> _exerciseDTOs = new();
         public ObservableCollection<ExerciseDTO> ExerciseDTOs
         {
@@ -35,6 +36,7 @@ namespace GymSwipe.ViewModels
             _exerciseFacade = exerciseFacade;
             GetRandomExcerises = new Command(async () => await GetObserverableCollectionOfExcerises());
         }
+        //Redneck way of clearing and adding to a observable collcetion
         public async Task GetObserverableCollectionOfExcerises()
         {
             if (ExerciseDTOs.Count != 0) {
