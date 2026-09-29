@@ -16,8 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GymSwipe.API\GymSwipe.API.csproj" />
     <ProjectReference Include="..\GymSwipe.Application\GymSwipe.ApplicationLayer.csproj" />
-    <ProjectReference Include="..\GymSwipe.Domain\GymSwipe.Domain.csproj" />
+    <ProjectReference Include="..\GymSwipe.Infrastructure\GymSwipe.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

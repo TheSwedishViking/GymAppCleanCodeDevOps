@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.Facades;
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.Domain.Interfaces;
 using GymSwipe.Infrastructure.Data;
 using GymSwipe.Infrastructure.Repos;
 using GymSwipe.ViewModels;

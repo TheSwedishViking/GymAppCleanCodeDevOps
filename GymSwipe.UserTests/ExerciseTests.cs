@@ -1,7 +1,4 @@
 ﻿using GymSwipe.ApplicationLayer.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace GymSwipe.UserTests
@@ -22,5 +19,7 @@ namespace GymSwipe.UserTests
             Assert.NotEmpty(exs);
 
         }
+
+
     }
 }

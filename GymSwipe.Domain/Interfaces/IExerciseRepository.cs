@@ -1,6 +1,6 @@
 ﻿using GymSwipe.Domain.Models;
 
-namespace GymSwipe.ApplicationLayer.Interfaces
+namespace GymSwipe.Domain.Interfaces
 {
     public interface IExerciseRepository
     {

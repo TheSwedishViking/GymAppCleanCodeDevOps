@@ -1,4 +1,4 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.Domain.Interfaces;
 using GymSwipe.Domain.Models;
 using GymSwipe.Infrastructure.Data;
 
@@ -26,9 +26,11 @@ namespace GymSwipe.Infrastructure.Repos
 
 
 
-        public Task<GymUser> GetUserById(int id)
+        public async Task<GymUser> GetUserById(int id)
         {
-            throw new NotImplementedException();
+            return _db.Users
+                   .Where(p => p.Id == id).SingleOrDefault();
+
         }
     }
 }
