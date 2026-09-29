@@ -29,12 +29,13 @@ namespace GymSwipe
 #if DEBUG
             builder.Logging.AddDebug();
 
-            ////******DB CONTEXT*******
-            //var connstring = builder.Configuration["Connections:LocalConnection"];
-            //builder.Services.AddDbContext<GymAppDbContext>(opts =>
-            //{
-            //    opts.UseSqlServer(DbConfig);
-            //});
+            //******DB CONTEXT*******
+            builder.Configuration.AddUserSecrets<App>();
+            var connstring = builder.Configuration["Connections:LocalConnection"];
+            builder.Services.AddDbContext<GymAppDbContext>(opts =>
+            {
+                opts.UseSqlServer(connstring);
+            });
             builder.Services.AddScoped<IDatabaseInitalizer, DatabaseInitalizer>();
 
             //*******SERVICES*******
