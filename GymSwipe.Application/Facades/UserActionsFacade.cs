@@ -1,9 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using GymSwipe.Domain.Models;
 
 namespace GymSwipe.ApplicationLayer.Facades
 {
@@ -16,25 +14,25 @@ namespace GymSwipe.ApplicationLayer.Facades
             _userService = userService;
             _userRepository = userRepository;
         }
-        public async Task<GymUserDTO?> CreateGymUser(RequestCreateGymUserDTO request)
+        public async Task CreateGymUser(RequestCreateGymUserDTO request)
         {
             var existing = await _userService.GetUserByEmail(request.Email);
-            if (existing is not null) return null; //Return other error code if its over an API, or inform user of email already used
+            //Return other error code if its over an API, or inform user of email already used
 
-            var dto = new GymUserDTO
-            {
-                Id = Random.Shared.Next(1, 51231), //Replace later
-                Firstname = request.Firstname,
-                Surname = request.Surname,
-                Email = request.Email,
-                Gender = request.Gender,
-                HeightCm = request.HeightCm,
-                WeightKg = request.WeightKg,
-                FriendCode = await _userService.GenerateFriendCode()
-            };
+            //GymUser.CurrentUser = new 
+            //{
+            //    Id = Random.Shared.Next(1, 51231), //Replace later
+            //    Firstname = request.Firstname,
+            //    Surname = request.Surname,
+            //    Email = request.Email,
+            //    Gender = request.Gender,
+            //    HeightCm = request.HeightCm,
+            //    WeightKg = request.WeightKg,
+            //    //FriendCode = await _userService.GenerateFriendCode()
+            //};
 
-            await _userRepository.AddUser(dto);
-            return dto;
+            await _userRepository.AddUser(GymUser.CurrentUser);
+            //return dto;
         }
 
         public Task<GymUserDTO> GetGymUserDTOAsync(int id)

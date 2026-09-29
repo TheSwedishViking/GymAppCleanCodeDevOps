@@ -1,19 +1,32 @@
-﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.Domain.Models;
+using GymSwipe.Infrastructure.Data;
 
 namespace GymSwipe.Infrastructure.Repos
 {
     public class UserRepository : IUserRepository
     {
-        public Task AddUser(GymUserDTO dto)
+
+
+        private readonly GymAppDbContext _db;
+
+        public UserRepository(GymAppDbContext db)
         {
-            throw new NotImplementedException();
+            _db = db;
         }
 
-        public Task<GymUserDTO> GetUserById(int id)
+        public async Task AddUser(GymUser model)
+        {
+            _db.Add(model);
+
+            await _db.SaveChangesAsync();
+        }
+
+
+
+
+
+        public Task<GymUser> GetUserById(int id)
         {
             throw new NotImplementedException();
         }
