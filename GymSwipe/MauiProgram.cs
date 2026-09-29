@@ -1,9 +1,13 @@
 ﻿using GymSwipe.ApplicationLayer.Facades;
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.Infrastructure.Data;
 using GymSwipe.Infrastructure.Repos;
 using GymSwipe.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace GymSwipe
 {
@@ -23,6 +27,13 @@ namespace GymSwipe
 
 #if DEBUG
             builder.Logging.AddDebug();
+
+            ////******DB CONTEXT*******
+            //var connstring = builder.Configuration["Connections:LocalConnection"];
+            //builder.Services.AddDbContext<GymAppDbContext>(opts =>
+            //{
+            //    opts.UseSqlServer(DbConfig);
+            //});
 
             //*******SERVICES*******
             builder.Services.AddScoped<IUserService, UserService>();

@@ -1,5 +1,6 @@
 ﻿using GymSwipe.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,6 +20,10 @@ namespace GymSwipe.Infrastructure.Data
         public DbSet<GymUser> Users { get; set; }
         public DbSet<PlaylistExcercise> UserPlaylistExercises { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //User has records, delete records when user is removed
