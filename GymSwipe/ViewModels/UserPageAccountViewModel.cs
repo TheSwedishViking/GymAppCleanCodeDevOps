@@ -12,7 +12,7 @@ namespace GymSwipe.ViewModels
 
 
 
-        private string _buttonText = "Login";
+        private string _buttonText = "Todays Message!";
         public string ButtonText
         {
             get { return _buttonText; }
@@ -40,9 +40,7 @@ namespace GymSwipe.ViewModels
         }
         public async Task GreetUser()
         {
-
             ButtonText = " = )";
-            //LblText = user;
         }
     }
 }

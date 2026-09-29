@@ -9,7 +9,6 @@ public partial class UserPage : ContentPage
     {
         InitializeComponent();
         BindingContext = new UserPageAccountViewModel();
-
     }
 
     private async void OnClickGreetUser(object sender, EventArgs e)

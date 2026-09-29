@@ -33,11 +33,11 @@
         <Button
         Text="{Binding ButtonText}"
         Command="{Binding GreetUserCommand}"
-        Clicked="OnClickGetUser"/>
+        Clicked="OnClickGreetUser"/>
 
         <Label
             x:Name="lblGreeted"
-            Text ="{Binding CurrentUser.FriendCode , StringFormat='FriendCode:    {0}'}"
+            Text =""
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
