@@ -12,14 +12,12 @@ namespace GymSwipe.Domain.ExampleData
             new Exercise{
                 Id = 1,
                 Name = "Pushup",
-                TargetAreaId = 2,
                 VideoSourceLink="https://www.youtube.com/watch?v=WDIpL0pjun0"
             },
             new Exercise
             {
                 Id = 2,
                 Name ="Chest Fly (machine)",
-                TargetAreaId= 3,
                 VideoSourceLink="https://www.youtube.com/watch?v=eGjt4lk6g34"
             }
 

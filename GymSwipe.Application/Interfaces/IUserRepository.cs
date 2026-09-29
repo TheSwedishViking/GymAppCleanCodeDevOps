@@ -9,6 +9,5 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     {
         Task AddUser(GymUserDTO dto);
         Task<GymUserDTO> GetUserById(int id);
-
     }
 }

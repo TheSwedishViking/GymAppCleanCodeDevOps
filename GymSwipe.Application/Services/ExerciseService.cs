@@ -18,7 +18,6 @@ namespace GymSwipe.ApplicationLayer.Services
                 {
                     Id = ex.Id,
                     Name = ex.Name,
-                    TargetAreaId = ex.TargetAreaId,
                     TargetAreaName = "Test data",
                     VideoSourceLink = ex.VideoSourceLink
                 };

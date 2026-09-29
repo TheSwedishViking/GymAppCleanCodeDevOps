@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.Facades;
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
 using GymSwipe.Infrastructure.Repos;
 using GymSwipe.ViewModels;
@@ -28,12 +29,14 @@ namespace GymSwipe
 #if DEBUG
             builder.Logging.AddDebug();
 
-            ////******DB CONTEXT*******
-            //var connstring = builder.Configuration["Connections:LocalConnection"];
-            //builder.Services.AddDbContext<GymAppDbContext>(opts =>
-            //{
-            //    opts.UseSqlServer(DbConfig);
-            //});
+            //******DB CONTEXT*******
+            builder.Configuration.AddUserSecrets<App>();
+            var connstring = builder.Configuration["Connections:LocalConnection"];
+            builder.Services.AddDbContext<GymAppDbContext>(opts =>
+            {
+                opts.UseSqlServer(connstring);
+            });
+            builder.Services.AddScoped<IDatabaseInitalizer, DatabaseInitalizer>();
 
             //*******SERVICES*******
             builder.Services.AddScoped<IUserService, UserService>();
@@ -55,8 +58,15 @@ namespace GymSwipe
             builder.Services.AddTransient<UserRegisterViewModel>();
 
 #endif
+            var app = builder.Build();
+            using(var scope = app.Services.CreateScope())
+            {
+                var init = scope.ServiceProvider.GetRequiredService<IDatabaseInitalizer>();
 
-            return builder.Build();
+                Task.Run(() => init.InitalizeAsync()).GetAwaiter().GetResult();
+            }
+
+            return app;
         }
     }
 }
