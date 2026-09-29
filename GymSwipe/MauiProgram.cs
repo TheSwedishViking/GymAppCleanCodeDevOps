@@ -22,7 +22,7 @@ namespace GymSwipe
 
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 
             //*******SERVICES*******
             builder.Services.AddScoped<IUserService, UserService>();
@@ -40,7 +40,7 @@ namespace GymSwipe
             //builder.Services.AddScoped<IPlaylistFacade>();  
 
             //*******VIEW MODELS*******
-            builder.Services.AddTransient<UserPageAccountViewModel>();
+            builder.Services.AddSingleton<UserPageAccountViewModel>();
             builder.Services.AddTransient<UserRegisterViewModel>();
 
 #endif
