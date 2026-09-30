@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.Domain.ExampleData;
+using GymSwipe.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,22 +10,28 @@ namespace GymSwipe.ApplicationLayer.Services
 {
     public class ExerciseService : IExerciseService
     {
+        private readonly IExerciseRepository _repo;
+        public ExerciseService(IExerciseRepository exerciseRepository)
+        {
+            _repo = exerciseRepository;
+        }
         public async Task<List<ExerciseDTO>> GetAllExercisesAsync()
         {
-            List<ExerciseDTO> exercises = new List<ExerciseDTO>();
-            foreach(var ex in StaticExerciseData.Exercises)
-            {
-                var dto = new ExerciseDTO
-                {
-                    Id = ex.Id,
-                    Name = ex.Name,
-                    TargetAreaName = "Test data",
-                    VideoSourceLink = ex.VideoSourceLink
-                };
-                exercises.Add(dto); 
-            }
+            var exercises = await _repo.GetAllExercisesAsync();
+            List<ExerciseDTO> dtos = exercises.Select(e =>
 
-            return exercises;
+                new ExerciseDTO
+                {
+                    Id = e.Id,
+                    VideoSourceLink = e.VideoSourceLink,
+                    Name = e.Name,
+
+                    TargetAreaNames = e.TargetAreas.
+                    Select(e => e.ExerciseCategoryName).
+                    ToList(),
+                }).ToList();
+
+            return dtos;
         }
 
         public Task<ExerciseDTO> GetExerciseByIdAsync(int id)

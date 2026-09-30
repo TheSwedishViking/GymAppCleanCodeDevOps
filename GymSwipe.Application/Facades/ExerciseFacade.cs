@@ -28,7 +28,19 @@ namespace GymSwipe.ApplicationLayer.Facades
         public async Task<List<ExerciseDTO>> GetRandomExercisesAsync()
         {
             var exs = await  _exerciseService.GetAllExercisesAsync();
-            return exs;
+            var dtos = new List<ExerciseDTO>();
+            //foreach(var ex in exs)
+            //{
+            //    var dto = new ExerciseDTO
+            //    {
+            //        Id = ex.Id,
+            //        Name = ex.Name,
+            //        VideoSourceLink = ex.VideoSourceLink,
+            //        TargetAreaId = ex.TargetAreaId,
+            //        TargetAreaName = ex.TargetAreaName,
+            //    };
+            //}
+            return new List<ExerciseDTO>();
         }
     }
 }
