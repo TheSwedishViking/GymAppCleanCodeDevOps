@@ -19,13 +19,15 @@ namespace GymSwipe.API.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] RequestCreateGymUserDTO request)
         {
-            //var result = await _userService.CreateGymUserAsync(request);
-            //if (result.IsSuccess)
-            //{
-            //    return Ok(result);
-            //}
-            return BadRequest(/*result*/);
 
+            if (request == null)
+            {
+                return BadRequest(/*result*/);
+
+            }
+            await _userService.TryAndCreateUserThroughRequestModelAsync(request);
+
+            return Ok();
         }
     }
 }

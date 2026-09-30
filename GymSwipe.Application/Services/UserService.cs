@@ -35,8 +35,17 @@ namespace GymSwipe.ApplicationLayer.Services
 
         public async Task<GymUserDTO>? TryAndCreateUserThroughRequestModelAsync(RequestCreateGymUserDTO request)
         {
-            return null;
-            return new GymUserDTO();
+            GymUserDTO dto = new()
+            {
+                Firstname = request.Firstname,
+                Surname = request.Surname,
+                HeightCm = request.HeightCm,
+                WeightKg = request.WeightKg,
+                Email = request.Email,
+                Gender = request.Gender
+            };
+
+            return dto;
         }
     }
 }
