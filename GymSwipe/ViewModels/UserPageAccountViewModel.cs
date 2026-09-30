@@ -1,4 +1,5 @@
-﻿using GymSwipe.Domain.Models;
+﻿using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.Domain.Models;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -7,10 +8,7 @@ namespace GymSwipe.ViewModels
     public class UserPageAccountViewModel : INotifyPropertyChanged
     {
 
-        public GymUser CurrentUser => GymUser.CurrentUser;
-
-
-
+        public GymUser CurrentUser { get; set; }
 
         private string _buttonText = "Todays Message!";
         public string ButtonText
@@ -22,12 +20,28 @@ namespace GymSwipe.ViewModels
                 OnPropertyChanged(nameof(ButtonText));
             }
         }
+
+        private string _greetingUser;
+        public string GreetingUser
+        {
+            get { return _greetingUser; }
+            set
+            {
+                _greetingUser = value;
+                OnPropertyChanged(nameof(GreetingUser));
+            }
+        }
+
         public ICommand GreetUserCommand { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public UserPageAccountViewModel()
+        private LoggedInUser _loggedInUser;
+
+        public UserPageAccountViewModel(LoggedInUser loggedInUser)
         {
+            _loggedInUser = loggedInUser;
+            CurrentUser = _loggedInUser.CurrentUser;
             GreetUserCommand = new Command(async () =>
             {
                 await GreetUser();
@@ -41,6 +55,7 @@ namespace GymSwipe.ViewModels
         public async Task GreetUser()
         {
             ButtonText = " = )";
+            GreetingUser = $"You are looking swole today {_loggedInUser.CurrentUser.Firstname}!";
         }
     }
 }

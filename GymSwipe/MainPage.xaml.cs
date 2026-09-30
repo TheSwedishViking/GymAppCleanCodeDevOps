@@ -1,17 +1,16 @@
 ﻿using GymSwipe.Domain.Models;
+using GymSwipe.ViewModels;
 
 namespace GymSwipe
 {
     public partial class MainPage : ContentPage
     {
 
-        public MainPage()
+        public MainPage(MainPageViewModel vm)
         {
             InitializeComponent();
-            BindingContext = GymUser.CurrentUser;
+            BindingContext = vm;
         }
-
-
 
         private async void onUserPageBtnClicked(object? sender, EventArgs e)
         {
@@ -22,7 +21,6 @@ namespace GymSwipe
         {
             await Shell.Current.GoToAsync(nameof(Pages.UserRegistrationPage));
 
-            Console.WriteLine(GymUser.CurrentUser);
         }
 
 
