@@ -54,8 +54,12 @@ namespace GymSwipe
             //builder.Services.AddScoped<IPlaylistFacade>();  
 
             //*******VIEW MODELS*******
+            builder.Services.AddSingleton<LoggedInUser>();
+
             builder.Services.AddSingleton<UserPageAccountViewModel>();
             builder.Services.AddTransient<UserRegisterViewModel>();
+            builder.Services.AddTransient<MainPageViewModel>();
+
 
 #endif
             var app = builder.Build();

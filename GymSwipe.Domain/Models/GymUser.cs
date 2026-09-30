@@ -5,7 +5,6 @@ namespace GymSwipe.Domain.Models
 {
     public class GymUser : INotifyPropertyChanged
     {
-        public static GymUser CurrentUser { get; } = new GymUser();
 
         [Key]
         public int Id { get; set; }
@@ -45,10 +44,6 @@ namespace GymSwipe.Domain.Models
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private GymUser()
-        {
-        }
-
 
         public void SetFriendCode()
         {
@@ -64,7 +59,6 @@ namespace GymSwipe.Domain.Models
                     friendCode += "-";
                 }
             }
-            CurrentUser.FriendCode = friendCode;
             Console.WriteLine(friendCode);
             //NNNN-NNNN-NNNN-NNNN
             //1337-6969-4201-6767

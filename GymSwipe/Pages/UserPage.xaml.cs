@@ -5,15 +5,14 @@ namespace GymSwipe.Pages;
 
 public partial class UserPage : ContentPage
 {
-    public UserPage()
+    public UserPage(UserPageAccountViewModel vm)
     {
         InitializeComponent();
-        BindingContext = new UserPageAccountViewModel();
+        BindingContext = vm;
     }
 
     private async void OnClickGreetUser(object sender, EventArgs e)
     {
-        lblGreeted.Text = "You are looking swole today " + GymUser.CurrentUser.Firstname + "!";
         lblGreeted.TextColor = Colors.Red;
     }
 }
