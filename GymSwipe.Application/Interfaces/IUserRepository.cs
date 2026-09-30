@@ -1,13 +1,12 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using GymSwipe.Domain.Models;
 
 namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface IUserRepository
     {
         Task AddUser(GymUserDTO dto);
-        Task<GymUserDTO> GetUserById(int id);
+        Task<GymUser> GetUserById(int id);
+        Task DeleteUserById(int id);
     }
 }

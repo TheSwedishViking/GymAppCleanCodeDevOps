@@ -31,20 +31,27 @@ namespace GymSwipe.ViewModels
                 OnPropertyChanged(nameof(GreetingUser));
             }
         }
-
         public ICommand GreetUserCommand { get; }
+
+        public ICommand DeleteUserCommand { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private LoggedInUser _loggedInUser;
+        private HttpClient _httpClient;
 
-        public UserPageAccountViewModel(LoggedInUser loggedInUser)
+        public UserPageAccountViewModel(LoggedInUser loggedInUser, HttpClient httpClient)
         {
             _loggedInUser = loggedInUser;
+            _httpClient = httpClient;
             CurrentUser = _loggedInUser.CurrentUser;
             GreetUserCommand = new Command(async () =>
             {
                 await GreetUser();
+            });
+            DeleteUserCommand = new Command(async () =>
+            {
+                await DeleteUser();
             });
         }
 
@@ -56,6 +63,13 @@ namespace GymSwipe.ViewModels
         {
             ButtonText = " = )";
             GreetingUser = $"You are looking swole today {_loggedInUser.CurrentUser.Firstname}!";
+        }
+
+        public async Task DeleteUser()
+        {
+
+            using var response = await _httpClient.DeleteAsync("api/User/1");
+            response.EnsureSuccessStatusCode();
         }
     }
 }

@@ -29,5 +29,23 @@ namespace GymSwipe.API.Controllers
 
             return Ok();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+
+            await _userService.TryToDeleteUserById(id);
+
+            return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            await _userService.GetUserById(id);
+            return Ok();
+
+        }
+
     }
 }

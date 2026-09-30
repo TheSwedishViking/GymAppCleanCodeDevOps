@@ -34,9 +34,29 @@ namespace GymSwipe.Infrastructure.Repos
             await _db.SaveChangesAsync();
         }
 
-        public Task<GymUserDTO> GetUserById(int id)
+        public async Task<GymUser> GetUserById(int id)
         {
-            throw new NotImplementedException();
+            GymUser foundUser = _db.Users.FirstOrDefault(u => u.Id == id);
+
+            foundUser.SetFriendCode();
+
+
+            return foundUser;
+
+
+        }
+
+
+        public async Task DeleteUserById(int userId)
+        {
+
+            GymUser foundUser = _db.Users.FirstOrDefault(u => u.Id == userId);
+            if (foundUser != null)
+            {
+                _db.Users.Remove(foundUser);
+                await _db.SaveChangesAsync();
+            }
+
         }
     }
 }

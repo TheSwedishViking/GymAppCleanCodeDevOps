@@ -35,7 +35,6 @@ namespace GymSwipe.ViewModels
                 Firstname = CurrentUser.Firstname,
                 Surname = CurrentUser.Surname,
                 Email = CurrentUser.Email,
-                Password = CurrentUser.PasswordHash, // only if this contains the entered password
                 HeightCm = CurrentUser.HeightCm,
                 WeightKg = CurrentUser.WeightKg,
                 Gender = CurrentUser.Gender

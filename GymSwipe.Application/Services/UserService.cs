@@ -36,10 +36,20 @@ namespace GymSwipe.ApplicationLayer.Services
             throw new NotImplementedException();
         }
 
-        public Task<GymUserDTO> GetUserById(string id)
+        public async Task<GymUserDTO> GetUserById(int id)
         {
-            throw new NotImplementedException();
+            return await _repo.GetUserById(id);
+
+
         }
+
+
+        public async Task TryToDeleteUserById(int id)
+        {
+            await _repo.DeleteUserById(id);
+
+        }
+
 
         public async Task<GymUserDTO>? TryAndCreateUserThroughRequestModelAsync(RequestCreateGymUserDTO request)
         {
