@@ -1,19 +1,19 @@
-### Description 📖
+### 🕐 Description 📖
 Introduction of the purpose for and describe further with this created branch. Is it a `fix`, `feature` , `refactor` or `chore`? Alternatively, include screenshot or gif.
 
-### Overview of Changes 👀
+### 🕑 Overview of Changes 👀
 Explaining of the changes that have been made with the help of different bullet list:
 
-- 1
+- 1️⃣
 
-- 1
-    - 2
+- 1️⃣
+    - 2️⃣
 
-- 1
-    - 2
-        - 3
+- 1️⃣
+    - 2️⃣
+        - 3️⃣
 
-### Checklist ✅
+### 🕒Checklist ✅
 
 - [ ] Test A
 - [ ] Test B
