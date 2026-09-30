@@ -34,10 +34,31 @@ namespace GymSwipe.ApplicationLayer.Services
             return dtos;
         }
 
-        public Task<ExerciseDTO> GetExerciseByIdAsync(int id)
+        public async Task<List<ExerciseDTO>> GetExerciseByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var chests = await _repo.GetExercisesByCategoryAsync(id);
+            List<ExerciseDTO> dtos = chests.Select(e =>
+
+              new ExerciseDTO
+              {
+                  Id = e.Id,
+                  VideoSourceLink = e.VideoSourceLink,
+                  Name = e.Name,
+
+                  TargetAreaNames = e.TargetAreas.
+                  Select(e => e.ExerciseCategoryName).
+                  ToList(),
+              }).ToList();
+
+            return dtos;
         }
 
+        public async Task<List<ExerciseDTO>?> GetRandomExercisesAsync()
+        {
+            var dtos = await GetAllExercisesAsync();
+            var arr = dtos.ToArray();
+            var randoms = arr.Shuffle().Take(3).ToList();
+            return randoms;
+        }
     }
 }

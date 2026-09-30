@@ -17,12 +17,20 @@ namespace GymSwipe.Infrastructure.Repos
         }
         public async Task<List<Exercise>> GetAllExercisesAsync()
         {
-            return  await _db.Exercises.ToListAsync();
+            return  await _db.Exercises.
+                Include(e=>e.TargetAreas).ToListAsync();
         }
 
-        public Task<List<IExerciseRepository>> GetExercisesByCategoryAsync(int categoryId)
+        public async Task<List<Exercise>> GetExercisesByCategoryAsync(int categoryId)
         {
-            throw new NotImplementedException();
+            return await 
+                    _db.Exercises.
+                    Include(e=>e.TargetAreas).
+                    Where(e=>e.TargetAreas.
+                    Any
+                    (e=>e.Id==categoryId)).ToListAsync();
         }
+
+       
     }
 }

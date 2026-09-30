@@ -8,7 +8,8 @@ namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface IExerciseService
     {
-        Task<ExerciseDTO> GetExerciseByIdAsync(int id);
+        Task<List<ExerciseDTO>> GetExerciseByIdAsync(int id);
         Task<List<ExerciseDTO>> GetAllExercisesAsync();
+        Task<List<ExerciseDTO>?> GetRandomExercisesAsync();
     }
 }
