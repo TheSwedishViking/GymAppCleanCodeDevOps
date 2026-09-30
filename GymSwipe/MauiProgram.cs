@@ -8,7 +8,6 @@ using GymSwipe.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System.Reflection;
 
 namespace GymSwipe
 {
@@ -60,10 +59,14 @@ namespace GymSwipe
             builder.Services.AddTransient<UserRegisterViewModel>();
             builder.Services.AddTransient<MainPageViewModel>();
 
-
+            //api address
+            builder.Services.AddSingleton(new HttpClient
+            {
+                BaseAddress = new Uri("https://localhost:7277/")
+            });
 #endif
             var app = builder.Build();
-            using(var scope = app.Services.CreateScope())
+            using (var scope = app.Services.CreateScope())
             {
                 var init = scope.ServiceProvider.GetRequiredService<IDatabaseInitalizer>();
 

@@ -6,6 +6,14 @@ namespace GymSwipe.ApplicationLayer.Services
 {
     public class UserService : IUserService
     {
+
+        private readonly IUserRepository _repo;
+
+        public UserService(IUserRepository repo)
+        {
+            _repo = repo;
+        }
+
         public Task<string> GenerateFriendCode()
         {
             string friendCode = "";
@@ -44,7 +52,9 @@ namespace GymSwipe.ApplicationLayer.Services
                 Email = request.Email,
                 Gender = request.Gender
             };
+            await _repo.AddUser(dto);
 
+            //ytterligare logik kan ske här, dto är inte garanterad att sparas i databasen
             return dto;
         }
     }
