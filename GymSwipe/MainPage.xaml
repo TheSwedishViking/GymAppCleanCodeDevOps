@@ -27,7 +27,7 @@
                 HorizontalOptions="Fill" />
 
             <Label
-            Text="{Binding Firstname}">
+            Text="{Binding Session.CurrentUser.Firstname}">
             </Label>
 
                 <Button
