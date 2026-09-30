@@ -28,7 +28,6 @@ namespace GymSwipe.ApplicationLayer.Facades
         public async Task<List<ExerciseDTO>> GetRandomExercisesAsync()
         {
             var exs = await  _exerciseService.GetAllExercisesAsync();
-            var dtos = new List<ExerciseDTO>();
             //foreach(var ex in exs)
             //{
             //    var dto = new ExerciseDTO
@@ -40,7 +39,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             //        TargetAreaName = ex.TargetAreaName,
             //    };
             //}
-            return new List<ExerciseDTO>();
+            return  exs ?? new List<ExerciseDTO>();
         }
     }
 }

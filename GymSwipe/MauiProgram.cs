@@ -45,12 +45,13 @@ namespace GymSwipe
 
             //*******REPOSITORIES*******
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            //builder.Services.AddScoped<IExerciseRepository>();
+            builder.Services.AddScoped<IExerciseRepository, ExerciseRepo>();
             //builder.Services.AddScoped<IPlaylistRepository>();
 
             //*******FACADES*******
             builder.Services.AddScoped<IUserFacade, UserActionsFacade>();
-            //builder.Services.AddScoped<IExerciseFacade>();
+            builder.Services.AddScoped<IExerciseFacade, ExerciseFacade>();
+
             //builder.Services.AddScoped<IPlaylistFacade>();  
 
             //*******VIEW MODELS*******
@@ -58,6 +59,7 @@ namespace GymSwipe
 
             builder.Services.AddSingleton<UserPageAccountViewModel>();
             builder.Services.AddTransient<UserRegisterViewModel>();
+            builder.Services.AddTransient<RandomExerciseViewModel>();
             builder.Services.AddTransient<MainPageViewModel>();
 
 
