@@ -22,24 +22,12 @@ namespace GymSwipe.ViewModels
         }
         //Reload page where name gets new value
         public GymUser CurrentUser { get; set; }
-        private LoggedInUser _loggedInUser;
-
-        private string _firstname => string.IsNullOrEmpty(CurrentUser?.Firstname) ? CurrentUser?.Firstname : "Not logged in";
-        public string Firstname
-        {
-            get => _firstname;
-            set
-            {
-                if (_firstname == value) return;
-                CurrentUser.Firstname = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Firstname)));
-            }
-        }
+        public LoggedInUser Session { get; }
      
         public MainPageViewModel(LoggedInUser loggedInUser)
         {
-            _loggedInUser = loggedInUser;
-            CurrentUser = _loggedInUser.CurrentUser;
+            Session = loggedInUser;
+            CurrentUser = Session.CurrentUser;
         }
         public void UpdateLabelGreetUser()
         {
