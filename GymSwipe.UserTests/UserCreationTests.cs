@@ -1,32 +1,39 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
-using GymSwipe.ApplicationLayer.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Net;
+using System.Net.Http.Json;
 using Xunit;
 
 namespace GymSwipe.UserTests
 {
-    public class UserCreationTests
+    public class UserCreationTests : IClassFixture<UserApiFixture>
     {
-        [Fact]
-        public async Task TryAndCreateUser_WithEmptyDate_ReturnsExpectedInvalidResult()
+
+        private readonly HttpClient _client;
+
+        public UserCreationTests(UserApiFixture fixture)
         {
-            RequestCreateGymUserDTO badUserData = new RequestCreateGymUserDTO
+            _client = fixture.CreateClient();
+        }
+
+
+        [Fact]
+        public async Task CreateadUser_IsSavedToDb_ReturnsExpected()
+        {
+
+            var request = new RequestCreateGymUserDTO
             {
-                Firstname = "1231312313",
-                Surname = "1313123132",
-                Email = "invalidemailformat",
-                Gender = null,
-                HeightCm = -5123,
-                Password = "password",
-                WeightKg = -50000
+                Firstname = "Usain",
+                Surname = "Bolt",
+                HeightCm = 200,
+                WeightKg = 90
             };
 
-            var sut = new UserService();
-            var result = await sut.TryAndCreateUserThroughRequestModelAsync(badUserData);
+            var response = await _client.PostAsJsonAsync("api/User", request);
 
-            Assert.Null(result);
+            response.EnsureSuccessStatusCode();
+
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }
