@@ -28,7 +28,8 @@ namespace GymSwipe.Infrastructure.Repos
                     Include(e=>e.TargetAreas).
                     Where(e=>e.TargetAreas.
                     Any
-                    (e=>e.Id==categoryId)).ToListAsync();
+                    (e=>e.Id==categoryId)).OrderBy(n=>n.Id).
+                    ToListAsync();
         }
 
        
