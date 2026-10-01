@@ -42,8 +42,8 @@ namespace GymSwipe.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
-            await _userService.GetUserById(id);
-            return Ok();
+            var user = await _userService.GetUserById(id);
+            return Ok(user); //return the user objekt to api 
 
         }
 

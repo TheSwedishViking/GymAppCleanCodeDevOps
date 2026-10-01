@@ -34,16 +34,24 @@ namespace GymSwipe.Infrastructure.Repos
             await _db.SaveChangesAsync();
         }
 
-        public async Task<GymUser> GetUserById(int id)
+        public async Task<GymUserDTO> GetUserById(int id)
         {
             GymUser foundUser = _db.Users.FirstOrDefault(u => u.Id == id);
-
+            Console.WriteLine();
             foundUser.SetFriendCode();
 
 
-            return foundUser;
-
-
+            return new GymUserDTO
+            {
+                Id = foundUser.Id,
+                Firstname = foundUser.Firstname,
+                Surname = foundUser.Surname,
+                Email = foundUser.Email,
+                HeightCm = foundUser.HeightCm,
+                WeightKg = foundUser.WeightKg,
+                Gender = foundUser.Gender,
+                FriendCode = foundUser.FriendCode
+            };
         }
 
 
