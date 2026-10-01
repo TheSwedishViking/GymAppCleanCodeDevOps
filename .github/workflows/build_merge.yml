@@ -7,15 +7,17 @@ jobs:
   BuildJob:
     runs-on: ubuntu-latest
     env:
-      net_v: '10.0.x0
+      net_v: '10.0.x0'
     steps:
       - name: Checkout the repo 👀  
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Setup .Net 🪻🟪
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{env.net_v}}
+      - name: Restore 🦒
+        run: dotnet restore
           
       - name: Build 🛠️ 
         run: |
