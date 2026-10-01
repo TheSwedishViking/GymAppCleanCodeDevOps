@@ -35,6 +35,11 @@
               Text="Register as new user" 
               Clicked="RegisterUserNavigationButtonClicked"
               HorizontalOptions="Fill" />
+            <Button
+        x:Name="RandomExerciseButton"
+        Text="View exercises" 
+        Clicked="RandomExerciseButtonButtonClicked"
+        HorizontalOptions="Fill" />
 
         </VerticalStackLayout>
     </ScrollView>

@@ -38,7 +38,7 @@ namespace GymSwipe.API
 
             //*******REPOSITORIES*******
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            //builder.Services.AddScoped<IExerciseRepository>();
+            builder.Services.AddScoped<IExerciseRepository, ExerciseRepo>();
             //builder.Services.AddScoped<IPlaylistRepository>();
 
 
