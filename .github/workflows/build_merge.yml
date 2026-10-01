@@ -7,7 +7,7 @@ jobs:
   BuildJob:
     runs-on: ubuntu-latest
     env:
-      net_v: '10.0.x0'
+      net_v: '10.0.x'
     steps:
       - name: Checkout the repo 👀  
         uses: actions/checkout@v4
