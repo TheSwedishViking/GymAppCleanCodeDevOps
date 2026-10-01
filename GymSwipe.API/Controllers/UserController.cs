@@ -1,0 +1,51 @@
+﻿using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+
+namespace GymSwipe.API.Controllers
+{
+    [ApiController]
+    [Route("api/User")]
+    public class UserController : ControllerBase
+    {
+
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterUser([FromBody] RequestCreateGymUserDTO request)
+        {
+
+            if (request == null)
+            {
+                return BadRequest(/*result*/);
+
+            }
+            var user = await _userService.TryAndCreateUserThroughRequestModelAsync(request);
+
+            return Ok(user);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+
+            await _userService.TryToDeleteUserById(id);
+
+            return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var user = await _userService.GetUserById(id);
+            return Ok(user); //return the user objekt to api 
+
+        }
+
+    }
+}
