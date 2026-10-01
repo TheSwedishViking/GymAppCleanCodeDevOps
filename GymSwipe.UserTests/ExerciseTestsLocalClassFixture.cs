@@ -12,12 +12,12 @@ using Xunit;
 
 namespace GymSwipe.UserTests
 {
-    public class ExerciseTests : IClassFixture<ExerciseFixture>
+    public class ExerciseTestsLocalClassFixture : IClassFixture<ExerciseFixture>
     {
         private readonly ExerciseFixture _fixture;
         private readonly IServiceScope _scope;
         private readonly IExerciseService _sut;
-        public ExerciseTests(ExerciseFixture fixture)
+        public ExerciseTestsLocalClassFixture(ExerciseFixture fixture)
         {
             _fixture = fixture;
            _scope = _fixture.ServiceProvider.CreateScope();
