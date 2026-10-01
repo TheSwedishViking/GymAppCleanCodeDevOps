@@ -1,0 +1,34 @@
+name: 'Build and validate before merge ‼️🫠🤸‍♀️'
+on:
+  pull_request: 
+    branches:
+      - main
+jobs:
+  BuildJob:
+    runs-on: ubuntu-latest
+    env:
+      net_v: '10.0.x'
+      slnx_path: 'GymSwipe/GymSwipe.slnx'
+    steps:
+      - name: Checkout the repo 👀  
+        uses: actions/checkout@v4
+
+      - name: Setup .Net 🪻🟪
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{env.net_v}}
+          
+      - name: Install Workloads (for maui) 🤬
+        run: dotnet workload restore ${{env.slnx_path}}
+          
+      - name: Restore 🦒
+        run: dotnet restore ${{env.slnx_path}}
+          
+      - name: Build 🛠️ 
+        run: |
+          echo "Building!"
+          dotnet build ${{env.slnx_path}} --no-restore --configuration Release
+      - name: Run Tests 📈📉
+        run: |
+          echo "Running tests"
+          dotnet test ${{env.slnx_path}} --no-build --configuration Release
