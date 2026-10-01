@@ -1,4 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
+using GymSwipe.UserTests.FixtureFolder;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;
@@ -22,8 +23,8 @@ namespace GymSwipe.UserTests
 
             var request = new RequestCreateGymUserDTO
             {
-                Firstname = "Usain",
-                Surname = "Bolt",
+                Firstname = "Peter",
+                Surname = "Stormare",
                 HeightCm = 200,
                 WeightKg = 90
             };
