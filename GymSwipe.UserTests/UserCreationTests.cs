@@ -25,6 +25,7 @@ namespace GymSwipe.UserTests
             {
                 Firstname = "Peter",
                 Surname = "Stormare",
+                Gender = true,
                 HeightCm = 200,
                 WeightKg = 90
             };
