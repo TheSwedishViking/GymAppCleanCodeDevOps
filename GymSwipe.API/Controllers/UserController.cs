@@ -25,9 +25,9 @@ namespace GymSwipe.API.Controllers
                 return BadRequest(/*result*/);
 
             }
-            await _userService.TryAndCreateUserThroughRequestModelAsync(request);
+            var user = await _userService.TryAndCreateUserThroughRequestModelAsync(request);
 
-            return Ok();
+            return Ok(user);
         }
 
         [HttpDelete("{id}")]

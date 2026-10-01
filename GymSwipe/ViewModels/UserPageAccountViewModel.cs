@@ -62,13 +62,13 @@ namespace GymSwipe.ViewModels
         public async Task GreetUser()
         {
             ButtonText = " = )";
-            GreetingUser = $"You are looking swole today {_loggedInUser.CurrentUser.Firstname}!";
+            GreetingUser = $"You are looking swole today {_loggedInUser.CurrentUser.Firstname} {_loggedInUser.CurrentUser.Id}!";
         }
 
         public async Task DeleteUser()
         {
-
-            using var response = await _httpClient.DeleteAsync("api/User/1");
+            //finns ej id'n i objekt
+            using var response = await _httpClient.DeleteAsync("api/User/" + _loggedInUser.CurrentUser.Id);
             response.EnsureSuccessStatusCode();
         }
     }

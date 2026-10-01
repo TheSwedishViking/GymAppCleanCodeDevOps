@@ -14,12 +14,13 @@ namespace GymSwipe.Infrastructure.Repos
             _db = gymAppDbContext;
         }
 
-        public async Task AddUser(GymUserDTO dto)
+        public async Task<GymUser> AddUser(GymUserDTO dto)
         {
 
 
             GymUser user = new GymUser
             {
+
                 Firstname = dto.Firstname,
                 Surname = dto.Surname,
                 Email = dto.Email,
@@ -32,6 +33,7 @@ namespace GymSwipe.Infrastructure.Repos
 
             _db.Add(user);
             await _db.SaveChangesAsync();
+            return user;
         }
 
         public async Task<GymUserDTO> GetUserById(int id)
