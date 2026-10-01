@@ -18,6 +18,9 @@ jobs:
         with:
           dotnet-version: ${{env.net_v}}
           
+      - name: Install Workloads (for maui) 🤬
+        run: dotnet workload restore ${{env.slnx_path}}
+          
       - name: Restore 🦒
         run: dotnet restore ${{env.slnx_path}}
           
