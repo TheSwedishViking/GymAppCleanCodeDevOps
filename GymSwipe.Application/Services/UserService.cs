@@ -70,5 +70,7 @@ namespace GymSwipe.ApplicationLayer.Services
             return dto;
 
         }
+
+
     }
 }
