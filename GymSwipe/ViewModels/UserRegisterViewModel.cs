@@ -1,4 +1,5 @@
-﻿using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
 using GymSwipe.ApplicationLayer.Services;
 using GymSwipe.Domain.Models;
 using System.ComponentModel;
@@ -42,10 +43,11 @@ namespace GymSwipe.ViewModels
 
             using var response = await _httpClient.PostAsJsonAsync("api/User", request);
             response.EnsureSuccessStatusCode();
+            var user = await response.Content.ReadFromJsonAsync<GymUserDTO>();
+            Console.WriteLine(user);
 
 
-
-
+            CurrentUser.Id = user.Id;
 
             _loggedIn.CurrentUser = CurrentUser;
             Console.WriteLine(CurrentUser);

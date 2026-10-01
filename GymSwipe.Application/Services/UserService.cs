@@ -62,10 +62,13 @@ namespace GymSwipe.ApplicationLayer.Services
                 Email = request.Email,
                 Gender = request.Gender
             };
-            await _repo.AddUser(dto);
+            var user = await _repo.AddUser(dto);
 
+            dto.Id = user.Id;
+            dto.FriendCode = user.FriendCode;
             //ytterligare logik kan ske här, dto är inte garanterad att sparas i databasen
             return dto;
+
         }
     }
 }
