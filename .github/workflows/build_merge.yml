@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       net_v: '10.0.x'
+      slnx_path: 'GymSwipe/GymSwipe.slnx'
     steps:
       - name: Checkout the repo 👀  
         uses: actions/checkout@v4
@@ -16,14 +17,15 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{env.net_v}}
+          
       - name: Restore 🦒
-        run: dotnet restore
+        run: dotnet restore ${{env.slnx_path}}
           
       - name: Build 🛠️ 
         run: |
           echo "Building!"
-          dotnet build --no-restore --configuration Release
+          dotnet build ${{env.slnx_path}} --no-restore --configuration Release
       - name: Run Tests 📈📉
         run: |
           echo "Running tests"
-          dotnet test --no-build --configuration Release
+          dotnet test ${{env.slnx_path}} --no-build --configuration Release
