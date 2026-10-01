@@ -28,7 +28,10 @@ namespace GymSwipe.UserTests
                 WeightKg = 90
             };
 
-            var response = await _client.PostAsJsonAsync("api/gymuser", request);
+            var response = await _client.PostAsJsonAsync("api/User", request);
+
+            response.EnsureSuccessStatusCode();
+
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
