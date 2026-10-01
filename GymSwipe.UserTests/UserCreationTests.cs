@@ -1,4 +1,4 @@
-﻿using GymSwipe.ApplicationLayer.DTOs;
+﻿using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;
@@ -20,7 +20,7 @@ namespace GymSwipe.UserTests
         public async Task CreateadUser_IsSavedToDb_ReturnsExpected()
         {
 
-            var request = new GymUserDTO
+            var request = new RequestCreateGymUserDTO
             {
                 Firstname = "Usain",
                 Surname = "Bolt",
