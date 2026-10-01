@@ -6,6 +6,14 @@ namespace GymSwipe.ApplicationLayer.Services
 {
     public class UserService : IUserService
     {
+
+        private readonly IUserRepository _repo;
+
+        public UserService(IUserRepository repo)
+        {
+            _repo = repo;
+        }
+
         public Task<string> GenerateFriendCode()
         {
             string friendCode = "";
@@ -28,15 +36,36 @@ namespace GymSwipe.ApplicationLayer.Services
             throw new NotImplementedException();
         }
 
-        public Task<GymUserDTO> GetUserById(string id)
+        public async Task<GymUserDTO> GetUserById(int id)
         {
-            throw new NotImplementedException();
+            return await _repo.GetUserById(id);
+
+
         }
+
+
+        public async Task TryToDeleteUserById(int id)
+        {
+            await _repo.DeleteUserById(id);
+
+        }
+
 
         public async Task<GymUserDTO>? TryAndCreateUserThroughRequestModelAsync(RequestCreateGymUserDTO request)
         {
-            return null;
-            return new GymUserDTO();
+            GymUserDTO dto = new()
+            {
+                Firstname = request.Firstname,
+                Surname = request.Surname,
+                HeightCm = request.HeightCm,
+                WeightKg = request.WeightKg,
+                Email = request.Email,
+                Gender = request.Gender
+            };
+            await _repo.AddUser(dto);
+
+            //ytterligare logik kan ske här, dto är inte garanterad att sparas i databasen
+            return dto;
         }
     }
 }

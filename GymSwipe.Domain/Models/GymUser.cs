@@ -63,7 +63,7 @@ namespace GymSwipe.Domain.Models
             //NNNN-NNNN-NNNN-NNNN
             //1337-6969-4201-6767
 
-
+            FriendCode = friendCode;
         }
 
     }

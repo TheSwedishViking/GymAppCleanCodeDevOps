@@ -35,6 +35,11 @@
         Command="{Binding GreetUserCommand}"
         Clicked="OnClickGreetUser"/>
 
+        <Button
+            Text="Delete"
+            Command="{Binding DeleteUserCommand}"
+            />
+
         <Label
             x:Name="lblGreeted"
             Text ="{Binding GreetingUser}"

@@ -1,7 +1,4 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Interfaces
 {
@@ -9,5 +6,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     {
         Task AddUser(GymUserDTO dto);
         Task<GymUserDTO> GetUserById(int id);
+        Task DeleteUserById(int id);
     }
 }
