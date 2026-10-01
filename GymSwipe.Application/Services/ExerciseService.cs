@@ -1,5 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.Domain.Enums;
 using GymSwipe.Domain.ExampleData;
 using GymSwipe.Domain.Models;
 using System;
@@ -32,6 +33,12 @@ namespace GymSwipe.ApplicationLayer.Services
                 }).ToList();
 
             return dtos;
+        }
+
+        public async Task<List<ExerciseDTO>?> GetExerciseByEnum(AreaEnum area)
+        {
+            var exas = await GetExerciseByIdAsync((int)(area));
+            return exas;
         }
 
         public async Task<List<ExerciseDTO>> GetExerciseByIdAsync(int id)
