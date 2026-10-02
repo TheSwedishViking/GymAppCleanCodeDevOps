@@ -1,5 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
 using GymSwipe.Infrastructure.Repos;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xunit;
 
 namespace GymSwipe.UserTests.FixtureFolder
 {
-    public class ExerciseFixture : IDisposable
+    public class ExerciseFixture : IAsyncLifetime
     {
         public ServiceProvider ServiceProvider { get; private set; }
         public ExerciseFixture()
@@ -24,10 +26,25 @@ namespace GymSwipe.UserTests.FixtureFolder
 
             services.AddScoped<IExerciseRepository, ExerciseRepo>();
             services.AddScoped<IExerciseService, ExerciseService>();
+            services.AddScoped<IDatabaseInitalizer, DatabaseInitalizer>();
 
             ServiceProvider = services.BuildServiceProvider();
         }
-        public void Dispose() => ServiceProvider.Dispose();
-        
+        public async Task DisposeAsync()
+        {
+            if(ServiceProvider != null)
+            {
+                await ServiceProvider.DisposeAsync();
+            }
+        }
+
+        public  async Task InitializeAsync()
+        {
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var init = scope.ServiceProvider.GetRequiredService<IDatabaseInitalizer>();
+                await init.InitalizeAsync();
+            }
+        }
     }
 }

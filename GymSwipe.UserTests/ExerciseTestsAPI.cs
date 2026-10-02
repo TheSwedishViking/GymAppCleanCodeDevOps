@@ -13,7 +13,7 @@ namespace GymSwipe.UserTests
         private readonly HttpClient _client;
         public ExerciseTestsAPI(UserApiFixture fixture)
         {
-            _client = fixture.CreateClient();
+            _client = fixture.GetClient();
         }
 
         [Fact]

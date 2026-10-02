@@ -16,7 +16,16 @@ namespace GymSwipe.Infrastructure.Data
         }
         public async Task InitalizeAsync(CancellationToken ct = default)
         {
-            await _db.Database.MigrateAsync(ct);
+            //Relational ones SQL server, SSMS, in-memory dosen't count => Can't migrate
+            if (_db.Database.IsRelational())
+            {
+                await _db.Database.MigrateAsync(ct);
+            }
+            //In memory awaits to ensure creation, so that we can handle tests
+            else
+            {
+                await _db.Database.EnsureCreatedAsync();
+            }
             //Assume no exercises => Db empty
             if (!await _db.Exercises.AnyAsync(ct))
             {
