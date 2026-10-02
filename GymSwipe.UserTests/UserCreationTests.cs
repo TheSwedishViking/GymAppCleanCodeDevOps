@@ -14,7 +14,7 @@ namespace GymSwipe.UserTests
 
         public UserCreationTests(UserApiFixture fixture)
         {
-            _client = fixture.CreateClient();
+            _client = fixture.GetClient();
         }
 
 
