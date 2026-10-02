@@ -51,6 +51,16 @@ namespace GymSwipe.Infrastructure.Data
 
               await  _db.SaveChangesAsync();
             }
+            if(!await _db.Users.AnyAsync(ct))
+            {
+                //var robert = new GymUser
+                //{
+                //    Id=1,
+                //    Email
+                //}
+            }
+
         }
+        
     }
 }
