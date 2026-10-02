@@ -45,6 +45,7 @@ namespace GymSwipe.ViewModels
             _loggedInUser = loggedInUser;
             _httpClient = httpClient;
             CurrentUser = _loggedInUser.CurrentUser;
+
             GreetUserCommand = new Command(async () =>
             {
                 await GreetUser();

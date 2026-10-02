@@ -63,8 +63,6 @@ namespace GymSwipe.UserTests
                 actual = false;
             }
 
-
-
             Assert.Equal(expected, actual);
         }
 

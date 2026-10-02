@@ -26,6 +26,17 @@
              VerticalOptions="Center" 
  HorizontalOptions="Center"
             />
+
+        <Label
+            Text="{Binding StatusCheck}" 
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            Grid.Row="0"
+            Grid.Column="1"
+    />
+
+
+
         <!--Name-->
         <Label
             Text="Firstname" 
@@ -98,6 +109,8 @@ Grid.Column="0"
             Text="Register!"
             Grid.Row="6"
             Grid.Column="1"/>
+
+        
     </Grid>
 
 </ContentPage>
