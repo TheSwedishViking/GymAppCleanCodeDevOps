@@ -18,11 +18,23 @@ namespace GymSwipe.UserTests.FixtureFolder
         public ServiceProvider ServiceProvider { get; private set; }
         public ExerciseFixture()
         {
-            var config = new ConfigurationBuilder().AddUserSecrets<ExerciseFixture>().Build();
+            var config = new ConfigurationBuilder().AddUserSecrets<ExerciseFixture>(optional: true).Build();
 
             var services = new ServiceCollection();
 
-            services.AddDbContext<GymAppDbContext>(d => d.UseSqlServer(config["Connections:LocalConnection"]));
+            var connString = config["Connections:LocalConnection"];
+
+            //Use in memory
+            if (string.IsNullOrEmpty(connString))
+            {
+                services.AddDbContext<GymAppDbContext>(db => db.UseInMemoryDatabase("GymAppTestDb"));
+            }
+            //Local machine; use server
+            else
+            {
+                services.AddDbContext<GymAppDbContext>(d => d.UseSqlServer(connString));
+
+            }
 
             services.AddScoped<IExerciseRepository, ExerciseRepo>();
             services.AddScoped<IExerciseService, ExerciseService>();
