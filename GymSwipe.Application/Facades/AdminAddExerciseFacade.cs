@@ -9,9 +9,11 @@ namespace GymSwipe.ApplicationLayer.Facades
     public class AdminAddExerciseFacade : IAdminAddExerciseFacade
     {
         private readonly IExerciseService _exerciseService;
-        public AdminAddExerciseFacade(IExerciseService exerciseService  )
+        private readonly ITraningAreaService _traningAreaService;
+        public AdminAddExerciseFacade(IExerciseService exerciseService, ITraningAreaService traningAreaService)
         {
             _exerciseService = exerciseService;
+            _traningAreaService = traningAreaService;
         }
         public Task AddExercise(Exercise newExercise)
         {
@@ -21,6 +23,11 @@ namespace GymSwipe.ApplicationLayer.Facades
 
             //Send over API (if everythigns valid)
 
+            throw new NotImplementedException();
+        }
+
+        public Task<List<ExerciseTargetArea>> GetExerciseTargetsAsync()
+        {
             throw new NotImplementedException();
         }
     }
