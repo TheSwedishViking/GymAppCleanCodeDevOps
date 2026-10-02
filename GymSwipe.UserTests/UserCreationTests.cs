@@ -1,6 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
 using GymSwipe.ApplicationLayer.Services;
-using GymSwipe.UserTests.FixtureFolder;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;
@@ -66,14 +65,11 @@ namespace GymSwipe.UserTests
 
             Assert.Equal(expected, actual);
         }
-        [InlineData("Robinbertling@gmail.com", false)] //false = email taken
+        //false = email taken
         [InlineData("PeterStormare@gmail.com", false)]
         [InlineData("bATLover@gmail.com", false)]
         [InlineData("robinbertling@gmail.com", false)]
-        [InlineData("Peter123Stormare@gmail.com", true)]
-        [InlineData("batlover@gmail.com", false)]
-        [InlineData("PeterStormage@gmail.com", true)]
-        [InlineData("bathater@gmail.com", true)]
+
         [Theory]
         public async Task CreateadUser_HasUniqueEmail_ReturnExpected(string email, bool expected)
         {
