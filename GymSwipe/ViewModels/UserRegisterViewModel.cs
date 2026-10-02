@@ -59,13 +59,26 @@ namespace GymSwipe.ViewModels
             }
             CurrentUser.Surname = last;
 
+            var correctEmail = _validator.UserEmailIsValid(CurrentUser.Email);
 
+            if (correctEmail.IsValid == false)
+            {
+                StatusCheck = "Email incorrect format. Good luck";
+
+                return;
+            }
+            bool uniqueEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/email/" + correctEmail.Email);
+            if (uniqueEmail == false)
+            {
+                StatusCheck = correctEmail.Email + " already in use. Try being original!";
+                return;
+            }
 
             var request = new RequestCreateGymUserDTO
             {
                 Firstname = CurrentUser.Firstname,
                 Surname = CurrentUser.Surname,
-                Email = CurrentUser.Email,
+                Email = correctEmail.Email,
                 HeightCm = CurrentUser.HeightCm,
                 WeightKg = CurrentUser.WeightKg,
                 Gender = CurrentUser.Gender

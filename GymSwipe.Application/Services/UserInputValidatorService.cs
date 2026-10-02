@@ -36,5 +36,27 @@ namespace GymSwipe.ApplicationLayer.Services
         {
             return char.ToUpper(lowerName[0]) + lowerName.Substring(1);
         }
+
+
+        public (bool IsValid, string? Email) UserEmailIsValid(string? email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return (false, null);
+            }
+            string emailLower = email.ToLower();
+            Regex emailPattern = new Regex(@"^[a-z0-9]{5,40}@[a-z0-9]{1,15}\.[a-z]{2,6}$");
+            if (!emailPattern.IsMatch(emailLower))
+            {
+                return (false, null);
+            }
+
+            return (true, emailLower); //emailValid
+
+        }
+
+
+
+
     }
 }
