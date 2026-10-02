@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymSwipe.Pages.UserRegistrationPage"
              Title="UserRegistrationPage">
-    <Grid Margin="50,25,20,20" RowSpacing="25">
+    <Grid Margin="50,25,20,20" RowSpacing="20">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -24,7 +25,7 @@
             Grid.Column="0"
             FontSize="Large"
              VerticalOptions="Center" 
- HorizontalOptions="Center"
+            HorizontalOptions="Center"
             />
 
         <Label
@@ -33,7 +34,7 @@
             HorizontalOptions="Center"
             Grid.Row="0"
             Grid.Column="1"
-    />
+        />
 
 
 
@@ -50,6 +51,7 @@
             Text="{Binding CurrentUser.Firstname, Mode=TwoWay}"
              Grid.Row="1"
             Grid.Column="1"/>
+        
         <Label
             Text="Surname" 
             VerticalOptions="Center" 
@@ -68,64 +70,68 @@
             Text="Email" 
             VerticalOptions="Center" 
             HorizontalOptions="Center"
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="0"
         />
         <Entry
             x:Name="EmailEntry"
             Text="{Binding CurrentUser.Email, Mode=TwoWay}"
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="1"/>
 
         <!--Body-->
         <Label
             
-    Text="Height (cm)" 
-    VerticalOptions="Center" 
-    HorizontalOptions="Center"
-     Grid.Row="3"
-    Grid.Column="0"
-    />
+            Text="Height (cm)" 
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+             Grid.Row="4"
+            Grid.Column="0"
+        />
+        
         <Entry
-              Keyboard="Numeric"
-    x:Name="HeightCmEntry"
-                         Text="{Binding CurrentUser.HeightCm, Mode=TwoWay}"
+                Keyboard="Numeric"
+                 x:Name="HeightCmEntry"
+                 Text="{Binding CurrentUser.HeightCm, Mode=TwoWay}"
+                 Grid.Row="4"
+                Grid.Column="1"/>
+        
+            <Label
+                Text="Weight (kg)" 
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                 Grid.Row="5"
+                Grid.Column="0"
+            />
 
-     Grid.Row="3"
-    Grid.Column="1"/>
-        <Label
-Text="Weight (kg)" 
-VerticalOptions="Center" 
-HorizontalOptions="Center"
- Grid.Row="4"
-Grid.Column="0"
-/>
         <Entry
-            Keyboard="Numeric"
-x:Name="WeightKgEntry"
-                                     Text="{Binding CurrentUser.WeightKg, Mode=TwoWay}"
+            
+                    Keyboard="Numeric"
+                    x:Name="WeightKgEntry"
+                  Text="{Binding CurrentUser.WeightKg, Mode=TwoWay}"
+                 Grid.Row="5"
+                Grid.Column="1"/>
 
- Grid.Row="4"
-Grid.Column="1"/>
-        <Label
-Text="Gender (for caloric calculation)" 
-VerticalOptions="Center" 
-HorizontalOptions="Center"
- Grid.Row="5"
-Grid.Column="0"
-/>
-        <HorizontalStackLayout Grid.Row="5" Grid.Column="1" RadioButtonGroup.GroupName="Gender"
-                       RadioButtonGroup.SelectedValue="{Binding CurrentUser.Gender, Mode=TwoWay}">
+            <Label
+            Text="Gender (for caloric calculation)" 
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+             Grid.Row="6"
+            Grid.Column="0"
+            />
+
+        <HorizontalStackLayout Grid.Row="6" Grid.Column="1" RadioButtonGroup.GroupName="Gender"
+             RadioButtonGroup.SelectedValue="{Binding CurrentUser.Gender, Mode=TwoWay}">
             <RadioButton Content="Male"         Margin="25,0" Value="True" />
             <RadioButton Content="Female"       Margin="25,0" Value="False" />
         </HorizontalStackLayout>
+        
         <Button
             Command="{Binding RegisterUserCommand}"
             Text="Register!"
-            Grid.Row="6"
+            Grid.Row="9"
             Grid.Column="1"/>
 
-        
     </Grid>
 
 </ContentPage>
