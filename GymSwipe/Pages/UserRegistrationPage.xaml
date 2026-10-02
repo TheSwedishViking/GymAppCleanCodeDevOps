@@ -26,6 +26,17 @@
              VerticalOptions="Center" 
  HorizontalOptions="Center"
             />
+
+        <Label
+            Text="{Binding StatusCheck}" 
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            Grid.Row="0"
+            Grid.Column="1"
+    />
+
+
+
         <!--Name-->
         <Label
             Text="Firstname" 
@@ -51,6 +62,21 @@
              Text="{Binding CurrentUser.Surname, Mode=TwoWay}"
              Grid.Row="2"
             Grid.Column="1"/>
+
+
+        <Label
+            Text="Email" 
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            Grid.Row="2"
+            Grid.Column="0"
+        />
+        <Entry
+            x:Name="EmailEntry"
+            Text="{Binding CurrentUser.Email, Mode=TwoWay}"
+            Grid.Row="2"
+            Grid.Column="1"/>
+
         <!--Body-->
         <Label
             
@@ -98,6 +124,8 @@ Grid.Column="0"
             Text="Register!"
             Grid.Row="6"
             Grid.Column="1"/>
+
+        
     </Grid>
 
 </ContentPage>

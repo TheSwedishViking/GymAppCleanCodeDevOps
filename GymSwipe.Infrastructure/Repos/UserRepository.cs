@@ -42,7 +42,6 @@ namespace GymSwipe.Infrastructure.Repos
             Console.WriteLine();
             foundUser.SetFriendCode();
 
-
             return new GymUserDTO
             {
                 Id = foundUser.Id,
@@ -54,6 +53,19 @@ namespace GymSwipe.Infrastructure.Repos
                 Gender = foundUser.Gender,
                 FriendCode = foundUser.FriendCode
             };
+        }
+
+        public async Task<bool> GetUserByEmail(string email)
+        {
+            GymUser foundUser = _db.Users.FirstOrDefault(u => u.Email == email);
+            Console.WriteLine();
+
+            if (foundUser == null)
+            {
+                return true; //Email is available
+            }
+
+            return false; //Email is already in use
         }
 
 
