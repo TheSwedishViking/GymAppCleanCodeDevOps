@@ -4,11 +4,20 @@
              x:Class="GymSwipe.Pages.RandomExercisePage"
              Title="RandomExercisePage">
 
-    <Grid RowDefinitions="Auto,*" Padding="10" RowSpacing="10">
-        <Button Grid.Row="0"
+    <Grid RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="Auto, Auto, Auto"   Padding="10" RowSpacing="10">
+        
+        <Button Grid.Row="0" Grid.Column="0"
                 Text="Get random!"
                 Command="{Binding GetRandomExcerises}"
                 HorizontalOptions="Center" />
+        <Button Grid.Row="0" Grid.Column="1"
+             Text="Get chest exercises!"
+             Command="{Binding GetChestExercises}"
+             HorizontalOptions="Center" />
+        <Button Grid.Row="0" Grid.Column="2"
+      Text="View all!"
+      Command="{Binding GetAllExercises}"
+      HorizontalOptions="Center" />
 
         <CollectionView Grid.Row="1"
                         ItemsSource="{Binding ExerciseDTOs}"
@@ -21,10 +30,20 @@
             </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" Padding="10">
+                    <Grid ColumnDefinitions="Auto,Auto,2*,Auto" ColumnSpacing="10" Padding="10">
                         <Label Grid.Column="0" Text="{Binding Name}" FontAttributes="Bold"/>
-                        <Label Grid.Column="1" Text="{Binding Id}" FontAttributes="Italic"/> 
-                        <Label Grid.Column="2" Text="{Binding TargetAreaName}" FontAttributes="Italic"/> 
+                        <Label Grid.Column="1" Text="{Binding Id}" FontAttributes="Italic"/>
+                        <!--Flex layout to handle multiple strings/objects in a list-->
+                        <FlexLayout Grid.Column="2"
+                                    BindableLayout.ItemsSource="{Binding TargetAreaNames}"
+                                    Wrap="Wrap"
+                                    Direction="Row">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="x:String"> <!--Right now a string, could be of type TargetAreaDTO in the future...-->
+                                    <Label Text="{Binding .}" Margin="0,0,4,0"/> <!--Binding '.' targets item in the collection, something with relativity-->
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
                         <Label Grid.Column="3" Text="{Binding VideoSourceLink}" FontAttributes="Italic"/>
                     </Grid>
                 </DataTemplate>
