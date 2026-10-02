@@ -1,4 +1,5 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -26,9 +27,9 @@ namespace GymSwipe.ApplicationLayer.Facades
             throw new NotImplementedException();
         }
 
-        public Task<List<ExerciseTargetArea>> GetExerciseTargetsAsync()
+        public async Task<List<TargetAreaDTO>> GetExerciseTargetsAsync()
         {
-            throw new NotImplementedException();
+            return await _traningAreaService.GetExerciseTargetsAsync();
         }
     }
 }

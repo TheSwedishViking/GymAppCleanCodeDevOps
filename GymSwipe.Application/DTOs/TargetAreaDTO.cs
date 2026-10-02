@@ -7,7 +7,7 @@ namespace GymSwipe.ApplicationLayer.DTOs
     public class TargetAreaDTO
     {
         public int Id;
-        public string Name; 
+        public string Name { get; set; }
       //  public List<string>? Exercises
     }
 }

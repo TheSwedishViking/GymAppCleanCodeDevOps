@@ -4,9 +4,15 @@ namespace GymSwipe.Pages;
 
 public partial class AdminRegisterNewExercise : ContentPage
 {
+	private readonly AdminRegisterNewExerciseViewModel _vm;
 	public AdminRegisterNewExercise(AdminRegisterNewExerciseViewModel vm)
 	{
 		InitializeComponent();
-		BindingContext = vm;
+		BindingContext = _vm = vm;
 	}
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+		await _vm.OnLoadPageGetExerciseAreas();
+    }
 }

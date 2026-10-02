@@ -1,4 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
+using GymSwipe.UserTests.FixtureFolder;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;

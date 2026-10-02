@@ -7,9 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 
-namespace GymSwipe.UserTests
+namespace GymSwipe.UserTests.FixtureFolder
 {
-    public class UserApiFixture : WebApplicationFactory<GymSwipe.API.Program> //startup class for the api
+    public class UserApiFixture : WebApplicationFactory<API.Program> //startup class for the api
     {
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
