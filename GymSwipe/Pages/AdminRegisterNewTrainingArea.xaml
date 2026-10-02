@@ -5,6 +5,5 @@
              Title="AdminRegisterNewTrainingArea">
     <VerticalStackLayout>
         <Label Text="Admin register new training area" FontSize="Large"/>
-
     </VerticalStackLayout>
 </ContentPage>

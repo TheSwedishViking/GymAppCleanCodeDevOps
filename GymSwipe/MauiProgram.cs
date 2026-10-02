@@ -4,7 +4,9 @@ using GymSwipe.ApplicationLayer.Services;
 using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
 using GymSwipe.Infrastructure.Repos;
+using GymSwipe.Pages;
 using GymSwipe.ViewModels;
+using GymSwipe.ViewModels.Admin;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -59,6 +61,7 @@ namespace GymSwipe
             builder.Services.AddSingleton<UserPageAccountViewModel>();
             builder.Services.AddTransient<UserRegisterViewModel>();
             builder.Services.AddTransient<RandomExerciseViewModel>();
+            builder.Services.AddTransient<AdminRegisterNewExerciseViewModel>();
             builder.Services.AddTransient<MainPageViewModel>();
 
             //api address

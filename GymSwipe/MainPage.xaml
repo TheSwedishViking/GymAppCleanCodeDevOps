@@ -36,10 +36,15 @@
               Clicked="RegisterUserNavigationButtonClicked"
               HorizontalOptions="Fill" />
             <Button
-        x:Name="RandomExerciseButton"
-        Text="View exercises" 
-        Clicked="RandomExerciseButtonButtonClicked"
-        HorizontalOptions="Fill" />
+            x:Name="RandomExerciseButton"
+            Text="View exercises" 
+            Clicked="RandomExerciseButtonButtonClicked"
+            HorizontalOptions="Fill" />
+            <Button
+                x:Name="Admin_NewExerciseButton"
+                Text="Admin: New Exercise"
+                Clicked="Admin_NewExerciseButton_Clicked"
+                HorizontalOptions="Fill"/>
 
         </VerticalStackLayout>
     </ScrollView>

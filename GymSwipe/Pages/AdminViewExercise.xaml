@@ -4,9 +4,6 @@
              x:Class="GymSwipe.Pages.AdminViewExercise"
              Title="AdminViewExercise">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <Label Text="Admin view exercise" FontSize="Large"/>
     </VerticalStackLayout>
 </ContentPage>
