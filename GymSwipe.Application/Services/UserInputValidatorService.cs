@@ -4,9 +4,14 @@ namespace GymSwipe.ApplicationLayer.Services
 {
     public class UserInputValidatorService
     {
-        public string? UserNameValidator(string name)
+        public string? UserNameValidator(string? name)
         {
-            string trimmedName = "";
+            if (string.IsNullOrEmpty(name))
+            {
+                return null;
+            }
+
+            string? trimmedName = "";
 
 
             foreach (char c in name)
@@ -19,15 +24,17 @@ namespace GymSwipe.ApplicationLayer.Services
             //Titta på läng imorgon
             Regex namePattern = new Regex(@"^([a-z]{3,15})$");
 
-
-            namePattern.IsMatch(trimmedName.ToLower());
-
-            return Capitalize(trimmedName);
+            string lowerName = trimmedName.ToLower();
+            if (!namePattern.IsMatch(lowerName))
+            {
+                return null;
+            }
+            return Capitalize(lowerName);
         }
 
-        public static string Capitalize(string input)
+        public static string Capitalize(string lowerName)
         {
-            return char.ToUpper(input[0]) + input.Substring(1);
+            return char.ToUpper(lowerName[0]) + lowerName.Substring(1);
         }
     }
 }

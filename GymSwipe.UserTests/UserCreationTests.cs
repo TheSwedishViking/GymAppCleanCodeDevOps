@@ -1,19 +1,17 @@
-﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
+﻿using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
 using GymSwipe.ApplicationLayer.Services;
-using GymSwipe.UserTests.FixtureFolder;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;
 
 namespace GymSwipe.UserTests
 {
-    public class UserCreationTests : IClassFixture<UserApiFixture>
+    public class UserCreationTests : IClassFixture<UserInMemoryApiFixture>
     {
 
         private readonly HttpClient _client;
 
-        public UserCreationTests(UserApiFixture fixture)
+        public UserCreationTests(UserInMemoryApiFixture fixture)
         {
             _client = fixture.CreateClient();
         }
@@ -39,30 +37,39 @@ namespace GymSwipe.UserTests
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
-        [Fact]
-        public async Task CreatedUser_ValidatedNames_ReturnsExpected()
+
+        [InlineData("Peter", "Stormare", true)]
+        [InlineData("peter", "stormare", true)]
+        [InlineData("Pet    er", "Stor        mare", true)]
+        [InlineData("Pe", "St", false)]
+        [InlineData("P3ter", "Sto12", true)]
+        [InlineData("@GOdare", "St1 ma$re", true)]
+        [InlineData(null, null, false)]
+        [Theory]
+        public async Task UserCreatesNames_ValidateNames_ReturnsExpected(string? firstName, string? surName, bool expected)
         {
-            var request = new RequestCreateGymUserDTO
-            {
-                Firstname = "Peter",
-                Surname = "Stormare",
-                Gender = true,
-                HeightCm = 200,
-                WeightKg = 90
-            };
+            bool actual = true;
+
+            string? Firstname = "";
+            string? Surname = "";
+
 
             var service = new UserInputValidatorService();
-            request.Firstname = service.UserNameValidator(request.Firstname);
-            request.Surname = service.UserNameValidator(request.Surname);
+            Firstname = service.UserNameValidator(firstName);
+            Surname = service.UserNameValidator(surName);
 
-            var response = await _client.PostAsJsonAsync("api/User", request);
+            if (Firstname == null || Surname == null)
+            {
+                actual = false;
+            }
 
-            response.EnsureSuccessStatusCode();
-            var returnedUser = await response.Content.ReadFromJsonAsync<GymUserDTO>();
 
 
-            Assert.Equal("Peter", returnedUser.Firstname);
+            Assert.Equal(expected, actual);
         }
+
+
+
 
 
     }
