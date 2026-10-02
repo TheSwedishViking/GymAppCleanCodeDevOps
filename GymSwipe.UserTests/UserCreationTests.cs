@@ -1,17 +1,18 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
 using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.UserTests.FixtureFolder;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;
 
 namespace GymSwipe.UserTests
 {
-    public class UserCreationTests : IClassFixture<UserInMemoryApiFixture>
+    public class UserCreationTests : IClassFixture<UserApiFixture>
     {
 
         private readonly HttpClient _client;
 
-        public UserCreationTests(UserInMemoryApiFixture fixture)
+        public UserCreationTests(UserApiFixture fixture)
         {
             _client = fixture.CreateClient();
         }
@@ -65,10 +66,21 @@ namespace GymSwipe.UserTests
 
             Assert.Equal(expected, actual);
         }
+        [InlineData("Robinbertling@gmail.com", false)] //false = email taken
+        [InlineData("PeterStormare@gmail.com", false)]
+        [InlineData("bATLover@gmail.com", false)]
+        [InlineData("robinbertling@gmail.com", false)]
+        [InlineData("Peter123Stormare@gmail.com", true)]
+        [InlineData("batlover@gmail.com", false)]
+        [InlineData("PeterStormage@gmail.com", true)]
+        [InlineData("bathater@gmail.com", true)]
+        [Theory]
+        public async Task CreateadUser_HasUniqueEmail_ReturnExpected(string email, bool expected)
+        {
+            var response = await _client.GetFromJsonAsync<bool>("api/User/email/" + email);
 
-
-
-
+            Assert.Equal(expected, response);
+        }
 
     }
 }

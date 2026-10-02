@@ -1,14 +1,11 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using System;
-using System.Collections.Generic;
+using GymSwipe.UserTests.FixtureFolder;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
 using Xunit;
 
 namespace GymSwipe.UserTests
 {
-    public class ExerciseTestsAPI:IClassFixture<UserApiFixture>
+    public class ExerciseTestsAPI : IClassFixture<UserApiFixture>
     {
         private readonly HttpClient _client;
         public ExerciseTestsAPI(UserApiFixture fixture)
