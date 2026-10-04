@@ -55,6 +55,11 @@ namespace GymSwipe.ViewModels.Admin
 
         private async Task TryRegisterNewExercise()
         {
+            if(Selected.Count == 0)
+            {
+                return;
+            }
+            NewExercise.TargetAreaNames = Selected.Select(e=>e.Name).ToList();
             Console.WriteLine(NewExercise);
             await _adminAddExerciseFacade.AddExercise(NewExercise);
         }

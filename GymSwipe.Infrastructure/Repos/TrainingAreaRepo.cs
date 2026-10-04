@@ -23,7 +23,8 @@ namespace GymSwipe.Infrastructure.Repos
 
         public async Task<ExerciseTargetArea> GetExerciseTargetAreaByName(string name)
         {
-            return await _db.ExercisesTargetAreas.FirstOrDefaultAsync(e=>string.Equals(name, e.ExerciseCategoryName, StringComparison.OrdinalIgnoreCase));
+            return await _db.ExercisesTargetAreas
+                .FirstOrDefaultAsync(e => e.ExerciseCategoryName == name);
         }
 
         public async Task<List<ExerciseTargetArea>> GetExerciseTargetAreasAsync()

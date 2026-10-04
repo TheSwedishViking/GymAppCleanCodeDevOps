@@ -30,6 +30,11 @@ namespace GymSwipe.Infrastructure.Repos
                 Include(e=>e.TargetAreas).ToListAsync();
         }
 
+        public async Task<Exercise> GetExerciseByName(string name)
+        {
+            return await _db.Exercises.FirstOrDefaultAsync(e=>e.Name.ToLower() == name.ToLower());
+        }
+
         public async Task<List<Exercise>> GetExercisesByCategoryAsync(int categoryId)
         {
             return await 

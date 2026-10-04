@@ -52,8 +52,7 @@ namespace GymSwipe.ApplicationLayer.Services
 
         public async Task<ExerciseDTO> GetExerciseByName(string name)
         {
-            var exs = await _repo.GetAllExercisesAsync();
-            var ex = exs.FirstOrDefault(e=>string.Equals(e.Name, name, StringComparison.OrdinalIgnoreCase));
+            var ex = await _repo.GetExerciseByName(name);   
             if(ex == null)
             {
                 return null;

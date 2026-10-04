@@ -44,8 +44,7 @@ namespace GymSwipe.ApplicationLayer.Services
 
         public async Task<TargetAreaDTO> GetTargetAreaByName(string name)
         {
-            var exs = await _repo.GetExerciseTargetAreasAsync();
-            var ex = exs.FirstOrDefault(e => string.Equals(e.ExerciseCategoryName, name, StringComparison.OrdinalIgnoreCase));
+            var ex = await _repo.GetExerciseTargetAreaByName(name);
             if (ex == null)
             {
                 return null;
