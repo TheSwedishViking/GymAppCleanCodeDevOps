@@ -84,6 +84,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Pages\AdminAddNewTargetArea.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\AdminRegisterNewExercise.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -45,6 +45,11 @@
                 Text="Admin: New Exercise"
                 Clicked="Admin_NewExerciseButton_Clicked"
                 HorizontalOptions="Fill"/>
+            <Button
+             x:Name="Admin_NewTargetAreaButton"
+             Text="Admin: New Target Area"
+              Clicked="Admin_NewTargetAreaButton_Clicked"
+             HorizontalOptions="Fill"/>
 
         </VerticalStackLayout>
     </ScrollView>

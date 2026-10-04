@@ -11,7 +11,7 @@ namespace GymSwipe.ViewModels.Admin
 {
     public class AdminRegisterNewTrainingAreaViewModel : INotifyPropertyChanged
     {
-        public TargetAreaDTO NewTargetAreaDTO { get; set; } = new TargetAreaDTO();
+        public TargetAreaDTO NewTargetArea { get; set; } = new TargetAreaDTO();
         public ObservableCollection<TargetAreaDTO> Current { get; } = new ObservableCollection<TargetAreaDTO>();
         public ICommand GetAreasCommand { get; }
         public ICommand AddNewTargetAreaCommand { get; }
@@ -27,7 +27,7 @@ namespace GymSwipe.ViewModels.Admin
 
         public async Task TryAddNewExerciseTargetArea()
         {
-            await _adminAddTrainingAreaFacade.AddTargetArea(NewTargetAreaDTO);
+            await _adminAddTrainingAreaFacade.AddTargetArea(NewTargetArea);
         }
         public async Task GetAreas()
         {

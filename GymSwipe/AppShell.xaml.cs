@@ -13,6 +13,7 @@
             Routing.RegisterRoute(nameof(Pages.AdminRegisterNewTrainingArea), typeof(Pages.AdminRegisterNewTrainingArea));
             Routing.RegisterRoute(nameof(Pages.AdminViewExercise), typeof(Pages.AdminViewExercise));
             Routing.RegisterRoute(nameof(Pages.AdminViewTraningArea), typeof(Pages.AdminViewTraningArea));
+            Routing.RegisterRoute(nameof(Pages.AdminAddNewTargetArea), typeof(Pages.AdminAddNewTargetArea));
 
 
         }

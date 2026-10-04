@@ -21,6 +21,11 @@ namespace GymSwipe.Infrastructure.Repos
             await _db.SaveChangesAsync();
         }
 
+        public async Task<ExerciseTargetArea> GetExerciseTargetAreaByName(string name)
+        {
+            return await _db.ExercisesTargetAreas.FirstOrDefaultAsync(e=>string.Equals(name, e.ExerciseCategoryName, StringComparison.OrdinalIgnoreCase));
+        }
+
         public async Task<List<ExerciseTargetArea>> GetExerciseTargetAreasAsync()
         {
             return await _db.ExercisesTargetAreas.ToListAsync() ?? new List<ExerciseTargetArea>();
