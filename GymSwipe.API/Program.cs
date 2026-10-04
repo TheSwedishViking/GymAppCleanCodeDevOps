@@ -23,11 +23,22 @@ namespace GymSwipe.API
 
 
             //******DB CONTEXT*******
-            var connectionString = builder.Configuration.GetConnectionString("MyConnectionString")
-                                    ?? throw new InvalidOperationException("ConnectionStrings:MyConnectionString is missing.");
+            if (!builder.Environment.IsEnvironment("TestEnv"))
+            {
+                var connectionString = builder.Configuration.GetConnectionString("MyConnectionString")
+                                 ?? throw new InvalidOperationException("ConnectionStrings:MyConnectionString is missing.");
 
-            builder.Services.AddDbContext<GymAppDbContext>(options =>
-                options.UseSqlServer(connectionString));
+
+                builder.Services.AddDbContext<GymAppDbContext>(options =>
+                    options.UseSqlServer(connectionString));
+            }
+            else
+            {
+                //For tests with in-memory, fixture sets up this
+                builder.Services.AddScoped<GymAppDbContext>();
+            }
+         
+
 
             builder.Services.AddScoped<IDatabaseInitalizer, DatabaseInitalizer>();
 

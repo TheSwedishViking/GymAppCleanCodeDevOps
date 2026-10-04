@@ -3,18 +3,16 @@ using GymSwipe.UserTests.FixtureFolder;
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
 using Xunit;
 
 namespace GymSwipe.UserTests
 {
-    public class ExerciseTestsAPI:IClassFixture<UserApiFixture>
+    public class ExerciseTestsAPI : IClassFixture<UserApiFixture>
     {
         private readonly HttpClient _client;
         public ExerciseTestsAPI(UserApiFixture fixture)
         {
-            _client = fixture.CreateClient();
+            _client = fixture.GetClient();
         }
 
         [Fact]
