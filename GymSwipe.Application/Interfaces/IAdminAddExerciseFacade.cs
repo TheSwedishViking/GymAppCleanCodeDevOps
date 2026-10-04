@@ -8,7 +8,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface IAdminAddExerciseFacade
     {
-        Task AddExercise(Exercise newExercise);
+        Task AddExercise(ExerciseDTO newExercise);
         Task<List<TargetAreaDTO>> GetExerciseTargetsAsync();
     }
 }

@@ -16,15 +16,23 @@ namespace GymSwipe.ApplicationLayer.Facades
             _exerciseService = exerciseService;
             _traningAreaService = traningAreaService;
         }
-        public Task AddExercise(Exercise newExercise)
+        public async Task AddExercise(ExerciseDTO newExercise)
         {
             //Validate
+            if(newExercise == null)
+            {
+                throw new Exception("Empty exercise, can''t register"); 
+            }
 
-            //Convert to DTO
-
-            //Send over API (if everythigns valid)
-
-            throw new NotImplementedException();
+            var checkExisting = await _exerciseService.GetExerciseByName(newExercise.Name);
+            if(checkExisting == null)
+            {
+                await _exerciseService.SaveExercise(newExercise);
+            }
+            else
+            {
+                return;
+            }
         }
 
         public async Task<List<TargetAreaDTO>> GetExerciseTargetsAsync()

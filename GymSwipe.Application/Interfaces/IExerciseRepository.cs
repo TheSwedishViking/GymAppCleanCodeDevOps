@@ -10,6 +10,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     {
         Task<List<Exercise>> GetExercisesByCategoryAsync(int categoryId);
         Task<List<Exercise>> GetAllExercisesAsync();
-
+        Task AddExercise(Exercise domain);
     }
 }
