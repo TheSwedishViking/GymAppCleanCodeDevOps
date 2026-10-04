@@ -15,10 +15,11 @@ namespace GymSwipe.Infrastructure.Repos
         {
             _db = dbContext;
         }
-        public async Task AddTargetArea(ExerciseTargetArea area)
+        public async Task<bool> AddTargetArea(ExerciseTargetArea area)
         {
             _db.ExercisesTargetAreas.Add(area);
             await _db.SaveChangesAsync();
+            return true;
         }
 
         public async Task<ExerciseTargetArea> GetExerciseTargetAreaByName(string name)

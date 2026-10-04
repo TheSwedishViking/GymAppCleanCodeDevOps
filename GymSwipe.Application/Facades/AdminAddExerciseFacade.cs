@@ -16,7 +16,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             _exerciseService = exerciseService;
             _traningAreaService = traningAreaService;
         }
-        public async Task AddExercise(ExerciseDTO newExercise)
+        public async Task<bool> AddExercise(ExerciseDTO newExercise)
         {
             //Validate
             if(newExercise == null)
@@ -28,10 +28,11 @@ namespace GymSwipe.ApplicationLayer.Facades
             if(checkExisting == null)
             {
                 await _exerciseService.SaveExercise(newExercise);
+                return true;
             }
             else
             {
-                return;
+                return false;
             }
         }
 

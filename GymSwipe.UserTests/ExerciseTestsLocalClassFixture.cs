@@ -1,4 +1,5 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services;
 using GymSwipe.Domain.Enums;
 using GymSwipe.Infrastructure.Repos;
@@ -82,6 +83,56 @@ namespace GymSwipe.UserTests
                 Assert.Equal(e.Name, match.Name);
             });
         }
+        [Fact]
+        public async Task CreateExampleExercise_IfThereAlreadyIsOne_ReturnsExpected_FalseBoolean_IndicatesFailureToSave_NewExerciseThat_AlreadyExists_NoDuplicates()
+        {
+            var exercise = new ExerciseDTO
+            {
+                Name = "Push up",
+                VideoSourceLink = "https://www.youtube.com/",
+                TargetAreaNames = new List<string>{
+                    "Chest" }
+            };
+            bool expected = false;
+
+            var act = await _sut.GetExerciseByName(exercise.Name);
+
+            bool actual =  await _sut.SaveExercise(exercise);
+
+            Assert.Equal(actual, expected);
+        }
+        [Fact]
+        public async Task GetNamesOfExercises_ByName_ReturnsTrue()
+        {
+            string name = "Push up";
+
+            bool expected = true;
+
+            var actual = await _sut.GetExerciseByName(name);
+
+            Assert.Equal(name, actual.Name);
+        }
+        [Theory]
+        [InlineData("Push up", true)]
+        [InlineData("PUSH UP", true)]
+        [InlineData("pUsH up", true)]
+        [InlineData("backflip to frontflip",  false)]
+        public async Task GetNameOfExercises_HandlesStringCase_TriesToFindExercise_NonExistingExercise_ReturnsNull(string name,  bool shouldExist)
+        {
+            var result = await _sut.GetExerciseByName(name);
+
+            if (shouldExist)
+            {
+                Assert.NotNull(result);
+                Assert.Equal("Push up", result.Name);
+            }
+            else
+            {
+                Assert.Null(result);
+
+            }
+        }
+
 
     }
 }

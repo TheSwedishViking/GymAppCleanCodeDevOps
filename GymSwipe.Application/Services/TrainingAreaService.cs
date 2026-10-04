@@ -15,13 +15,14 @@ namespace GymSwipe.ApplicationLayer.Services
             _repo = traningAreaRepo;
         }
 
-        public async Task AddNewArea(TargetAreaDTO targetAreaDTO)
+        public async Task<bool> AddNewArea(TargetAreaDTO targetAreaDTO)
         {
             var domain = new ExerciseTargetArea
             {
                 ExerciseCategoryName = targetAreaDTO.Name
             };
-            await _repo.AddTargetArea(domain);
+            var result = await _repo.AddTargetArea(domain);
+            return result;
         }
 
         public async Task<List<TargetAreaDTO>> ConvertToDTOsFromDomainAsync(List<ExerciseTargetArea> areas)

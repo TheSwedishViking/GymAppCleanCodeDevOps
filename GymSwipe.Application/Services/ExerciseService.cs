@@ -81,8 +81,15 @@ namespace GymSwipe.ApplicationLayer.Services
             };
         }
 
-        public async Task SaveExercise(ExerciseDTO newExercise)
+        public async Task<bool> SaveExercise(ExerciseDTO newExercise)
         {
+            var checkExisting = await GetExerciseByName(newExercise.Name);
+
+            if (checkExisting != null)
+            {
+                return false;
+            }
+
             var targetAreas = (await Task.WhenAll(newExercise.TargetAreaNames.Select(_traningAreaRepo.GetExerciseTargetAreaByName))).ToList();
             var domain = new Exercise
             {
@@ -90,7 +97,7 @@ namespace GymSwipe.ApplicationLayer.Services
                 VideoSourceLink = newExercise.VideoSourceLink,
                 TargetAreas = targetAreas,
             };
-            await _repo.AddExercise(domain);
+           return await _repo.AddExercise(domain);
         }
     }
 }

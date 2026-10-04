@@ -14,6 +14,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task<List<ExerciseDTO>> GetAllExercisesAsync();
         Task<List<ExerciseDTO>?> GetRandomExercisesAsync();
         Task<List<ExerciseDTO>?> GetExerciseByEnum(AreaEnum area);
-        Task SaveExercise(ExerciseDTO newExercise);
+        Task<bool> SaveExercise(ExerciseDTO newExercise);
     }
 }
