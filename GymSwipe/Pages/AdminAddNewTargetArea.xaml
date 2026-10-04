@@ -22,13 +22,13 @@
        Grid.Row="1"
       Grid.Column="1"/>
         <Label
-      Text="Video link" 
+      Text="Current areas" 
       VerticalOptions="Center" 
       HorizontalOptions="Center"
        Grid.Row="2"
       Grid.Column="0"
       />
-        <CollectionView ItemsSource="{Binding Current}" Grid.Column="1" Grid.Row="3">
+        <CollectionView ItemsSource="{Binding Current}" Grid.Column="1" Grid.Row="2">
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
             </CollectionView.ItemsLayout>

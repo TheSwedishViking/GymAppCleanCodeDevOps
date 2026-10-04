@@ -34,7 +34,7 @@
          Grid.Row="2"
         Grid.Column="1"/>
         <Label 
-            Text="Targets these areas"
+            Text="Available target areas"
             Grid.Row="3"
             Grid.Column="0"
             />
