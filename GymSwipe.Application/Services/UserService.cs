@@ -31,16 +31,15 @@ namespace GymSwipe.ApplicationLayer.Services
             return Task.FromResult(friendCode);
         }
 
-        public Task<GymUserDTO> GetUserByEmail(string email)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<GymUserDTO> GetUserById(int id)
         {
             return await _repo.GetUserById(id);
+        }
 
-
+        public async Task<bool> GetUserByEmail(string email)
+        {
+            return await _repo.GetUserByEmail(email);
         }
 
 
@@ -70,5 +69,7 @@ namespace GymSwipe.ApplicationLayer.Services
             return dto;
 
         }
+
+
     }
 }

@@ -1,9 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Facades
 {
@@ -18,8 +15,9 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         public async Task<GymUserDTO?> CreateGymUser(RequestCreateGymUserDTO request)
         {
-            var existing = await _userService.GetUserByEmail(request.Email);
-            if (existing is not null) return null; //Return other error code if its over an API, or inform user of email already used
+            //Currently messing up my work sorry 
+            //var existing = await _userService.GetUserByEmail(request.Email);
+            //if (existing is not null) return null; //Return other error code if its over an API, or inform user of email already used
 
             var dto = new GymUserDTO
             {

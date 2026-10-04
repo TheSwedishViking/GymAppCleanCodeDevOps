@@ -11,6 +11,7 @@ namespace GymSwipe.ViewModels
     public class UserRegisterViewModel : INotifyPropertyChanged
     {
 
+        private readonly UserInputValidatorService _validator = new();
 
 
         public GymUser CurrentUser { get; set; } = new GymUser();
@@ -18,6 +19,19 @@ namespace GymSwipe.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public ICommand RegisterUserCommand { get; }
+
+        private string _statusCheck = "";
+        public string StatusCheck
+        {
+            get => _statusCheck;
+            set
+            {
+                if (_statusCheck == value) return;
+                _statusCheck = value;
+                OnPropertyChanged(nameof(StatusCheck));
+            }
+        }
+
         private LoggedInUser _loggedIn;
         private HttpClient _httpClient;
         public UserRegisterViewModel(LoggedInUser loggedInUser, HttpClient httpClient)
@@ -30,12 +44,41 @@ namespace GymSwipe.ViewModels
         public async Task TryRegisterNewUser()
         {
 
+            var first = _validator.UserNameValidator(CurrentUser.Firstname);
+            if (first is null)
+            {
+                StatusCheck = "Invalid first name. Use 3-15 letters.";
+                return;
+            }
+            CurrentUser.Firstname = first;
+            var last = _validator.UserNameValidator(CurrentUser.Surname);
+            if (last is null)
+            {
+                StatusCheck = "Invalid surname. Use 3-15 letters.";
+                return;
+            }
+            CurrentUser.Surname = last;
+
+            var correctEmail = _validator.UserEmailIsValid(CurrentUser.Email);
+
+            if (correctEmail.IsValid == false)
+            {
+                StatusCheck = "Email incorrect format. Good luck";
+
+                return;
+            }
+            bool uniqueEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/email/" + correctEmail.Email);
+            if (uniqueEmail == false)
+            {
+                StatusCheck = correctEmail.Email + " already in use. Try being original!";
+                return;
+            }
 
             var request = new RequestCreateGymUserDTO
             {
                 Firstname = CurrentUser.Firstname,
                 Surname = CurrentUser.Surname,
-                Email = CurrentUser.Email,
+                Email = correctEmail.Email,
                 HeightCm = CurrentUser.HeightCm,
                 WeightKg = CurrentUser.WeightKg,
                 Gender = CurrentUser.Gender
