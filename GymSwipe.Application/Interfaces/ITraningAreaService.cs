@@ -10,5 +10,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     {
         Task<List<TargetAreaDTO>> GetExerciseTargetsAsync();
         Task<List<TargetAreaDTO>> ConvertToDTOsFromDomainAsync(List<ExerciseTargetArea> areas);
+        Task<TargetAreaDTO> GetTargetAreaByName(string name);
+        Task AddNewArea(TargetAreaDTO targetAreaDTO);
     }
 }

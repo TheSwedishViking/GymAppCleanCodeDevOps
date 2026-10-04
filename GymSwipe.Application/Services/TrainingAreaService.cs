@@ -15,14 +15,19 @@ namespace GymSwipe.ApplicationLayer.Services
             _repo = traningAreaRepo;
         }
 
+        public async Task AddNewArea(TargetAreaDTO targetAreaDTO)
+        {
+            var domain = new ExerciseTargetArea
+            {
+                ExerciseCategoryName = targetAreaDTO.Name
+            };
+            await _repo.AddTargetArea(domain);
+        }
+
         public async Task<List<TargetAreaDTO>> ConvertToDTOsFromDomainAsync(List<ExerciseTargetArea> areas)
         {
-            List<TargetAreaDTO> dtos = areas.Select(e =>
-            new TargetAreaDTO
-            {
-                Id = e.Id,
-                Name = e.ExerciseCategoryName,
-            }).ToList();
+
+            var dtos = (await Task.WhenAll(areas.Select(e=>ConvertToDTO(e)))).ToList();
 
             return dtos;
         }
@@ -35,6 +40,26 @@ namespace GymSwipe.ApplicationLayer.Services
 
             return dtos;
 
+        }
+
+        public async Task<TargetAreaDTO> GetTargetAreaByName(string name)
+        {
+            var exs = await _repo.GetExerciseTargetAreasAsync();
+            var ex = exs.FirstOrDefault(e => string.Equals(e.ExerciseCategoryName, name, StringComparison.OrdinalIgnoreCase));
+            if (ex == null)
+            {
+                return null;
+            }
+            return await ConvertToDTO(ex);
+        }
+
+        private async Task<TargetAreaDTO> ConvertToDTO(ExerciseTargetArea ex)
+        {
+            return new TargetAreaDTO
+            {
+                Id = ex.Id,
+                Name = ex.ExerciseCategoryName,
+            };
         }
     }
 }
