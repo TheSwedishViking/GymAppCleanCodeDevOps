@@ -5,7 +5,16 @@ namespace GymSwipe.ApplicationLayer.Services
 {
     public class PlaylistService : IPlaylistService
     {
-        public GymPlaylist GetPlaylist(int id)
+
+
+        private readonly IPlaylistRepository _repo;
+
+        public PlaylistService(IPlaylistRepository repo)
+        {
+            _repo = repo;
+        }
+
+        public async Task<GymPlaylist> GetPlaylist(int id)
         {
             return await _repo.GetPlaylist(id);
         }

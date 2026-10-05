@@ -37,7 +37,7 @@ namespace GymSwipe.API
                 //For tests with in-memory, fixture sets up this
                 builder.Services.AddScoped<GymAppDbContext>();
             }
-         
+
 
 
             builder.Services.AddScoped<IDatabaseInitalizer, DatabaseInitalizer>();
@@ -51,7 +51,7 @@ namespace GymSwipe.API
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepo>();
             builder.Services.AddScoped<ITraningAreaRepo, TrainingAreaRepo>();
-            //builder.Services.AddScoped<IPlaylistRepository>();
+            builder.Services.AddScoped<IPlaylistRepository, GymPlaylistRepo>();
 
 
 

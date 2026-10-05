@@ -4,6 +4,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface IPlaylistService
     {
-        GymPlaylist GetPlaylist(int id);
+        Task<GymPlaylist> GetPlaylist(int id);
     }
 }

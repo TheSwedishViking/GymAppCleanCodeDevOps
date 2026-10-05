@@ -1,24 +1,26 @@
 ﻿using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.Domain.Models;
+using GymSwipe.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymSwipe.Infrastructure.Repos
 {
     public class GymPlaylistRepo : IPlaylistRepository
     {
-        private readonly IPlaylistRepository _db;
+        private readonly GymAppDbContext _db;
 
-        public GymPlaylistRepo(IPlaylistRepository db)
+        public GymPlaylistRepo(GymAppDbContext db)
         {
             _db = db;
         }
 
 
-        public async Task<GymPlaylist> GetPlaylist(int id)
+        public async Task<GymPlaylist?> GetPlaylist(int id)
         {
-            GymPlaylist foundPlaylist = await _db.GetPlaylist(id);
+            GymPlaylist? foundPlaylist = await _db.GymPlaylists.FirstOrDefaultAsync(playlist => playlist.Id == id);
             if (foundPlaylist == null)
             {
-                throw new Exception($"Playlist with id {id} not found.");
+                return null;
             }
 
             return foundPlaylist;

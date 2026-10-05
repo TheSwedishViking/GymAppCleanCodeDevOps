@@ -4,7 +4,6 @@ using GymSwipe.ApplicationLayer.Services;
 using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
 using GymSwipe.Infrastructure.Repos;
-using GymSwipe.Pages;
 using GymSwipe.ViewModels;
 using GymSwipe.ViewModels.Admin;
 using Microsoft.EntityFrameworkCore;
@@ -48,8 +47,8 @@ namespace GymSwipe
             //*******REPOSITORIES*******
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepo>();
-            builder.Services.AddScoped<ITraningAreaRepo,  TrainingAreaRepo>();
-            //builder.Services.AddScoped<IPlaylistRepository>();
+            builder.Services.AddScoped<ITraningAreaRepo, TrainingAreaRepo>();
+            builder.Services.AddScoped<IPlaylistRepository, GymPlaylistRepo>();
 
             //*******FACADES*******
             builder.Services.AddScoped<IUserFacade, UserActionsFacade>();
