@@ -8,9 +8,9 @@ namespace GymSwipe.API.Controllers
     public class GymplaylistController : ControllerBase
     {
 
-        private readonly IPlaylistService _playlistService;
+        private readonly IGymPlaylistService _playlistService;
 
-        public GymplaylistController(IPlaylistService playlistService)
+        public GymplaylistController(IGymPlaylistService playlistService)
         {
             _playlistService = playlistService;
         }

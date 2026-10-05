@@ -3,13 +3,13 @@ using GymSwipe.Domain.Models;
 
 namespace GymSwipe.ApplicationLayer.Services
 {
-    public class PlaylistService : IPlaylistService
+    public class GymPlaylistService : IGymPlaylistService
     {
 
 
-        private readonly IPlaylistRepository _repo;
+        private readonly IGymPlaylistRepository _repo;
 
-        public PlaylistService(IPlaylistRepository repo)
+        public GymPlaylistService(IGymPlaylistRepository repo)
         {
             _repo = repo;
         }

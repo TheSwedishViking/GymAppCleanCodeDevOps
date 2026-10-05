@@ -2,8 +2,10 @@
 
 namespace GymSwipe.ApplicationLayer.Interfaces
 {
-    public interface IPlaylistService
+    public interface IGymPlaylistRepository
     {
         Task<GymPlaylist> GetPlaylist(int id);
+
+
     }
 }

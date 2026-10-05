@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GymSwipe.Infrastructure.Repos
 {
-    public class GymPlaylistRepo : IPlaylistRepository
+    public class GymPlaylistRepo : IGymPlaylistRepository
     {
         private readonly GymAppDbContext _db;
 

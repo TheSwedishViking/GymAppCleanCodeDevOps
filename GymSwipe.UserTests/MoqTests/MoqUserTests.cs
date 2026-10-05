@@ -1,4 +1,6 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using System.Threading.Tasks;
+using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Services;
 using GymSwipe.Domain.Models;
 using Moq;
 using Xunit;
@@ -7,34 +9,25 @@ namespace GymSwipe.UserTests.MoqTests
 {
     public class MoqUserTests
     {
+
+
         [Fact]
-        public void TestUserPlaylist()
+        public async Task TestUserPlaylist()
         {
             // Arrange
-            var playlist = new GymPlaylist
-            {
-                Name = "Test Playlist",
-                Excercise = new PlaylistExcercise()
 
-            };
-
-            var mockRepository = new Mock<IPlaylistRepository>();
-
-
-
-
-            //ExerciseId = 1,
-            //        Id = 1,
-            //        PlaylistId = 1,
-            //        PlaylistOrder = 1
-
-
+            var gymPlaylistMock = new Mock<IGymPlaylistRepository>();
+            gymPlaylistMock.Setup(p => p.GetPlaylist(1))
+                .ReturnsAsync(new GymPlaylist { Id = 1, Name = "Test Playlist" });
 
             // Act
-
-
+            var gymPlaylistService = new GymPlaylistService(gymPlaylistMock.Object);
+            var result = await gymPlaylistService.GetPlaylist(1);
 
             // Assert
+            Assert.Equal("Test Playlist", result.Name);
         }
     }
+
+
 }

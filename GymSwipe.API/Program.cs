@@ -45,13 +45,13 @@ namespace GymSwipe.API
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
-            builder.Services.AddScoped<IPlaylistService, PlaylistService>();
+            builder.Services.AddScoped<IGymPlaylistService, GymPlaylistService>();
 
             //*******REPOSITORIES*******
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepo>();
             builder.Services.AddScoped<ITraningAreaRepo, TrainingAreaRepo>();
-            builder.Services.AddScoped<IPlaylistRepository, GymPlaylistRepo>();
+            builder.Services.AddScoped<IGymPlaylistRepository, GymPlaylistRepo>();
 
 
 
