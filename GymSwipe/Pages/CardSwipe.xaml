@@ -4,17 +4,30 @@
              x:Class="GymSwipe.Pages.CardSwipe"
              Title="CardSwipe">
     <VerticalStackLayout>
-        <Image
+        <!--<Image
             x:Name="ExampleCard"
             Source="sceptile_card.jpg"
             HeightRequest="300"
             WidthRequest="140"
             >
             <Image.GestureRecognizers>
-                <DragGestureRecognizer/>
+                <PanGestureRecognizer/>
             </Image.GestureRecognizers>
-            
-            
-        </Image>
+        </Image>-->
+        <Label FontSize="Large" Text="Card-Swipe Demo"/>
+        <Grid x:Name="CardShell" WidthRequest="300">
+            <Border x:Name="Card" StrokeShape="RoundRectangle 16" Padding="16">
+                <Border.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
+                </Border.GestureRecognizers>
+
+                <VerticalStackLayout>
+                    <Label FontSize="Large" Text="Exercise!"/>
+                    <Label Text="Example Exercise"/>
+                    <Label Text="Addiontal Info"/>
+                    <Label Text="Video Link" FontAttributes="Italic"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
     </VerticalStackLayout>
 </ContentPage>
