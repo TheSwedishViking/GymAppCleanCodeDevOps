@@ -36,12 +36,11 @@
               Clicked="RegisterUserNavigationButtonClicked"
               HorizontalOptions="Fill" />
             <Button
-<<<<<<< HEAD
                 x:Name="CardButton"
                 Text="Card swipe test" 
                 Clicked="CardSwipeNavigationButtonClicked"
                 HorizontalOptions="Fill" /> 
-=======
+			<Button
             x:Name="RandomExerciseButton"
             Text="View exercises" 
             Clicked="RandomExerciseButtonButtonClicked"
@@ -57,7 +56,6 @@
               Clicked="Admin_NewTargetAreaButton_Clicked"
              HorizontalOptions="Fill"/>
 
->>>>>>> origin/main
         </VerticalStackLayout>
     </ScrollView>
 

@@ -1,4 +1,5 @@
 
+using GymSwipe.ViewModels;
 using System.Collections.ObjectModel;
 
 namespace GymSwipe.Pages;
@@ -7,15 +8,7 @@ public partial class CardSwipe : ContentPage
 {
 	//Posiiton of card to manipulat
 	private double _startX, _startY;
-	public List<string> Cards { get; set; } = new List<string>
-	{
-		"boufallant_card.png",
-		"metagross_card.jpg",
-		"sceptile_card.jpg"
-	};
-	public ObservableCollection<string> AddedCards { get; } = new ObservableCollection<string>();
-	public bool DrawnAllCards => Cards.Count == 0;
-	public int CardsRemaning => Cards.Count();
+
 	private string _currentCard;
 	private string _cardDeckInfo;
 	public string CardDeckInfo
@@ -32,15 +25,14 @@ public partial class CardSwipe : ContentPage
     //With the factor of the card width, this will set limit to register as discarded/approved
     public double CardPositionRegistrationThreshold { get; set; } = 1;
 	public double SwipeLimitForRegistration => Card.Width * CardPositionRegistrationThreshold;
-	public CardSwipe()
+	private readonly CardSwipeViewModel _vm;
+	public CardSwipe(CardSwipeViewModel vm)
 	{
 		InitializeComponent();
-		BindingContext = this;
+		BindingContext = _vm = vm;
 		Card.BackgroundColor = Colors.Black;
         _startX = Card.TranslationX; 
 		_startY = Card.TranslationY;
-
-        DrawNextCard();
 
     }
 
@@ -56,44 +48,27 @@ public partial class CardSwipe : ContentPage
 				break;
 			//While moving
 			case GestureStatus.Running:
-                Console.WriteLine("WE moving?!");
+				//UI
                 Card.TranslationX = _startX + e.TotalX;
                 Card.TranslationY = _startY + e.TotalY;
-				Card.Rotation = (e.TotalX / 100) * 5.02;
-				//Visuals
-				if(Card.TranslationX <= -SwipeLimitForRegistration)
+				Card.Rotation = (e.TotalX / _vm.CardDividend)*_vm.RotationFactor;
+				if(Card.TranslationX <= _vm.DiscardX)
 				{
                     Card.BackgroundColor = Colors.Red;
                 }
-				else if(Card.TranslationX >= SwipeLimitForRegistration)
+				else if(Card.TranslationX >= _vm.ApproveX)
 				{
                     Card.BackgroundColor = Colors.Green;
                 }
 				else
 				{
                     Card.BackgroundColor = Colors.Black;
-
                 }
-
                 break;
 			case GestureStatus.Completed:
-				Console.WriteLine("Gesture completed");
-				//Validate if discard or approved
-				double swipeLimit = Card.Width * CardPositionRegistrationThreshold;
-                    //From center to left => Negative values?s
-                    if (Card.TranslationX <= -swipeLimit)
-                    {
-                        Console.WriteLine("Discarded");
-						DiscardCard();
-					}
 
-                    else if (Card.TranslationX >= swipeLimit)
-                    {
-                        Console.WriteLine("Approved");
-                        ApproveCard();
-                    }
-
-				ResetCard();
+				_vm.HandleOnCompleteCardSwipe(Card.TranslationX, Card.Width);
+                ResetCard();
 
 				break;
 				//Cancel for resetting
@@ -102,41 +77,6 @@ public partial class CardSwipe : ContentPage
                 ResetCard();
                 break;
 		}
-
-    }
-	public void ApproveCard()
-	{
-		if (_currentCard != null)
-		{
-			AddedCards.Add(_currentCard);
-			DrawNextCard();
-		}
-	
-    }
-    public void DiscardCard()
-    {
-		if (_currentCard != null)
-		{
-			DrawNextCard();
-		}
-    }
-    public void DrawNextCard()
-	{
-     
-        if (DrawnAllCards)
-        {
-			_currentCard = null;
-            CardDeckInfo = "All cards have been drawn!";
-            CardImage.Source = null;
-			return;
-        }
-
-        var card = Cards[Random.Shared.Next(Cards.Count)];
-        Cards.Remove(card);
-
-        _currentCard = card;
-		CardImage.Source = card;
-		CardDeckInfo = $"There are {CardsRemaning + 1} cards remaning in the deck";
 
     }
 

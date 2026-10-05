@@ -16,7 +16,7 @@
         </Image>-->
         <Label FontSize="Large" Text="Card-Swipe Demo"/>
         <Label Text="{Binding CardDeckInfo}" />
-        <Grid x:Name="CardShell" WidthRequest="300">
+        <Grid x:Name="CardShell" WidthRequest="{Binding CardWidth}">
             <Border x:Name="Card" StrokeShape="RoundRectangle 16" Padding="16">
                 <Border.GestureRecognizers>
                     <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
@@ -25,7 +25,7 @@
                     <Label FontSize="Large" Text="Exercise!"/>
                     <Label Text="Example Exercise"/>
                     <Label Text="Addiontal Info"/>
-                    <Image  x:Name="CardImage"/>
+                    <Image  x:Name="CardImage" Source="{Binding CardImageSource}"/>
                     <Label Text="Video Link" FontAttributes="Italic"/>
                 </VerticalStackLayout>
             </Border>
