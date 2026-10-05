@@ -80,8 +80,6 @@ public partial class CardSwipe : ContentPage
 				Console.WriteLine("Gesture completed");
 				//Validate if discard or approved
 				double swipeLimit = Card.Width * CardPositionRegistrationThreshold;
-
-				
                     //From center to left => Negative values?s
                     if (Card.TranslationX <= -swipeLimit)
                     {
