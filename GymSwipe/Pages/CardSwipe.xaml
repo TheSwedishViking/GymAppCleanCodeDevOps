@@ -20,11 +20,11 @@
                 <Border.GestureRecognizers>
                     <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
                 </Border.GestureRecognizers>
-
                 <VerticalStackLayout>
                     <Label FontSize="Large" Text="Exercise!"/>
                     <Label Text="Example Exercise"/>
                     <Label Text="Addiontal Info"/>
+                    <Image Source="sceptile_card.jpg"/>
                     <Label Text="Video Link" FontAttributes="Italic"/>
                 </VerticalStackLayout>
             </Border>
