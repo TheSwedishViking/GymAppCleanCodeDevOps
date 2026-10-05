@@ -4,7 +4,9 @@ using GymSwipe.ApplicationLayer.Services;
 using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
 using GymSwipe.Infrastructure.Repos;
+using GymSwipe.Pages;
 using GymSwipe.ViewModels;
+using GymSwipe.ViewModels.Admin;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -39,18 +41,21 @@ namespace GymSwipe
 
             //*******SERVICES*******
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITraningAreaService, TrainingAreaService>();
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
             builder.Services.AddScoped<IPlaylistService, PlaylistService>();
 
             //*******REPOSITORIES*******
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepo>();
+            builder.Services.AddScoped<ITraningAreaRepo,  TrainingAreaRepo>();
             //builder.Services.AddScoped<IPlaylistRepository>();
 
             //*******FACADES*******
             builder.Services.AddScoped<IUserFacade, UserActionsFacade>();
             builder.Services.AddScoped<IExerciseFacade, ExerciseFacade>();
-
+            builder.Services.AddScoped<IAdminAddExerciseFacade, AdminAddExerciseFacade>();
+            builder.Services.AddScoped<IAdminAddTrainingAreaFacade, AdminAddTraningAreaFacade>();
             //builder.Services.AddScoped<IPlaylistFacade>();  
 
             //*******VIEW MODELS*******
@@ -59,6 +64,8 @@ namespace GymSwipe
             builder.Services.AddSingleton<UserPageAccountViewModel>();
             builder.Services.AddTransient<UserRegisterViewModel>();
             builder.Services.AddTransient<RandomExerciseViewModel>();
+            builder.Services.AddTransient<AdminRegisterNewExerciseViewModel>();
+            builder.Services.AddTransient<AdminRegisterNewTrainingAreaViewModel>();
             builder.Services.AddTransient<MainPageViewModel>();
 
             //api address

@@ -39,6 +39,8 @@ namespace GymSwipe.UserTests.FixtureFolder
             services.AddScoped<IExerciseRepository, ExerciseRepo>();
             services.AddScoped<IExerciseService, ExerciseService>();
             services.AddScoped<IDatabaseInitalizer, DatabaseInitalizer>();
+            services.AddScoped<ITraningAreaRepo, TrainingAreaRepo>();
+            services.AddScoped<ITraningAreaService, TrainingAreaService>();
 
             ServiceProvider = services.BuildServiceProvider();
         }

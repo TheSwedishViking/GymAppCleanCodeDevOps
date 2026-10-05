@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dto="clr-namespace:GymSwipe.ApplicationLayer.DTOs;assembly=GymSwipe.ApplicationLayer"
+             xmlns:vm="clr-namespace:GymSwipe.ViewModels.Admin"
+             x:Name="ThisPage"
+             x:Class="GymSwipe.Pages.AdminRegisterNewExercise"
+             Title="AdminRegisterNewExercise">
+    <Grid RowDefinitions="Auto, Auto, Auto,Auto,Auto,Auto" ColumnDefinitions="Auto, Auto, Auto"   Padding="10" RowSpacing="10">
+        <Label Text="Admin register new exercise" FontSize="Large"/>
+        <!--Name-->
+        <Label
+        Text="Name of the exercise" 
+        VerticalOptions="Center" 
+        HorizontalOptions="Center"
+        Grid.Row="1"
+        Grid.Column="0"
+        />
+        <Entry
+        x:Name="NameExc"
+        Text="{Binding NewExercise.Name}"
+         Grid.Row="1"
+        Grid.Column="1"/>
+        <Label
+        Text="Video link" 
+        VerticalOptions="Center" 
+        HorizontalOptions="Center"
+         Grid.Row="2"
+        Grid.Column="0"
+        />
+        <Entry
+        x:Name="Video"
+         Text="{Binding NewExercise.VideoSourceLink}"
+         Grid.Row="2"
+        Grid.Column="1"/>
+        <Label 
+            Text="Available target areas"
+            Grid.Row="3"
+            Grid.Column="0"
+            />
+        <CollectionView ItemsSource="{Binding Available}" Grid.Column="1" Grid.Row="3">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="12,6">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer
+                             Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.AddTargetAreaCommand}"
+                             CommandParameter="{Binding .}"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="{Binding Name}" FontAttributes="Bold" />
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Label 
+       Text="Selected areas"
+       Grid.Row="4"
+       Grid.Column="0"
+       />
+        <CollectionView ItemsSource="{Binding Selected}" Grid.Column="1" Grid.Row="4">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="12,6">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer
+                               Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.RemoveTargetAreaCommand}"
+                               CommandParameter="{Binding .}"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="{Binding Name}" FontAttributes="Bold" />
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button
+            Text="Register"
+            Command="{Binding RegisterNewExerciseCommand}"
+            Grid.Row="5"
+            Grid.Column="1"/>
+    </Grid>
+</ContentPage>

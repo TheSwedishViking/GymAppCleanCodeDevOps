@@ -1,7 +1,8 @@
-﻿using System.ComponentModel;
+﻿using GymSwipe.Domain.Models;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace GymSwipe.Domain.Models
+namespace GymSwipe.UserTests.TestModels
 {
     public class UserTestModel : INotifyPropertyChanged
     {

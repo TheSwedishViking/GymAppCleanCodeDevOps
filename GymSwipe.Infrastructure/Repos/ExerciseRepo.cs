@@ -15,10 +15,25 @@ namespace GymSwipe.Infrastructure.Repos
         {
             _db = gymAppDbContext;
         }
+
+        public async Task<bool> AddExercise(Exercise domain)
+        {
+            _db.Exercises.Add
+                (domain);
+
+             await _db.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<List<Exercise>> GetAllExercisesAsync()
         {
             return  await _db.Exercises.
                 Include(e=>e.TargetAreas).ToListAsync();
+        }
+
+        public async Task<Exercise> GetExerciseByName(string name)
+        {
+            return await _db.Exercises.FirstOrDefaultAsync(e=>e.Name.ToLower() == name.ToLower());
         }
 
         public async Task<List<Exercise>> GetExercisesByCategoryAsync(int categoryId)
