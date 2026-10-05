@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:dto="clr-namespace:GymSwipe.ApplicationLayer.DTOs;assembly=GymSwipe.ApplicationLayer"
+               xmlns:vm="clr-namespace:GymSwipe.ViewModels.Admin"
+               x:Name="ThisPage"
+             x:Class="GymSwipe.Pages.AdminAddNewTargetArea"
+             Title="AdminAddNewTargetArea">
+    <Grid RowDefinitions="Auto, Auto, Auto,Auto,Auto,Auto" ColumnDefinitions="Auto, Auto, Auto"   Padding="10" RowSpacing="10">
+        <Label Text="Admin register new area" FontSize="Large"/>
+        <!--Name-->
+        <Label
+      Text="Name of the target area" 
+      VerticalOptions="Center" 
+      HorizontalOptions="Center"
+      Grid.Row="1"
+      Grid.Column="0"
+      />
+        <Entry
+      x:Name="NameExc"
+      Text="{Binding NewTargetArea.Name}"
+       Grid.Row="1"
+      Grid.Column="1"/>
+        <Label
+      Text="Current areas" 
+      VerticalOptions="Center" 
+      HorizontalOptions="Center"
+       Grid.Row="2"
+      Grid.Column="0"
+      />
+        <CollectionView ItemsSource="{Binding Current}" Grid.Column="1" Grid.Row="2">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="12,6">
+                        <Label Text="{Binding Name}" FontAttributes="Bold" />
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button
+          Text="Register"
+          Command="{Binding AddNewTargetAreaCommand}"
+          Grid.Row="3"
+          Grid.Column="1"/>
+    </Grid>
+</ContentPage>

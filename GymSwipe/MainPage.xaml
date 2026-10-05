@@ -25,16 +25,39 @@
                 Text="UserPage" 
                 Clicked="onUserPageBtnClicked"
                 HorizontalOptions="Fill" />
+
+            <Label
+            Text="{Binding Session.CurrentUser.Firstname}">
+            </Label>
+
                 <Button
               x:Name="UserRegistrationButton"
               Text="Register as new user" 
               Clicked="RegisterUserNavigationButtonClicked"
               HorizontalOptions="Fill" />
             <Button
+<<<<<<< HEAD
                 x:Name="CardButton"
                 Text="Card swipe test" 
                 Clicked="CardSwipeNavigationButtonClicked"
                 HorizontalOptions="Fill" /> 
+=======
+            x:Name="RandomExerciseButton"
+            Text="View exercises" 
+            Clicked="RandomExerciseButtonButtonClicked"
+            HorizontalOptions="Fill" />
+            <Button
+                x:Name="Admin_NewExerciseButton"
+                Text="Admin: New Exercise"
+                Clicked="Admin_NewExerciseButton_Clicked"
+                HorizontalOptions="Fill"/>
+            <Button
+             x:Name="Admin_NewTargetAreaButton"
+             Text="Admin: New Target Area"
+              Clicked="Admin_NewTargetAreaButton_Clicked"
+             HorizontalOptions="Fill"/>
+
+>>>>>>> origin/main
         </VerticalStackLayout>
     </ScrollView>
 

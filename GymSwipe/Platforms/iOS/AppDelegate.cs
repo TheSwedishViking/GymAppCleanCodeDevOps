@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace GymSwipe
+namespace GymSwipe.Platforms.iOS
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate
