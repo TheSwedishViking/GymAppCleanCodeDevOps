@@ -4,6 +4,12 @@ public partial class CardSwipe : ContentPage
 {
 	//Posiiton of card to manipulat
 	private double _startX, _startY;
+	public List<string> Cards { get; set; } = new List<string>
+	{
+		"boufallant_card.png",
+		"metagross_card.jpg",
+		"sceptile_card.jpg"
+	};
 
 	//With the factor of the card width, this will set limit to register as discarded/approved
 	public double CardPositionRegistrationThreshold { get; set; } = 1;
@@ -11,7 +17,8 @@ public partial class CardSwipe : ContentPage
 	public CardSwipe()
 	{
 		InitializeComponent();
-		_startX = Card.TranslationX; 
+        Card.BackgroundColor = Colors.Black;
+        _startX = Card.TranslationX; 
 		_startY = Card.TranslationY;
 	}
 
@@ -60,6 +67,7 @@ public partial class CardSwipe : ContentPage
 				else if(Card.TranslationX >= swipeLimit)
 				{
                     Console.WriteLine("Approved");
+					ApproveCard();
 				}
 
 				ResetCard();
@@ -73,6 +81,10 @@ public partial class CardSwipe : ContentPage
 		}
 
     }
+	public void ApproveCard()
+	{
+		CardImage.Source = Cards[Random.Shared.Next(0, Cards.Count())];
+	}
 	public void ResetCard()
 	{
 		Card.TranslationX = _startX;

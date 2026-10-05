@@ -24,7 +24,7 @@
                     <Label FontSize="Large" Text="Exercise!"/>
                     <Label Text="Example Exercise"/>
                     <Label Text="Addiontal Info"/>
-                    <Image Source="sceptile_card.jpg"/>
+                    <Image Source="sceptile_card.jpg" x:Name="CardImage"/>
                     <Label Text="Video Link" FontAttributes="Italic"/>
                 </VerticalStackLayout>
             </Border>
