@@ -17,13 +17,15 @@ namespace GymSwipe.Infrastructure.Repos
 
         public async Task<GymPlaylist?> GetPlaylist(int id)
         {
-            GymPlaylist? foundPlaylist = await _db.GymPlaylists.FirstOrDefaultAsync(playlist => playlist.Id == id);
-            if (foundPlaylist == null)
-            {
-                return null;
-            }
 
-            return foundPlaylist;
+
+            return await _db.GymPlaylists
+                .Include(p => p.Excercise.OrderBy(pe => pe.PlaylistOrder))
+                .ThenInclude(pe => pe.Exercise)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+
+
         }
 
     }

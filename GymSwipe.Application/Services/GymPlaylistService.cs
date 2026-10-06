@@ -16,7 +16,8 @@ namespace GymSwipe.ApplicationLayer.Services
 
         public async Task<GymPlaylist> GetPlaylist(int id)
         {
-            return await _repo.GetPlaylist(id);
+
+            return await _repo.GetPlaylist(id); //Wont go if mocked
         }
     }
 }
