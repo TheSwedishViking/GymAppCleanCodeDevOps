@@ -149,7 +149,6 @@ namespace GymSwipe.ViewModels
         {
 
             CardImageSource = await _cardFacade.GetApproptiateImageForExercise(CurrentExercise);
-
             CardDeckInfo = await _cardFacade.DeckInfo();
         }
 

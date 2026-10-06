@@ -82,10 +82,7 @@ namespace GymSwipe.ApplicationLayer.Facades
 
         public async Task<string> GetApproptiateImageForExercise(ExerciseDTO currentExercise)
         {
-            if (HasDrawnAllCards())
-            {
-                return "";
-            }
+        
             return AvailableCards[Random.Shared.Next(AvailableCards.Count)];
         }
     }
