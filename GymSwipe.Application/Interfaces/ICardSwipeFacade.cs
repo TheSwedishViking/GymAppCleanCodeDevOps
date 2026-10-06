@@ -6,9 +6,11 @@ namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface ICardSwipeFacade
     {
-        Task ApproveCard();
-        Task DiscardCard();
-        Task DrawNewCard();
+        bool HasDrawnAllCards();
+        Task<string> ApproveCard(string card);
+        Task<string> DiscardCard();
+        Task<string> DrawNewCard();
+        Task<string> DeckInfo();
         Task GetExercises();
 
     }

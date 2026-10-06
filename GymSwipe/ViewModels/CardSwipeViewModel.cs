@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GymSwipe.ApplicationLayer.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,15 +9,7 @@ namespace GymSwipe.ViewModels
 {
     public class CardSwipeViewModel : INotifyPropertyChanged
     {
-        public List<string> Cards { get; set; } = new List<string>
-        {
-            "boufallant_card.png",
-            "metagross_card.jpg",
-            "sceptile_card.jpg"
-        };
         public ObservableCollection<string> AddedCards { get; } = new ObservableCollection<string>();
-        public bool DrawnAllCards => Cards.Count == 0;
-        public int CardsRemaning => Cards.Count();
         private string _currentCard;
         private string _cardDeckInfo;
         public string CardDeckInfo
@@ -36,7 +29,6 @@ namespace GymSwipe.ViewModels
         public double DiscardX { get;  }
         public double ApproveX { get;  }
         public double SwipeLimitForRegistration => CardWidth * CardPositionRegistrationThreshold;
-
         public double CardDividend { get; } = 100;
         public double RotationFactor { get;  } = 5.02;
         private string _cardImageSource;
@@ -52,65 +44,65 @@ namespace GymSwipe.ViewModels
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        public CardSwipeViewModel()
+        private readonly ICardSwipeFacade _cardFacade;
+        public CardSwipeViewModel(ICardSwipeFacade cardSwipeFacade)
         {
             DiscardX -= SwipeLimitForRegistration;
             ApproveX += SwipeLimitForRegistration;
-            DrawNextCard();
+            _cardFacade = cardSwipeFacade;
+            _ = ShowInitalCard();
+          
+            //DrawNextCard();
         }
-
+        private async Task ShowInitalCard()
+        {
+            _currentCard = await _cardFacade.DrawNewCard();
+            await UpdateCard();
+        }
+    
         public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
      
-        public void HandleOnCompleteCardSwipe(double translationX, double width)
+        public async Task HandleOnCompleteCardSwipe(double translationX, double width)
         {
             //From center to left => Negative values?s
             if (translationX <= -SwipeLimitForRegistration)
             {
                 Console.WriteLine("Discarded");
-                DiscardCard();
+                await DiscardCard();
             }
 
             else if (translationX >= SwipeLimitForRegistration)
             {
                 Console.WriteLine("Approved");
-                ApproveCard();
+                await ApproveCard();
             }
         }
-        public void ApproveCard()
+        public async Task ApproveCard()
         {
             if (_currentCard != null)
             {
+                _currentCard = await _cardFacade.ApproveCard(_currentCard);
                 AddedCards.Add(_currentCard);
-                DrawNextCard();
+                await UpdateCard();
             }
 
         }
-        public void DiscardCard()
+        public async Task DiscardCard()
         {
             if (_currentCard != null)
             {
-                DrawNextCard();
+                _currentCard = await _cardFacade.DiscardCard();
+                await UpdateCard();
             }
         }
-        public void DrawNextCard()
+        public async Task UpdateCard()
         {
-            if (DrawnAllCards)
-            {
-                _currentCard = null;
-                CardDeckInfo = "All cards have been drawn!";
-                CardImageSource = null;
-                return;
-            }
+            CardImageSource = _currentCard;
 
-            var card = Cards[Random.Shared.Next(Cards.Count)];
-            Cards.Remove(card);
-
-            _currentCard = card;
-            CardImageSource = card;
-            CardDeckInfo = $"There are {CardsRemaning + 1} cards remaning in the deck";
+            CardDeckInfo = await _cardFacade.DeckInfo();
 
         }
 

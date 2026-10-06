@@ -19,7 +19,7 @@ public partial class CardSwipe : ContentPage
 
     }
 
-    public void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
+    public async void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
     {
 	
 		switch (e.StatusType)
@@ -50,7 +50,7 @@ public partial class CardSwipe : ContentPage
                 break;
 			case GestureStatus.Completed:
 
-				_vm.HandleOnCompleteCardSwipe(Card.TranslationX, Card.Width);
+				await _vm.HandleOnCompleteCardSwipe(Card.TranslationX, Card.Width);
                 ResetCard();
 
 				break;
