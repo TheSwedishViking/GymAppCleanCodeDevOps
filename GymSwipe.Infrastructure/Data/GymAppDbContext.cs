@@ -1,13 +1,9 @@
 ﻿using GymSwipe.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GymSwipe.Infrastructure.Data
 {
-    public class GymAppDbContext:DbContext
+    public class GymAppDbContext : DbContext
     {
         private readonly string _connstring = "Not handled yet";
 
@@ -46,9 +42,11 @@ namespace GymSwipe.Infrastructure.Data
                 //.OnDelete(DeleteBehavior.Restrict);
             });
 
+
+
             modelBuilder.Entity<GymUser>()
            .HasIndex(u => u.FriendCode)
-           .IsUnique(); //Needs to be validated and tested later, should never repeat : Must always be unique
+           .IsUnique();
 
             modelBuilder.Entity<GymPlaylist>(g =>
             {
@@ -56,6 +54,19 @@ namespace GymSwipe.Infrastructure.Data
                 .WithMany(gm => gm.UserPlaylists)
                 .HasForeignKey(gm => gm.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<PlaylistExcercise>(pe =>
+            {
+                pe.HasOne(x => x.Playlist)
+                  .WithMany(p => p.Excercise)
+                  .HasForeignKey(x => x.PlaylistId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+                pe.HasOne(x => x.Exercise)
+                  .WithMany()
+                  .HasForeignKey(x => x.ExerciseId)
+                  .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }

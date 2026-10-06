@@ -3,15 +3,19 @@ using GymSwipe.ApplicationLayer.Services;
 using GymSwipe.Domain.Models;
 using Moq;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace GymSwipe.UserTests.MoqTests
 {
-    public class MoqUserTests : UserApiFixture
+    public class MoqUserTests
     {
-        public UserApiFixture _fixture;
-        public MoqUserTests(UserApiFixture fixture)
+
+
+        private readonly ITestOutputHelper _output;
+
+        public MoqUserTests(ITestOutputHelper output)
         {
-            _fixture = fixture;
+            _output = output;
         }
 
         [Fact]
@@ -32,21 +36,54 @@ namespace GymSwipe.UserTests.MoqTests
             Assert.Equal("Test Playlist", result.Name);
         }
 
-        public async Task MockExcercisesInGymPlaylist()
+        [Fact]
+        public async Task GetPlaylist_ReturnsPlaylistWithExercises()
         {
             // Arrange
+            var playlist = new GymPlaylist
+            {
+                Id = 1,
+                Name = "Mocked Playlist",
+                Excercise = new List<PlaylistExcercise>
+                {
+                    new PlaylistExcercise
+                    {
+                        Id = 1,
+                        ExerciseId = 1,
+                        PlaylistId = 1,
+                        PlaylistOrder = 1,
+                        Exercise = new Exercise { Id = 1, Name = "Mocked Exercise" }
+                    }
+                }
+            };
+            _output.WriteLine(playlist.Excercise.FirstOrDefault().Exercise.Name);
             var repoGym = new Mock<IGymPlaylistRepository>();
-            repoGym.Setup(p => p.GetPlaylist(1))
-                .ReturnsAsync(new GymPlaylist { Id = 1, Name = "Mocked Playlist" });
+            repoGym.Setup(p => p.GetPlaylist(1)).ReturnsAsync(playlist);
 
-
+            var service = new GymPlaylistService(repoGym.Object);
 
             // Act
-
+            var result = await service.GetPlaylist(1);
 
             // Assert
+            Assert.NotNull(result);
+            Assert.Equal(1, result!.Id);
+            Assert.Single(result.Excercise);
+            Assert.Equal("Mocked Exercise", result.Excercise.First().Exercise.Name);
+            repoGym.Verify(p => p.GetPlaylist(1), Times.Once);
         }
+        [Fact]
+        public async Task GetPlaylist_ReturnsNull_WhenNotFound()
+        {
+            var repoGym = new Mock<IGymPlaylistRepository>();
+            repoGym.Setup(p => p.GetPlaylist(99)).ReturnsAsync((GymPlaylist?)null);
 
+            var service = new GymPlaylistService(repoGym.Object);
+
+            var result = await service.GetPlaylist(99);
+
+            Assert.Null(result);
+        }
     }
 
 
