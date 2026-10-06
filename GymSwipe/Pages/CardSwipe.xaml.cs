@@ -8,23 +8,6 @@ public partial class CardSwipe : ContentPage
 {
 	//Posiiton of card to manipulat
 	private double _startX, _startY;
-
-	private string _currentCard;
-	private string _cardDeckInfo;
-	public string CardDeckInfo
-	{
-		get { return _cardDeckInfo; }
-		set
-		{
-			if(_cardDeckInfo==value) return;
-			_cardDeckInfo = value;
-            OnPropertyChanged(nameof(CardDeckInfo));
-        }
-    }
-
-    //With the factor of the card width, this will set limit to register as discarded/approved
-    public double CardPositionRegistrationThreshold { get; set; } = 1;
-	public double SwipeLimitForRegistration => Card.Width * CardPositionRegistrationThreshold;
 	private readonly CardSwipeViewModel _vm;
 	public CardSwipe(CardSwipeViewModel vm)
 	{
@@ -79,7 +62,7 @@ public partial class CardSwipe : ContentPage
 		}
 
     }
-
+	//Purely UI reset
     public void ResetCard()
 	{
 		Card.TranslationX = _startX;

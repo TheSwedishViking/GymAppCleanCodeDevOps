@@ -8,7 +8,6 @@ namespace GymSwipe.ViewModels
 {
     public class CardSwipeViewModel : INotifyPropertyChanged
     {
-
         public List<string> Cards { get; set; } = new List<string>
         {
             "boufallant_card.png",
@@ -55,7 +54,6 @@ namespace GymSwipe.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
         public CardSwipeViewModel()
         {
-
             DiscardX -= SwipeLimitForRegistration;
             ApproveX += SwipeLimitForRegistration;
             DrawNextCard();
@@ -68,21 +66,18 @@ namespace GymSwipe.ViewModels
      
         public void HandleOnCompleteCardSwipe(double translationX, double width)
         {
-            double swipeLimit = width * CardPositionRegistrationThreshold;
-
             //From center to left => Negative values?s
-            if (translationX <= -swipeLimit)
+            if (translationX <= -SwipeLimitForRegistration)
             {
                 Console.WriteLine("Discarded");
                 DiscardCard();
             }
 
-            else if (translationX >= swipeLimit)
+            else if (translationX >= SwipeLimitForRegistration)
             {
                 Console.WriteLine("Approved");
                 ApproveCard();
             }
-
         }
         public void ApproveCard()
         {

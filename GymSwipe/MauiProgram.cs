@@ -56,6 +56,7 @@ namespace GymSwipe
             builder.Services.AddScoped<IExerciseFacade, ExerciseFacade>();
             builder.Services.AddScoped<IAdminAddExerciseFacade, AdminAddExerciseFacade>();
             builder.Services.AddScoped<IAdminAddTrainingAreaFacade, AdminAddTraningAreaFacade>();
+            builder.Services.AddScoped<ICardSwipeFacade, CardSwipeFacade>();
             //builder.Services.AddScoped<IPlaylistFacade>();  
 
             //*******VIEW MODELS*******
