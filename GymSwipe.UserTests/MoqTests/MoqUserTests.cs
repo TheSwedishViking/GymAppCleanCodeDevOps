@@ -80,7 +80,7 @@ namespace GymSwipe.UserTests.MoqTests
             // Act
 
 
-            //ASSERT
+            //asser
         }
 
     }
