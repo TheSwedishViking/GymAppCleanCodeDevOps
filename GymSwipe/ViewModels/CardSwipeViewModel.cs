@@ -85,7 +85,7 @@ namespace GymSwipe.ViewModels
         }
         public async Task SavePlaylist()
         {
-
+            await _cardFacade.SavePlayList();
         }
         public async Task InitalizeAsync()
         {

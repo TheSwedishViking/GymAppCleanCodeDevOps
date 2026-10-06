@@ -19,7 +19,6 @@ namespace GymSwipe.ApplicationLayer.Facades
         private readonly IExerciseService _exerciseService;
         private readonly IGymPlaylistService _playlistService;
         private readonly LoggedInUser _user;
-        private readonly ITraningAreaService _traningAreaService;
         public CardSwipeFacade(
             IExerciseService exerciseService,
             IGymPlaylistService playlistExecericseService,
@@ -28,7 +27,6 @@ namespace GymSwipe.ApplicationLayer.Facades
             )
         {
             _exerciseService = exerciseService;
-            _traningAreaService = traningAreaService;
             _playlistService = playlistExecericseService;
             _user = user;
             AvailableCards = GetCards();

@@ -15,6 +15,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task<string> DrawNewCard();
         Task<string> DeckInfo();
         Task GetExercises();
+        Task SavePlayList();
         Task<string> GetApproptiateImageForExercise(ExerciseDTO currentExercise);
     }
 }

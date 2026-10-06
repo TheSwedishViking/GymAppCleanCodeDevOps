@@ -28,8 +28,11 @@ namespace GymSwipe.UserTests.MoqTests
             repoMock.Setup(p => p.GetPlaylist(1))
                 .ReturnsAsync(new GymPlaylist { Id = 1, Name = "Test Playlist" });
 
+            var dateMock = new Mock<IDateHandler>();
+
             // Act
-            var service = new GymPlaylistService(repoMock.Object);
+            var service = new GymPlaylistService(repoMock.Object, dateMock.Object);
+
             var result = await service.GetPlaylist(1);
 
             // Assert
@@ -59,9 +62,10 @@ namespace GymSwipe.UserTests.MoqTests
             _output.WriteLine(playlist.Excercise.FirstOrDefault().Exercise.Name);
 
             var repoGym = new Mock<IGymPlaylistRepository>();
+            var dateMock = new Mock<IDateHandler>();
             repoGym.Setup(p => p.GetPlaylist(1)).ReturnsAsync(playlist);
 
-            var service = new GymPlaylistService(repoGym.Object);
+            var service = new GymPlaylistService(repoGym.Object, dateMock.Object);
 
             // Act
             var result = await service.GetPlaylist(1);
