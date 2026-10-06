@@ -52,6 +52,7 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
         <Button
-            Command="{Binding SavePlaylistCommand}"
+            Text="Save playlist"
+            Command="{Binding SavePlaylistCommand}"/>
     </VerticalStackLayout>
 </ContentPage>

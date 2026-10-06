@@ -30,5 +30,11 @@ namespace GymSwipe.Infrastructure.Repos
                     .ThenInclude(pe => pe.Exercise)
                 .ToListAsync();
         }
+
+        public async Task SavePlayList(GymPlaylist newPlaylist)
+        {
+            _db.GymPlaylists.Add(newPlaylist);
+            await _db.SaveChangesAsync();
+        }
     }
 }

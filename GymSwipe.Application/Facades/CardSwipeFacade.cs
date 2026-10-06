@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
@@ -16,12 +17,12 @@ namespace GymSwipe.ApplicationLayer.Facades
         public List<ExerciseDTO> AddedExercises { get; set; } = new List<ExerciseDTO>();
 
         private readonly IExerciseService _exerciseService;
-        private readonly IPlaylistExecericseService _playlistService;
+        private readonly IGymPlaylistService _playlistService;
         private readonly LoggedInUser _user;
         private readonly ITraningAreaService _traningAreaService;
         public CardSwipeFacade(
             IExerciseService exerciseService,
-            IPlaylistExecericseService playlistExecericseService,
+            IGymPlaylistService playlistExecericseService,
             ITraningAreaService traningAreaService,
             LoggedInUser user
             )
@@ -55,8 +56,10 @@ namespace GymSwipe.ApplicationLayer.Facades
         {
             if(AddedExercises != null&& AddedExercises.Count > 0)
             {
+                await _playlistService.SavePlayListToUser(AddedExercises, _user.CurrentUser);
             }
         }
+
         public async Task<ExerciseDTO> ApproveCard(ExerciseDTO exercise)
         {
             AddedExercises.Add(exercise);

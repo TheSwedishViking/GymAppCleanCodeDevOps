@@ -6,5 +6,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     {
         Task<GymPlaylist> GetPlaylist(int id);
         Task<List<GymPlaylist>> GetPlaylistsByUserId(int userId);
+        Task SavePlayList(GymPlaylist newPlaylist);
+
     }
 }

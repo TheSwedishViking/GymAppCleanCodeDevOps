@@ -1,4 +1,5 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.Domain.Models;
 
 namespace GymSwipe.ApplicationLayer.Services
@@ -7,20 +8,50 @@ namespace GymSwipe.ApplicationLayer.Services
     {
 
 
-        private readonly IGymPlaylistRepository _repo;
-
-        public GymPlaylistService(IGymPlaylistRepository repo)
+        private readonly IGymPlaylistRepository _playlistRepo;
+        private readonly IExerciseRepository _exerciseRepository;
+        public GymPlaylistService(IGymPlaylistRepository playlistRepo, IExerciseRepository exerciseRepository)
         {
-            _repo = repo;
+            _playlistRepo = playlistRepo;
+            _exerciseRepository = exerciseRepository;
         }
 
         public async Task<GymPlaylist> GetPlaylist(int id)
         {
-            return await _repo.GetPlaylist(id);
+            return await _playlistRepo.GetPlaylist(id);
         }
         public async Task<List<GymPlaylist>> GetPlaylistsByUserId(int userId)
         {
-            return await _repo.GetPlaylistsByUserId(userId);
+            return await _playlistRepo.GetPlaylistsByUserId(userId);
+        }
+
+        public async Task SavePlayListToUser(List<ExerciseDTO> addedExercises, GymUser currentUser)
+        {
+            GymPlaylist newPlaylist = new GymPlaylist();
+            List<PlaylistExcercise> domain = new List<PlaylistExcercise>();
+
+            for (int i = 0; i < addedExercises.Count; i++)
+            {
+                {
+                    newPlaylist.Excercise.Add(ConvertToDomain(addedExercises[i], i));
+                }
+            }
+            newPlaylist.Name = currentUser.Firstname + " playlist" + DateTime.Now.ToString("M");
+            newPlaylist.UserId = currentUser.Id;
+            newPlaylist.DateCreated = new DateOnly(2001, 02, 11);
+
+            await _playlistRepo.SavePlayList(newPlaylist);
+
+        }
+        private PlaylistExcercise ConvertToDomain(ExerciseDTO dTO, int order)
+        {
+            return new PlaylistExcercise
+            {
+                ExerciseId = dTO.Id,
+
+                PlaylistOrder = order,
+            };
+
         }
     }
 }
