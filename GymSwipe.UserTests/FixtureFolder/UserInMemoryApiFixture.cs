@@ -11,7 +11,7 @@ namespace GymSwipe.UserTests
 {
     public class UserInMemoryApiFixture : WebApplicationFactory<GymSwipe.API.Program> //startup class for the api
     {
-
+        //Will probably remove this class and just use UserApiFixture, but for now, this is a separate fixture for in-memory testing
 
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
