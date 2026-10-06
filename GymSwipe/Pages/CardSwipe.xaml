@@ -22,11 +22,11 @@
                     <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
                 </Border.GestureRecognizers>
                 <VerticalStackLayout>
-                    <Label FontSize="Large" Text="Exercise!"/>
+                    <Label FontSize="Large" Text="{Binding CurrentExercise.Name}"/>
                     <Label Text="Example Exercise"/>
-                    <Label Text="Addiontal Info"/>
+                    <Label Text="{Binding CurrentExercise.Id}"/>
                     <Image  x:Name="CardImage" Source="{Binding CardImageSource}"/>
-                    <Label Text="Video Link" FontAttributes="Italic"/>
+                    <Label Text="{Binding CurrentExercise.VideoSourceLink}" FontAttributes="Italic"/>
                 </VerticalStackLayout>
             </Border>
         </Grid>

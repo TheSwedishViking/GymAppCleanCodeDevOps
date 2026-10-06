@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,8 +8,9 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     public interface ICardSwipeFacade
     {
         bool HasDrawnAllCards();
-        Task<string> ApproveCard(string card);
-        Task<string> DiscardCard();
+        Task<ExerciseDTO> DrawExerciseCard();
+        Task<ExerciseDTO> ApproveCard(ExerciseDTO card);
+        Task<ExerciseDTO> DiscardCard();
         Task<string> DrawNewCard();
         Task<string> DeckInfo();
         Task GetExercises();

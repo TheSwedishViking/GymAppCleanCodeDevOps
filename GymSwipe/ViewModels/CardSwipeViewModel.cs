@@ -1,4 +1,5 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +11,7 @@ namespace GymSwipe.ViewModels
     public class CardSwipeViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<string> AddedCards { get; } = new ObservableCollection<string>();
+        public ObservableCollection<ExerciseDTO> AddedExercises { get; } = new ObservableCollection<ExerciseDTO>();
         private string _currentCard;
         private string _cardDeckInfo;
         public string CardDeckInfo
@@ -31,6 +33,17 @@ namespace GymSwipe.ViewModels
         public double SwipeLimitForRegistration => CardWidth * CardPositionRegistrationThreshold;
         public double CardDividend { get; } = 100;
         public double RotationFactor { get;  } = 5.02;
+        private ExerciseDTO _currentExercise;
+        public ExerciseDTO CurrentExercise
+        {
+            get => _currentExercise;
+            set
+            {
+                if(_currentExercise == value) return;
+                _currentExercise = value;
+                OnPropertyChanged(nameof(CurrentExercise));
+            }
+        }
         private string _cardImageSource;
         public string CardImageSource
         {
@@ -51,12 +64,12 @@ namespace GymSwipe.ViewModels
             ApproveX += SwipeLimitForRegistration;
             _cardFacade = cardSwipeFacade;
             _ = ShowInitalCard();
-          
             //DrawNextCard();
         }
         private async Task ShowInitalCard()
         {
             _currentCard = await _cardFacade.DrawNewCard();
+            _currentExercise = await _cardFacade.DrawExerciseCard();
             await UpdateCard();
         }
     
@@ -84,7 +97,8 @@ namespace GymSwipe.ViewModels
         {
             if (_currentCard != null)
             {
-                _currentCard = await _cardFacade.ApproveCard(_currentCard);
+                CurrentExercise = await _cardFacade.ApproveCard(_currentExercise);
+                //_currentCard = await _cardFacade.ApproveCard(_currentCard);
                 AddedCards.Add(_currentCard);
                 await UpdateCard();
             }
@@ -94,7 +108,7 @@ namespace GymSwipe.ViewModels
         {
             if (_currentCard != null)
             {
-                _currentCard = await _cardFacade.DiscardCard();
+                CurrentExercise = await _cardFacade.DiscardCard();
                 await UpdateCard();
             }
         }
@@ -103,6 +117,9 @@ namespace GymSwipe.ViewModels
             CardImageSource = _currentCard;
 
             CardDeckInfo = await _cardFacade.DeckInfo();
+
+            //CurrentExercise = await _cardFacade.DrawExerciseCard();
+            //Console.WriteLine(_currentExercise);
 
         }
 

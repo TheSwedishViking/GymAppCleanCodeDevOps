@@ -11,6 +11,8 @@ namespace GymSwipe.ApplicationLayer.Facades
     {
         public List<string> AvailableCards { get; set; } = new List<string>();
         public List<string> AddedCards { get; set; } = new List<string>();
+        public List<ExerciseDTO> AvailableExercises { get; set; } = new List<ExerciseDTO>();
+        public List<ExerciseDTO> AddedExercises { get; set; } = new List<ExerciseDTO>();
 
         private readonly IExerciseService _exerciseService;
         private readonly ITraningAreaService _traningAreaService;
@@ -19,8 +21,13 @@ namespace GymSwipe.ApplicationLayer.Facades
             _exerciseService = exerciseService;
             _traningAreaService = traningAreaService;
             AvailableCards = GetCards();
+            _ = GetExercises();
         }
-        public bool HasDrawnAllCards() { return AvailableCards.Count() == 0; } 
+        public async Task GetExercises()
+        {
+            AvailableExercises = await _exerciseService.GetAllExercisesAsync();
+        }
+        public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; } 
 
         private List<string> GetCards()
         {
@@ -31,16 +38,14 @@ namespace GymSwipe.ApplicationLayer.Facades
                 "sceptile_card.jpg"
             };
         }
-
-        public async Task<string> ApproveCard(string card)
+        public async Task<ExerciseDTO> ApproveCard(ExerciseDTO exercise)
         {
-            AddedCards.Add(card);
-           return await DrawNewCard();
+            AddedExercises.Add(exercise);
+            return await DrawNewExerciseCard();
         }
-
-        public async Task<string> DiscardCard()
+        public async Task<ExerciseDTO> DiscardCard()
         {
-          return await DrawNewCard();
+            return await DrawExerciseCard();
         }
 
         public async Task<string> DrawNewCard()
@@ -49,15 +54,25 @@ namespace GymSwipe.ApplicationLayer.Facades
             {
                 return "";
             }
-
             var card = AvailableCards[Random.Shared.Next(AvailableCards.Count)];
-            AvailableCards.Remove(card);
+            //AvailableCards.Remove(card);
             return card;
         }
-
-        public Task GetExercises()
+        public async Task<ExerciseDTO> DrawNewExerciseCard()
         {
-            throw new NotImplementedException();
+            if (HasDrawnAllCards())
+            {
+                return null;
+            }
+            var exercise = AvailableExercises[Random.Shared.Next(AvailableExercises.Count)];
+            AvailableExercises.Remove(exercise);
+            return exercise;
+        }
+
+        public async Task<ExerciseDTO> DrawExerciseCard()
+        {
+            var exercise = AvailableExercises[Random.Shared.Next(AvailableExercises.Count)];
+            return exercise;
         }
 
         public async Task<string> DeckInfo()
@@ -65,7 +80,9 @@ namespace GymSwipe.ApplicationLayer.Facades
             if (HasDrawnAllCards()){
                 return "Last card!";
             }
-            return $"There are {AvailableCards.Count} cards remaning in the deck";
+            return $"There are {AvailableExercises.Count} cards remaning in the deck";
         }
+
+       
     }
 }
