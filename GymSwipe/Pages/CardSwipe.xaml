@@ -16,7 +16,12 @@
         </Image>-->
         <Label FontSize="Large" Text="Card-Swipe Demo"/>
         <Label Text="{Binding CardDeckInfo}" />
-        <Grid x:Name="CardShell" WidthRequest="{Binding CardWidth}">
+        <Grid 
+            x:Name="CardShell" 
+            WidthRequest="{Binding CardWidth}"
+            IsVisible="{Binding IsCardStructureVisible}"
+            
+            >
             <Border x:Name="Card" StrokeShape="RoundRectangle 16" Padding="16">
                 <Border.GestureRecognizers>
                     <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>

@@ -24,6 +24,20 @@ namespace GymSwipe.ViewModels
                 OnPropertyChanged(nameof(CardDeckInfo));
             }
         }
+        private bool _isDeckFinished;
+        public bool IsDeckFinished
+        {
+            get => _isDeckFinished;
+            private set
+            {
+                if (_isDeckFinished == value) return;
+                _isDeckFinished = value;
+                OnPropertyChanged(nameof(IsDeckFinished));
+                OnPropertyChanged(nameof(IsCardStructureVisible));
+
+            }
+        }
+        public bool IsCardStructureVisible => !IsDeckFinished;
 
         //With the factor of the card width, this will set limit to register as discarded/approved
         public double CardPositionRegistrationThreshold { get; set; } = 1;
@@ -63,13 +77,21 @@ namespace GymSwipe.ViewModels
             DiscardX -= SwipeLimitForRegistration;
             ApproveX += SwipeLimitForRegistration;
             _cardFacade = cardSwipeFacade;
-            _ = ShowInitalCard();
-            //DrawNextCard();
         }
+        public async Task InitalizeAsync()
+        {
+            await _cardFacade.InitalizeAsync();
+            await ShowInitalCard();
+        }
+        public async Task<bool> AllCardsAreDrawn()
+        {
+            return  _cardFacade.HasDrawnAllCards() && CurrentExercise==null;
+        }
+
         private async Task ShowInitalCard()
         {
             _currentCard = await _cardFacade.DrawNewCard();
-            _currentExercise = await _cardFacade.DrawExerciseCard();
+            CurrentExercise = await _cardFacade.DrawNewExerciseCard();
             await UpdateCard();
         }
     
@@ -95,33 +117,42 @@ namespace GymSwipe.ViewModels
         }
         public async Task ApproveCard()
         {
-            if (_currentCard != null)
+            if (CurrentExercise != null)
             {
                 CurrentExercise = await _cardFacade.ApproveCard(_currentExercise);
-                //_currentCard = await _cardFacade.ApproveCard(_currentCard);
-                AddedCards.Add(_currentCard);
-                await UpdateCard();
+                //AddedCards.Add(_currentCard);
+                await ValidateAfterSwipe();
             }
 
         }
         public async Task DiscardCard()
         {
-            if (_currentCard != null)
+            if (CurrentExercise != null)
             {
                 CurrentExercise = await _cardFacade.DiscardCard();
-                await UpdateCard();
+                await ValidateAfterSwipe();
             }
+
+        }
+        private async Task ValidateAfterSwipe()
+        {
+            if(CurrentExercise is null)
+            {
+                IsDeckFinished = true;
+                CardImageSource = null;
+                CardDeckInfo = "All cards have been drawn! Leave!";
+                return;
+            }
+            await UpdateCard();
         }
         public async Task UpdateCard()
         {
-            CardImageSource = _currentCard;
+
+            CardImageSource = await _cardFacade.GetApproptiateImageForExercise(CurrentExercise);
 
             CardDeckInfo = await _cardFacade.DeckInfo();
-
-            //CurrentExercise = await _cardFacade.DrawExerciseCard();
-            //Console.WriteLine(_currentExercise);
-
         }
 
+    
     }
 }

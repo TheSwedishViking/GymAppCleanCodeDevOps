@@ -21,7 +21,10 @@ namespace GymSwipe.ApplicationLayer.Facades
             _exerciseService = exerciseService;
             _traningAreaService = traningAreaService;
             AvailableCards = GetCards();
-            _ = GetExercises();
+        }
+        public async Task InitalizeAsync()
+        {
+            await GetExercises();
         }
         public async Task GetExercises()
         {
@@ -45,7 +48,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         public async Task<ExerciseDTO> DiscardCard()
         {
-            return await DrawExerciseCard();
+            return await DrawNewExerciseCard();
         }
 
         public async Task<string> DrawNewCard()
@@ -69,12 +72,6 @@ namespace GymSwipe.ApplicationLayer.Facades
             return exercise;
         }
 
-        public async Task<ExerciseDTO> DrawExerciseCard()
-        {
-            var exercise = AvailableExercises[Random.Shared.Next(AvailableExercises.Count)];
-            return exercise;
-        }
-
         public async Task<string> DeckInfo()
         {
             if (HasDrawnAllCards()){
@@ -83,6 +80,13 @@ namespace GymSwipe.ApplicationLayer.Facades
             return $"There are {AvailableExercises.Count} cards remaning in the deck";
         }
 
-       
+        public async Task<string> GetApproptiateImageForExercise(ExerciseDTO currentExercise)
+        {
+            if (HasDrawnAllCards())
+            {
+                return "";
+            }
+            return AvailableCards[Random.Shared.Next(AvailableCards.Count)];
+        }
     }
 }

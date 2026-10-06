@@ -16,52 +16,58 @@ public partial class CardSwipe : ContentPage
 		Card.BackgroundColor = Colors.Black;
         _startX = Card.TranslationX; 
 		_startY = Card.TranslationY;
+    }
+    protected async override void OnAppearing()
+	{
+		base.OnAppearing();
+        await _vm.InitalizeAsync();
 
     }
+	public async void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
+	{
 
-    public async void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
-    {
-	
-		switch (e.StatusType)
+		if (!_vm.IsDeckFinished)
 		{
-			//When starting to move, store position
-			case GestureStatus.Started:
-				_startX = Card.TranslationX;
-				_startY = Card.TranslationY;
-				break;
-			//While moving
-			case GestureStatus.Running:
-				//UI
-                Card.TranslationX = _startX + e.TotalX;
-                Card.TranslationY = _startY + e.TotalY;
-				Card.Rotation = (e.TotalX / _vm.CardDividend)*_vm.RotationFactor;
-				if(Card.TranslationX <= _vm.DiscardX)
-				{
-                    Card.BackgroundColor = Colors.Red;
-                }
-				else if(Card.TranslationX >= _vm.ApproveX)
-				{
-                    Card.BackgroundColor = Colors.Green;
-                }
-				else
-				{
-                    Card.BackgroundColor = Colors.Black;
-                }
-                break;
-			case GestureStatus.Completed:
+			switch (e.StatusType)
+			{
+				//When starting to move, store position
+				case GestureStatus.Started:
+					_startX = Card.TranslationX;
+					_startY = Card.TranslationY;
+					break;
+				//While moving
+				case GestureStatus.Running:
+					//UI
+					Card.TranslationX = _startX + e.TotalX;
+					Card.TranslationY = _startY + e.TotalY;
+					Card.Rotation = (e.TotalX / _vm.CardDividend) * _vm.RotationFactor;
+					if (Card.TranslationX <= _vm.DiscardX)
+					{
+						Card.BackgroundColor = Colors.Red;
+					}
+					else if (Card.TranslationX >= _vm.ApproveX)
+					{
+						Card.BackgroundColor = Colors.Green;
+					}
+					else
+					{
+						Card.BackgroundColor = Colors.Black;
+					}
+					break;
+				case GestureStatus.Completed:
 
-				await _vm.HandleOnCompleteCardSwipe(Card.TranslationX, Card.Width);
-                ResetCard();
-
-				break;
+					await _vm.HandleOnCompleteCardSwipe(Card.TranslationX, Card.Width);
+					ResetCard();
+					break;
 				//Cancel for resetting
-			case GestureStatus.Canceled:
-				Console.WriteLine("Cancelled");
-                ResetCard();
-                break;
-		}
+				case GestureStatus.Canceled:
+					Console.WriteLine("Cancelled");
+					ResetCard();
+					break;
+			}
 
-    }
+		}
+	}
 	//Purely UI reset
     public void ResetCard()
 	{
