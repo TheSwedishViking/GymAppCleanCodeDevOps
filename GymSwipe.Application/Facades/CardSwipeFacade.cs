@@ -1,5 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
@@ -15,11 +16,17 @@ namespace GymSwipe.ApplicationLayer.Facades
         public List<ExerciseDTO> AddedExercises { get; set; } = new List<ExerciseDTO>();
 
         private readonly IExerciseService _exerciseService;
+        private readonly LoggedInUser _user;
         private readonly ITraningAreaService _traningAreaService;
-        public CardSwipeFacade(IExerciseService exerciseService, ITraningAreaService traningAreaService)
+        public CardSwipeFacade(
+            IExerciseService exerciseService, 
+            ITraningAreaService traningAreaService,
+            LoggedInUser user
+            )
         {
             _exerciseService = exerciseService;
             _traningAreaService = traningAreaService;
+            _user = user;
             AvailableCards = GetCards();
         }
         public async Task InitalizeAsync()
