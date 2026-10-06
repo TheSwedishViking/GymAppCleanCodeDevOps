@@ -16,16 +16,19 @@ namespace GymSwipe.ApplicationLayer.Facades
         public List<ExerciseDTO> AddedExercises { get; set; } = new List<ExerciseDTO>();
 
         private readonly IExerciseService _exerciseService;
+        private readonly IPlaylistExecericseService _playlistService;
         private readonly LoggedInUser _user;
         private readonly ITraningAreaService _traningAreaService;
         public CardSwipeFacade(
-            IExerciseService exerciseService, 
+            IExerciseService exerciseService,
+            IPlaylistExecericseService playlistExecericseService,
             ITraningAreaService traningAreaService,
             LoggedInUser user
             )
         {
             _exerciseService = exerciseService;
             _traningAreaService = traningAreaService;
+            _playlistService = playlistExecericseService;
             _user = user;
             AvailableCards = GetCards();
         }
