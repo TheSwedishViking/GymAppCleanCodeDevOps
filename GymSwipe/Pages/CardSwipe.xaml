@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymSwipe.Pages.CardSwipe"
+             Title="CardSwipe">
+    <VerticalStackLayout>
+        <!--<Image
+            x:Name="ExampleCard"
+            Source="sceptile_card.jpg"
+            HeightRequest="300"
+            WidthRequest="140"
+            >
+            <Image.GestureRecognizers>
+                <PanGestureRecognizer/>
+            </Image.GestureRecognizers>
+        </Image>-->
+        <Label FontSize="Large" Text="Card-Swipe Demo"/>
+        <Label Text="{Binding CardDeckInfo}" />
+        <Grid x:Name="CardShell" WidthRequest="{Binding CardWidth}">
+            <Border x:Name="Card" StrokeShape="RoundRectangle 16" Padding="16">
+                <Border.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
+                </Border.GestureRecognizers>
+                <VerticalStackLayout>
+                    <Label FontSize="Large" Text="Exercise!"/>
+                    <Label Text="Example Exercise"/>
+                    <Label Text="Addiontal Info"/>
+                    <Image  x:Name="CardImage" Source="{Binding CardImageSource}"/>
+                    <Label Text="Video Link" FontAttributes="Italic"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+        <CollectionView
+           ItemsSource="{Binding AddedCards}">
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

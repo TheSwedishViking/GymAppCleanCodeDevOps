@@ -21,6 +21,11 @@ namespace GymSwipe
         {
             await Shell.Current.GoToAsync(nameof(Pages.UserRegistrationPage));
         }
+        private async void CardSwipeNavigationButtonClicked(object? sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(Pages.CardSwipe));
+
+        }
         private async void RandomExerciseButtonButtonClicked(object? sender, EventArgs e)
         {
             await Shell.Current.GoToAsync(nameof(Pages.RandomExercisePage));
