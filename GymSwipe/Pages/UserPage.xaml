@@ -47,9 +47,47 @@
             HorizontalOptions="Center" />
 
 
-        <!--<Label
-            Text ="{Binding LblText.Athlete, StringFormat='Is athlete: {0}'}"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />-->
+
+        <CollectionView Grid.Row="1"
+                ItemsSource="{Binding UserPlaylists}"
+                ItemsLayout="VerticalList"
+                EmptyView="Its 'Swiping' Empty!">
+            <CollectionView.Header>
+                <VerticalStackLayout BackgroundColor="Black">
+                    <!--<Label Text="{Binding CurrentUser.Firstname, StringFormat='{0}\'s Playlists'}" FontSize="Large" TextColor="White"/>-->
+                </VerticalStackLayout>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout Padding="10" Spacing="6">
+                        <Grid ColumnDefinitions="*,Auto" BackgroundColor="LightGray" Padding="8">
+                            <Label Grid.Column="0" Text="{Binding Name}" FontAttributes="Bold" FontSize="Medium"/>
+                            <Label Grid.Column="1" Text="{Binding DateCreated}" FontAttributes="Italic"/>
+                        </Grid>
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Excercise}" Spacing="4">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="Auto,Auto,2*,Auto" ColumnSpacing="10" Padding="10,0">
+                                        <Label Grid.Column="0" Text="{Binding PlaylistOrder}"/>
+                                        <Label Grid.Column="1" Text="{Binding Exercise.Name}" FontAttributes="Bold"/>
+
+                                        <FlexLayout Grid.Column="2"
+                                            BindableLayout.ItemsSource="{Binding Exercise.TargetAreas}"
+                                            Wrap="Wrap" Direction="Row">
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Label Text="{Binding Name}" Margin="0,0,4,0"/>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </FlexLayout>
+                                        <Label Grid.Column="3" Text="{Binding Exercise.VideoSourceLink}" FontAttributes="Italic"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>

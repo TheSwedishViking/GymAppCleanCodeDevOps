@@ -17,16 +17,18 @@ namespace GymSwipe.Infrastructure.Repos
 
         public async Task<GymPlaylist?> GetPlaylist(int id)
         {
-
-
             return await _db.GymPlaylists
                 .Include(p => p.Excercise.OrderBy(pe => pe.PlaylistOrder))
                 .ThenInclude(pe => pe.Exercise)
                 .FirstOrDefaultAsync(p => p.Id == id);
-
-
-
         }
-
+        public async Task<List<GymPlaylist>> GetPlaylistsByUserId(int userId)
+        {
+            return await _db.GymPlaylists
+                .Where(p => p.UserId == userId)
+                .Include(p => p.Excercise.OrderBy(pe => pe.PlaylistOrder))
+                    .ThenInclude(pe => pe.Exercise)
+                .ToListAsync();
+        }
     }
 }
