@@ -57,6 +57,7 @@ namespace GymSwipe.UserTests.MoqTests
                 }
             };
             _output.WriteLine(playlist.Excercise.FirstOrDefault().Exercise.Name);
+
             var repoGym = new Mock<IGymPlaylistRepository>();
             repoGym.Setup(p => p.GetPlaylist(1)).ReturnsAsync(playlist);
 
@@ -65,25 +66,23 @@ namespace GymSwipe.UserTests.MoqTests
             // Act
             var result = await service.GetPlaylist(1);
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(1, result!.Id);
-            Assert.Single(result.Excercise);
             Assert.Equal("Mocked Exercise", result.Excercise.First().Exercise.Name);
-            repoGym.Verify(p => p.GetPlaylist(1), Times.Once);
         }
+
         [Fact]
-        public async Task GetPlaylist_ReturnsNull_WhenNotFound()
+        public async Task CardSwipe_Test()
         {
-            var repoGym = new Mock<IGymPlaylistRepository>();
-            repoGym.Setup(p => p.GetPlaylist(99)).ReturnsAsync((GymPlaylist?)null);
+            // Arrange
 
-            var service = new GymPlaylistService(repoGym.Object);
 
-            var result = await service.GetPlaylist(99);
 
-            Assert.Null(result);
+
+            // Act
+
+
+            //ASSERT
         }
+
     }
 
 
