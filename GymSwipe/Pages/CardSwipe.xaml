@@ -37,8 +37,8 @@
         </Grid>
         <CollectionView
            ItemsSource="{Binding AddedExercises}"
+            IsVisible="{Binding ShowList}"
             >
-            
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="dto:ExerciseDTO">
                     <Border StrokeShape="RoundRectangle 12">
@@ -51,5 +51,7 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Button
+            Command="{Binding SavePlaylistCommand}"
     </VerticalStackLayout>
 </ContentPage>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
+using System.Windows.Input;
 
 namespace GymSwipe.ViewModels
 {
@@ -34,11 +35,14 @@ namespace GymSwipe.ViewModels
                 _isDeckFinished = value;
                 OnPropertyChanged(nameof(IsDeckFinished));
                 OnPropertyChanged(nameof(IsCardStructureVisible));
+                OnPropertyChanged(nameof(ShowList));
 
             }
         }
         public bool IsCardStructureVisible => !IsDeckFinished;
+        public bool ShowList => IsDeckFinished;
 
+        public ICommand SavePlaylistCommand { get; }
         //With the factor of the card width, this will set limit to register as discarded/approved
         public double CardPositionRegistrationThreshold { get; set; } = 1;
         public double CardWidth { get; } = 300;
@@ -77,6 +81,11 @@ namespace GymSwipe.ViewModels
             DiscardX -= SwipeLimitForRegistration;
             ApproveX += SwipeLimitForRegistration;
             _cardFacade = cardSwipeFacade;
+            SavePlaylistCommand = new Command(async () => await SavePlaylist());
+        }
+        public async Task SavePlaylist()
+        {
+
         }
         public async Task InitalizeAsync()
         {

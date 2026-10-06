@@ -48,6 +48,12 @@ namespace GymSwipe.ApplicationLayer.Facades
                 "sceptile_card.jpg"
             };
         }
+        public async Task SavePlayList()
+        {
+            if(AddedExercises != null&& AddedExercises.Count > 0)
+            {
+            }
+        }
         public async Task<ExerciseDTO> ApproveCard(ExerciseDTO exercise)
         {
             AddedExercises.Add(exercise);
@@ -92,5 +98,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         
             return AvailableCards[Random.Shared.Next(AvailableCards.Count)];
         }
+
+     
     }
 }
