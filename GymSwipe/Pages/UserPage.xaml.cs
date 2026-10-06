@@ -1,4 +1,3 @@
-using GymSwipe.Domain.Models;
 using GymSwipe.ViewModels;
 
 namespace GymSwipe.Pages;
