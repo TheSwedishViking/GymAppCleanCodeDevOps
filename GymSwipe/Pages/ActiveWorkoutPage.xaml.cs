@@ -5,6 +5,7 @@ namespace GymSwipe.Pages;
 public partial class ActiveWorkoutPage : ContentPage
 {
 	private ActiveWorkoutViewModel _vm;
+
 	public ActiveWorkoutPage(ActiveWorkoutViewModel vm)
 	{
 		InitializeComponent();

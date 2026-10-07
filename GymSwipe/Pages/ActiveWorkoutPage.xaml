@@ -15,23 +15,28 @@
              >
             <Border x:Name="Card" StrokeShape="RoundRectangle 16" Padding="6">
                 <VerticalStackLayout>
-                    <Label FontSize="Large" Text="Test" HorizontalTextAlignment="Center"/>
-                    <Label Text="Example Exercise" HorizontalTextAlignment="Center"/>
-                    <Label Text="Test"/>
+                    <Label Text="{Binding GymPlaylist.Name}"/>
+                    <Label FontSize="Large" Text="{Binding CurrentExercise.Exercise.Name}" HorizontalTextAlignment="Center"/>
+                    <Label Text="{Binding CurrentExercise.Exercise.VideoSourceLink}" HorizontalTextAlignment="Center"/>
+                    <Label Text="{Binding CurrentExercise.Id}" HorizontalTextAlignment="Center"/>
+                    <Label Text="{Binding CurrentExercise.PlaylistOrder}"/>
                     <Image  x:Name="CardImage" Source="sceptile_card.jpg"/>
                     <Label Text="Video link" FontAttributes="Italic" HorizontalOptions="Center"/>
                     <HorizontalStackLayout HorizontalOptions="Center" >
                         <Button
-                            Text="Test"
+                            Text="⬅️"
                             Margin="10"
+                            Command="{Binding PreviousExerciseCommand}"
                             />
                         <Button
-                            Text="Test"
+                            Text="▶️"
                               Margin="10"
+                            Command="{Binding StartPlaylistCommand}"
                             />
                         <Button
-                            Text="Test"
+                            Text="➡️"
                               Margin="10"
+                            Command="{Binding NextExerciseCommand}"
                             />
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
