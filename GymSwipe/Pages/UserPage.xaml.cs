@@ -15,14 +15,7 @@ public partial class UserPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        try
-        {
-            await _vm.GetAllTheUsersPlaylists();
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine(ex);   // so a failed API call isn't silent
-        }
+        await _vm.GetAllTheUsersPlaylists();
     }
 
     private async void OnClickGreetUser(object sender, EventArgs e)
