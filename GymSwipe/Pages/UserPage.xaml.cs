@@ -9,7 +9,6 @@ public partial class UserPage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
-
     private async void OnClickGreetUser(object sender, EventArgs e)
     {
         lblGreeted.TextColor = Colors.Red;

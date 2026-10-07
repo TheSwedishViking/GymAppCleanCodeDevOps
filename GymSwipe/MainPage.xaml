@@ -36,6 +36,11 @@
               Clicked="RegisterUserNavigationButtonClicked"
               HorizontalOptions="Fill" />
             <Button
+                x:Name="GoToWorkout"
+                Text="Start a workout"
+                Clicked="GoTo_ActiveWorkout"
+                HorizontalOptions="Fill" />
+            <Button
                 x:Name="CardButton"
                 Text="Card swipe test" 
                 Clicked="CardSwipeNavigationButtonClicked"
