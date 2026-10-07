@@ -69,6 +69,7 @@ namespace GymSwipe
             builder.Services.AddTransient<CardSwipeViewModel>();
             builder.Services.AddTransient<AdminRegisterNewExerciseViewModel>();
             builder.Services.AddTransient<AdminRegisterNewTrainingAreaViewModel>();
+            builder.Services.AddTransient<ActiveWorkoutViewModel>();
             builder.Services.AddTransient<MainPageViewModel>();
 
             //api address

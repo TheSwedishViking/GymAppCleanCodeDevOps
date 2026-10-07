@@ -10,4 +10,9 @@ public partial class ActiveWorkoutPage : ContentPage
 		InitializeComponent();
 		BindingContext = _vm = vm;
 	}
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+		await _vm.InitalizeAsync();
+    }
 }

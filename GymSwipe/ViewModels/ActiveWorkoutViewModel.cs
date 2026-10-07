@@ -1,5 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +14,27 @@ namespace GymSwipe.ViewModels
 
         private readonly IWorkoutFacade _workoutFacade;
         private readonly  LoggedInUser _loggedInUser;
+        private GymPlaylist _playList;
+        public GymPlaylist GymPlaylist
+        {
+            get { return _playList; }
+            set
+            {
+                _playList = value;
+                OnPropertyChanged(nameof(GymPlaylist));
+            }
+        }
+        private PlaylistExcercise _currentExercise;
+        public PlaylistExcercise CurrentExercise
+        {
+            get { return _currentExercise; }
+            set
+            {
+                if(_currentExercise == value) return;
+                _currentExercise = value;
+                OnPropertyChanged(nameof(_currentExercise));
+            }
+        }
         public ActiveWorkoutViewModel(IWorkoutFacade workoutFacade, LoggedInUser loggedInUser)
         {
             _workoutFacade = workoutFacade;
@@ -27,8 +49,8 @@ namespace GymSwipe.ViewModels
 
         public async Task InitalizeAsync()
         {
-            await _workoutFacade.GetPlaylist(_loggedInUser.CurrentUser.Id);
-
+            GymPlaylist = await _workoutFacade.GetPlaylist(_loggedInUser.CurrentUser.Id);
+            Console.WriteLine(GymPlaylist);
         }
     }
 }

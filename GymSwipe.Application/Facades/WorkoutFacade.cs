@@ -18,7 +18,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             _playlistService = gymPlaylistService;
             _userService = userService;
         }
-        public async Task GetPlaylist(int userId)
+        public async Task<GymPlaylist> GetPlaylist(int userId)
         {
             var userValid = await _userService.GetUserById(userId);
             if (userValid == null)
@@ -31,7 +31,10 @@ namespace GymSwipe.ApplicationLayer.Facades
             {
                 throw new Exception("No playlist found; point user towards creating a playlist, alt open swipe automatically");
             }
-            throw new NotImplementedException();
+
+            var todaysPlaylist = await _playlistService.GetTodaysPlaylist(userId);
+
+            return todaysPlaylist;
         }
 
         public Task QuitWorkout()
