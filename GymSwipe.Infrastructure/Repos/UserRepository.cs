@@ -72,20 +72,22 @@ namespace GymSwipe.Infrastructure.Repos
         public async Task<GymUserDTO> GetCreatedUserByEmail(string email)
         {
             GymUser foundUser = _db.Users.FirstOrDefault(u => u.Email == email);
-            Console.WriteLine();
-            foundUser.SetFriendCode();
-
-            return new GymUserDTO
+            if (foundUser != null)
             {
-                Id = foundUser.Id,
-                Firstname = foundUser.Firstname,
-                Surname = foundUser.Surname,
-                Email = foundUser.Email,
-                HeightCm = foundUser.HeightCm,
-                WeightKg = foundUser.WeightKg,
-                Gender = foundUser.Gender,
-                FriendCode = foundUser.FriendCode
-            };
+                return new GymUserDTO
+                {
+                    Id = foundUser.Id,
+                    Firstname = foundUser.Firstname,
+                    Surname = foundUser.Surname,
+                    Email = foundUser.Email,
+                    HeightCm = foundUser.HeightCm,
+                    WeightKg = foundUser.WeightKg,
+                    Gender = foundUser.Gender,
+                    FriendCode = foundUser.FriendCode
+                };
+            }
+            return null;
+
         }
 
         public async Task DeleteUserById(int userId)
