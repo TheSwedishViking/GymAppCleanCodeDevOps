@@ -73,7 +73,7 @@ namespace GymSwipe.UserTests
         [Theory]
         public async Task CreateadUser_HasUniqueEmail_ReturnExpected(string email, bool expected)
         {
-            var response = await _client.GetFromJsonAsync<bool>("api/User/email/" + email);
+            var response = await _client.GetFromJsonAsync<bool>("api/User/Unique-Email/" + email);
 
             Assert.Equal(expected, response);
         }
