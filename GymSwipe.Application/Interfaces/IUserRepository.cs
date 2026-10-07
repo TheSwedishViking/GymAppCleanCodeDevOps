@@ -7,7 +7,9 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     {
         Task<GymUser> AddUser(GymUserDTO dto);
         Task<GymUserDTO> GetUserById(int id);
+
         Task<bool> GetUserByEmail(string Email);
         Task DeleteUserById(int id);
+        Task<GymUserDTO> GetCreatedUserByEmail(string email);
     }
 }

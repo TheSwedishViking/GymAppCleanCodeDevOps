@@ -8,6 +8,7 @@
 
             Routing.RegisterRoute(nameof(Pages.UserPage), typeof(Pages.UserPage));
             Routing.RegisterRoute(nameof(Pages.UserRegistrationPage), typeof(Pages.UserRegistrationPage));
+            Routing.RegisterRoute(nameof(Pages.UserSignInPage), typeof(Pages.UserSignInPage));
             Routing.RegisterRoute(nameof(Pages.CardSwipe), typeof(Pages.CardSwipe));
             Routing.RegisterRoute(nameof(Pages.RandomExercisePage), typeof(Pages.RandomExercisePage));
             Routing.RegisterRoute(nameof(Pages.AdminRegisterNewExercise), typeof(Pages.AdminRegisterNewExercise));

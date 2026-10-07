@@ -30,7 +30,12 @@
             Text="{Binding Session.CurrentUser.Firstname}">
             </Label>
 
-                <Button
+            <Button
+                x:Name="UserSignInButton"
+                Text="Sign In" 
+                Clicked="UserSignInNavigationButtonClicked"
+                HorizontalOptions="Fill" /> 
+            <Button
               x:Name="UserRegistrationButton"
               Text="Register as new user" 
               Clicked="RegisterUserNavigationButtonClicked"
