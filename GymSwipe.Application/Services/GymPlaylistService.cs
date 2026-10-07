@@ -26,6 +26,11 @@ namespace GymSwipe.ApplicationLayer.Services
             return await _playlistRepo.GetPlaylistsByUserId(userId);
         }
 
+        public async Task<GymPlaylist> GetTodaysPlaylist(int userId)
+        {
+            return await _playlistRepo.GetTodaysPlaylistByUserId(userId, await _dateHandler.SetDateAsDateOnly());
+        }
+
         public async Task SavePlayListToUser(List<ExerciseDTO> addedExercises, GymUser currentUser)
         {
             GymPlaylist newPlaylist = new GymPlaylist();
