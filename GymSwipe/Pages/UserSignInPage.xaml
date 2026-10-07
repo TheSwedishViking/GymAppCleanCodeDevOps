@@ -36,7 +36,7 @@
                 VerticalOptions="Center" />
             <Entry
                 x:Name="EmailEntry"
-                Text="{Binding CurrentUser.Email, Mode=TwoWay}"
+                Text="{Binding EmailEntry}"
                 Keyboard="Email"
                 Grid.Row="2"
                 Grid.Column="1" />

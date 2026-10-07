@@ -1,5 +1,4 @@
-﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
+﻿using GymSwipe.Domain.Models;
 using System.ComponentModel;
 using System.Net.Http.Json;
 using System.Windows.Input;
@@ -10,7 +9,8 @@ namespace GymSwipe.ViewModels
     {
 
         public event PropertyChangedEventHandler? PropertyChanged;
-
+        public GymUser CurrentUser { get; set; } = new GymUser();
+        public string EmailEntry;
         public ICommand SignInCommand { get; }
 
 
@@ -37,34 +37,17 @@ namespace GymSwipe.ViewModels
         {
 
 
-            bool uniqueEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/email/" + correctEmail.Email);
-            if (uniqueEmail == false)
+            bool uniqueEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/email/" + EmailEntry);
+            if (uniqueEmail = false)
             {
-                StatusCheck = correctEmail.Email + " already in use. Try being original!";
+                StatusCheck = EmailEntry + " not found! Register a new one";
                 return;
             }
 
-            var request = new RequestCreateGymUserDTO
-            {
-                Firstname = CurrentUser.Firstname,
-                Surname = CurrentUser.Surname,
-                Email = correctEmail.Email,
-                HeightCm = CurrentUser.HeightCm,
-                WeightKg = CurrentUser.WeightKg,
-                Gender = CurrentUser.Gender
-            };
-
-            using var response = await _httpClient.PostAsJsonAsync("api/User", request);
-            response.EnsureSuccessStatusCode();
-            var user = await response.Content.ReadFromJsonAsync<GymUserDTO>();
-            Console.WriteLine(user);
 
 
-            CurrentUser.Id = user.Id;
 
-            _loggedIn.CurrentUser = CurrentUser;
-            Console.WriteLine(CurrentUser);
-            _loggedIn.CurrentUser.SetFriendCode();
+
             await Shell.Current.GoToAsync("..");
         }
 
