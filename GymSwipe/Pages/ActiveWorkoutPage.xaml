@@ -6,7 +6,36 @@
     <VerticalStackLayout>
         <Label 
             Text="Users active workout here"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            Grid.Column="2"
+            Grid.Row="2"
+            />
+        <Grid 
+             x:Name="CardShell" 
+             WidthRequest="300"
+             >
+            <Border x:Name="Card" StrokeShape="RoundRectangle 16" Padding="6">
+                <VerticalStackLayout>
+                    <Label FontSize="Large" Text="Test" HorizontalTextAlignment="Center"/>
+                    <Label Text="Example Exercise" HorizontalTextAlignment="Center"/>
+                    <Label Text="Test"/>
+                    <Image  x:Name="CardImage" Source="sceptile_card.jpg"/>
+                    <Label Text="Video link" FontAttributes="Italic" HorizontalOptions="Center"/>
+                    <HorizontalStackLayout HorizontalOptions="Center" >
+                        <Button
+                            Text="Test"
+                            Margin="10"
+                            />
+                        <Button
+                            Text="Test"
+                              Margin="10"
+                            />
+                        <Button
+                            Text="Test"
+                              Margin="10"
+                            />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
     </VerticalStackLayout>
 </ContentPage>
