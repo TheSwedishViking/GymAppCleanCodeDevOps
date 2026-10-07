@@ -11,8 +11,11 @@ namespace GymSwipe.ViewModels
     {
 
         public GymUser CurrentUser { get; set; }
-        public ObservableCollection<GymPlaylist> UserPlaylists { get; } = new();
 
+        private List<GymPlaylist> _allPlaylists = new();
+        private int _currentPage = 0;
+        private const int PageSize = 3;
+        public ObservableCollection<GymPlaylist> TakeThreeLists { get; } = new();
 
 
         private string _buttonText = "Todays Message!";
@@ -36,8 +39,13 @@ namespace GymSwipe.ViewModels
                 OnPropertyChanged(nameof(GreetingUser));
             }
         }
+        public ICommand NextPageCommand { get; }
+        public ICommand PreviousPageCommand { get; }
+
         public ICommand GreetUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
+
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -50,6 +58,8 @@ namespace GymSwipe.ViewModels
             _httpClient = httpClient;
             CurrentUser = _loggedInUser.CurrentUser;
             _gymPlaylistService = gymPlaylistService;
+            NextPageCommand = new Command(() => ChangePage(1));
+            PreviousPageCommand = new Command(() => ChangePage(-1));
             GreetUserCommand = new Command(async () =>
             {
                 await GreetUser();
@@ -62,12 +72,23 @@ namespace GymSwipe.ViewModels
 
         public async Task GetAllTheUsersPlaylists()
         {
-            var playLists = await _gymPlaylistService.GetPlaylistsByUserId(CurrentUser.Id);
-            UserPlaylists.Clear();
-            foreach (var list in playLists)
-            {
-                UserPlaylists.Add(list);
-            }
+            _allPlaylists = (await _gymPlaylistService.GetPlaylistsByUserId(CurrentUser.Id)).ToList();
+            _currentPage = 0;
+            ShowCurrentPage();
+        }
+
+        private void ChangePage(int direction)
+        {
+            int lastPage = Math.Max(0, (_allPlaylists.Count - 1) / PageSize);
+            _currentPage = Math.Clamp(_currentPage + direction, 0, lastPage);
+            ShowCurrentPage();
+        }
+
+        private void ShowCurrentPage()
+        {
+            TakeThreeLists.Clear();
+            foreach (var list in _allPlaylists.Skip(_currentPage * PageSize).Take(PageSize))
+                TakeThreeLists.Add(list);
         }
 
 
