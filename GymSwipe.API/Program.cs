@@ -44,6 +44,7 @@ namespace GymSwipe.API
 
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IDateHandler, DateHandler>();
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
             builder.Services.AddScoped<IGymPlaylistService, GymPlaylistService>();
 

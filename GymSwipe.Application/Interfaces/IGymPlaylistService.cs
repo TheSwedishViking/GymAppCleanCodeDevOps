@@ -1,4 +1,5 @@
-﻿using GymSwipe.Domain.Models;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.Domain.Models;
 
 namespace GymSwipe.ApplicationLayer.Interfaces
 {
@@ -6,5 +7,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     {
         Task<GymPlaylist> GetPlaylist(int id);
         Task<List<GymPlaylist>> GetPlaylistsByUserId(int userId);
+        Task SavePlayListToUser(List<ExerciseDTO> addedExercises, GymUser currentUser);
+
     }
 }

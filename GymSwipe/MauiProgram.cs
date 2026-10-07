@@ -43,6 +43,7 @@ namespace GymSwipe
             builder.Services.AddScoped<ITraningAreaService, TrainingAreaService>();
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
             builder.Services.AddScoped<IGymPlaylistService, GymPlaylistService>();
+            builder.Services.AddScoped<IDateHandler, DateHandler>();
 
             //*******REPOSITORIES*******
             builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -55,6 +56,7 @@ namespace GymSwipe
             builder.Services.AddScoped<IExerciseFacade, ExerciseFacade>();
             builder.Services.AddScoped<IAdminAddExerciseFacade, AdminAddExerciseFacade>();
             builder.Services.AddScoped<IAdminAddTrainingAreaFacade, AdminAddTraningAreaFacade>();
+            builder.Services.AddScoped<ICardSwipeFacade, CardSwipeFacade>();
             //builder.Services.AddScoped<IPlaylistFacade>();  
 
             //*******VIEW MODELS*******
