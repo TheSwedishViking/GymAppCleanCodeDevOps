@@ -48,7 +48,7 @@
 
 
 
-        <CollectionView Grid.Row="1"
+        <CollectionView 
                 ItemsSource="{Binding UserPlaylists}"
                 ItemsLayout="VerticalList"
                 EmptyView="Its 'Swiping' Empty!">
@@ -59,15 +59,15 @@
             </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <VerticalStackLayout Padding="10" Spacing="6">
-                        <Grid ColumnDefinitions="*,Auto" BackgroundColor="LightGray" Padding="8">
-                            <Label Grid.Column="0" Text="{Binding Name}" FontAttributes="Bold" FontSize="Medium"/>
+                    <VerticalStackLayout Padding="20" >
+                        <Grid ColumnDefinitions="*,Auto" BackgroundColor="Green" Padding="8">
+                            <Label Grid.Column="0" Text="{Binding Name}" FontAttributes="Bold" FontSize="Medium" TextColor="Purple" BackgroundColor="Black"/>
                             <Label Grid.Column="1" Text="{Binding DateCreated}" FontAttributes="Italic"/>
                         </Grid>
                         <VerticalStackLayout BindableLayout.ItemsSource="{Binding Excercise}" Spacing="4">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid ColumnDefinitions="Auto,Auto,2*,Auto" ColumnSpacing="10" Padding="10,0">
+                                    <Grid ColumnDefinitions="Auto,Auto,2*,Auto" ColumnSpacing="10" Padding="10,0" BackgroundColor="grey">
                                         <Label Grid.Column="0" Text="{Binding PlaylistOrder}"/>
                                         <Label Grid.Column="1" Text="{Binding Exercise.Name}" FontAttributes="Bold"/>
 
