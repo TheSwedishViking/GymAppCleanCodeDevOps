@@ -54,7 +54,7 @@ namespace GymSwipe.UserTests
             Assert.NotEmpty(chests);
         }
         [Fact]
-        public async Task Requesting_ExerciesWithAndInvalid_Id_LikeZero_Or_Enum_AreaEnum_Inavlid_ReturnsEmpty()
+        public async Task Requesting_ExerciesWithAInvalid_Id_LikeZero_Or_Enum_AreaEnum_Inavlid_ReturnsEmpty()
         {
             var empty = await _sut.GetExerciseByIdAsync(0);
 

@@ -46,7 +46,14 @@ namespace GymSwipe.API.Controllers
             return Ok(user); //return the user objekt to api 
         }
 
-        [HttpGet("email/{email}")]
+        [HttpGet("Get-UserDto-By-Email/{email}")]
+        public async Task<IActionResult> GetCreatedUserByEmail(string email)
+        {
+            var user = await _userService.GetCreatedUserByEmail(email);
+            return Ok(user);
+        }
+
+        [HttpGet("Unique-Email/{email}")]
         public async Task<IActionResult> GetUserByEmail(string email)
         {
             bool avaliableEmail = await _userService.GetUserByEmail(email);

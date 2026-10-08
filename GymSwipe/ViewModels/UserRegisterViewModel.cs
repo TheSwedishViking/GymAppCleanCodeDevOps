@@ -67,7 +67,7 @@ namespace GymSwipe.ViewModels
 
                 return;
             }
-            bool uniqueEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/email/" + correctEmail.Email);
+            bool uniqueEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/Unique-Email/" + correctEmail.Email);
             if (uniqueEmail == false)
             {
                 StatusCheck = correctEmail.Email + " already in use. Try being original!";

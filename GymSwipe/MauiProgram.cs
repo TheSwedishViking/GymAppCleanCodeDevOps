@@ -64,6 +64,7 @@ namespace GymSwipe
             builder.Services.AddSingleton<LoggedInUser>();
 
             builder.Services.AddSingleton<UserPageAccountViewModel>();
+            builder.Services.AddTransient<UserPageSignInViewModel>();
             builder.Services.AddTransient<UserRegisterViewModel>();
             builder.Services.AddTransient<RandomExerciseViewModel>();
             builder.Services.AddTransient<CardSwipeViewModel>();

@@ -55,19 +55,40 @@ namespace GymSwipe.Infrastructure.Repos
             };
         }
 
-        public async Task<bool> GetUserByEmail(string email)
+        public async Task<bool> GetUserByEmail(string email) // bad naming But a hazzle to change
         {
             GymUser foundUser = _db.Users.FirstOrDefault(u => u.Email == email);
             Console.WriteLine();
 
             if (foundUser == null)
             {
-                return true; //Email is available
+                return true;
             }
 
-            return false; //Email is already in use
+            return false;
         }
 
+
+        public async Task<GymUserDTO> GetCreatedUserByEmail(string email)
+        {
+            GymUser foundUser = _db.Users.FirstOrDefault(u => u.Email == email);
+            if (foundUser != null)
+            {
+                return new GymUserDTO
+                {
+                    Id = foundUser.Id,
+                    Firstname = foundUser.Firstname,
+                    Surname = foundUser.Surname,
+                    Email = foundUser.Email,
+                    HeightCm = foundUser.HeightCm,
+                    WeightKg = foundUser.WeightKg,
+                    Gender = foundUser.Gender,
+                    FriendCode = foundUser.FriendCode
+                };
+            }
+            return null;
+
+        }
 
         public async Task DeleteUserById(int userId)
         {

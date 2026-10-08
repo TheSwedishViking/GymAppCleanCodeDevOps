@@ -1,18 +1,20 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
-using GymSwipe.ApplicationLayer.Services;
+﻿using GymSwipe.ApplicationLayer.Services;
 using GymSwipe.Domain.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using GymSwipe.ApplicationLayer.Interfaces;
+
 
 namespace GymSwipe.ViewModels
 {
     public class UserPageAccountViewModel : INotifyPropertyChanged
     {
 
-        public GymUser CurrentUser { get; set; }
-        public ObservableCollection<GymPlaylist> UserPlaylists { get; } = new();
-
+        private List<GymPlaylist> _allPlaylists = new();
+        private int _currentPage = 0;
+        private const int PageSize = 3;
+        public ObservableCollection<GymPlaylist> CurrentThreePlaylists { get; } = new();
 
 
         private string _buttonText = "Todays Message!";
@@ -36,39 +38,64 @@ namespace GymSwipe.ViewModels
                 OnPropertyChanged(nameof(GreetingUser));
             }
         }
+        public ICommand NextPageCommand { get; }
+        public ICommand PreviousPageCommand { get; }
         public ICommand GreetUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
 
+
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private LoggedInUser _loggedInUser;
-        private HttpClient _httpClient;
-        private GymSwipe.ApplicationLayer.Interfaces.IGymPlaylistService _gymPlaylistService;
+        public GymUser CurrentUser { get; set; }
+        private readonly LoggedInUser _loggedInUser;
+        private readonly HttpClient _httpClient;
+        private readonly IGymPlaylistService _gymPlaylistService;
         public UserPageAccountViewModel(LoggedInUser loggedInUser, HttpClient httpClient, IGymPlaylistService gymPlaylistService)
         {
             _loggedInUser = loggedInUser;
             _httpClient = httpClient;
             CurrentUser = _loggedInUser.CurrentUser;
             _gymPlaylistService = gymPlaylistService;
-            GreetUserCommand = new Command(async () =>
-            {
-                await GreetUser();
-            });
+            NextPageCommand = new Command(() => ChangePage(1));
+            PreviousPageCommand = new Command(() => ChangePage(-1));
+            GreetUserCommand = new Command(GreetUser);
+
             DeleteUserCommand = new Command(async () =>
             {
                 await DeleteUser();
             });
         }
 
+
+
+
+
         public async Task GetAllTheUsersPlaylists()
         {
-            var playLists = await _gymPlaylistService.GetPlaylistsByUserId(CurrentUser.Id);
-            UserPlaylists.Clear();
-            foreach (var list in playLists)
-            {
-                UserPlaylists.Add(list);
-            }
+            _allPlaylists = (await _gymPlaylistService.GetPlaylistsByUserId(CurrentUser.Id)).ToList();
+            _currentPage = 0;
+            ShowCurrentPage();
         }
+
+        private void ChangePage(int direction)
+        {
+            int lastPage = Math.Max(0, (_allPlaylists.Count - 1) / PageSize);
+            _currentPage = Math.Clamp(_currentPage + direction, 0, lastPage);
+            ShowCurrentPage();
+        }
+
+        private void ShowCurrentPage()
+        {
+            CurrentThreePlaylists.Clear();
+            foreach (var list in _allPlaylists.Skip(_currentPage * PageSize).Take(PageSize))
+                CurrentThreePlaylists.Add(list);
+        }
+
+
+
+
+
 
 
 
@@ -76,7 +103,7 @@ namespace GymSwipe.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public async Task GreetUser()
+        public void GreetUser()
         {
             ButtonText = " = )";
             GreetingUser = $"You are looking swole today {_loggedInUser.CurrentUser.Firstname} {_loggedInUser.CurrentUser.Id}!";

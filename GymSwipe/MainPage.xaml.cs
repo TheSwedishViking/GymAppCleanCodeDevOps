@@ -1,5 +1,4 @@
-﻿using GymSwipe.Domain.Models;
-using GymSwipe.ViewModels;
+﻿using GymSwipe.ViewModels;
 
 namespace GymSwipe
 {
@@ -21,6 +20,15 @@ namespace GymSwipe
         {
             await Shell.Current.GoToAsync(nameof(Pages.UserRegistrationPage));
         }
+
+        private async void UserSignInNavigationButtonClicked(object? sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(Pages.UserSignInPage));
+        }
+
+
+
+
         private async void CardSwipeNavigationButtonClicked(object? sender, EventArgs e)
         {
             await Shell.Current.GoToAsync(nameof(Pages.CardSwipe));
