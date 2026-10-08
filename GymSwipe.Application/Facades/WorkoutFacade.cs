@@ -22,7 +22,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             _userService = userService;
             stopwatch = new Stopwatch();
         }
-        public async Task<GymPlaylist> GetPlaylist(int userId)
+        public async Task<GymPlaylist> GetPlaylistByUserId(int userId)
         {
             var userValid = await _userService.GetUserById(userId);
             if (userValid == null)
@@ -92,8 +92,23 @@ namespace GymSwipe.ApplicationLayer.Facades
             return true;
         }
 
-       
-
-        
+        public async Task<GymPlaylist> GetPlaylistById(int id)
+        {
+            try
+            {
+                var playlist = await _playlistService.GetPlaylist(id);
+                if (playlist == null)
+                {
+                    throw new ArgumentNullException("No playlist found, but we have a provided Id?");
+                }
+                _playlist = playlist;
+                return _playlist;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return new GymPlaylist();
+        }
     }
 }

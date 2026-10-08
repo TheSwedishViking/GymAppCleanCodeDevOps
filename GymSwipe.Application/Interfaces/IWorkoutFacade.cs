@@ -11,7 +11,8 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task PauseWorkout();
         Task<PlaylistExcercise> GetNextExercise(PlaylistExcercise current);
         Task<PlaylistExcercise> GetPreviousExercise(PlaylistExcercise current);
-        Task<GymPlaylist> GetPlaylist(int userId);
+        Task<GymPlaylist> GetPlaylistById(int id);
+        Task<GymPlaylist> GetPlaylistByUserId(int userId);
         Task<bool> QuitWorkout();
         Task RecordUserWorkout();
     }

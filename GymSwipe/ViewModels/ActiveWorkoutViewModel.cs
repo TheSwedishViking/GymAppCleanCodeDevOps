@@ -9,12 +9,18 @@ using System.Windows.Input;
 
 namespace GymSwipe.ViewModels
 {
-    public class ActiveWorkoutViewModel : INotifyPropertyChanged
+    //IQueraAttributable for loading a playlist if ID provided from other page 
+    public class ActiveWorkoutViewModel : INotifyPropertyChanged, IQueryAttributable
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly IWorkoutFacade _workoutFacade;
         private readonly  LoggedInUser _loggedInUser;
+        private int? _playListId;
+        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            _playListId = query.TryGetValue("PlayListId", out var value) && value is int id ? id : null;
+        }
         private GymPlaylist _playList;
         public GymPlaylist GymPlaylist
         {
@@ -98,8 +104,18 @@ namespace GymSwipe.ViewModels
                 await Shell.Current.GoToAsync(nameof(Pages.UserRegistrationPage));
                 return;
             }
-            GymPlaylist = await _workoutFacade.GetPlaylist(_loggedInUser.CurrentUser.Id);
+            if(_playListId is int id)
+            {
+                GymPlaylist = await _workoutFacade.GetPlaylistById(id);
+            }
+            else
+            {
+                GymPlaylist = await _workoutFacade.GetPlaylistByUserId(_loggedInUser.CurrentUser.Id);
+            }
+          
             Console.WriteLine(GymPlaylist);
         }
+
+    
     }
 }

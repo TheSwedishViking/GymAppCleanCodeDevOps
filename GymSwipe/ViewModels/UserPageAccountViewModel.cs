@@ -42,6 +42,7 @@ namespace GymSwipe.ViewModels
         public ICommand PreviousPageCommand { get; }
         public ICommand GreetUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
+        public ICommand PlayPlaylistCommand {  get; }
 
 
 
@@ -61,13 +62,23 @@ namespace GymSwipe.ViewModels
             NextPageCommand = new Command(() => ChangePage(1));
             PreviousPageCommand = new Command(() => ChangePage(-1));
             GreetUserCommand = new Command(GreetUser);
-
             DeleteUserCommand = new Command(async () =>
             {
                 await DeleteUser();
             });
-        }
 
+            PlayPlaylistCommand = new Command<GymPlaylist>(async e => await StartThisPlayList(e));
+
+
+        }
+        public async Task StartThisPlayList(GymPlaylist gymPlaylist)
+        {
+            Console.WriteLine(gymPlaylist);
+            await Shell.Current.GoToAsync(nameof(Pages.ActiveWorkoutPage), new Dictionary<string, object>
+            {
+                ["PlayListId"] = gymPlaylist.Id
+            });
+        }
         public async Task InitalizeAsync()
         {
             CurrentUser = _loggedInUser.CurrentUser;

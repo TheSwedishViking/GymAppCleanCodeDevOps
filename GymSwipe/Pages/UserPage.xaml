@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymSwipe.Pages.UserPage"
+             x:Name="Page"
              Title="UserPage">
     <VerticalStackLayout>
         <Label 
@@ -63,20 +64,6 @@
                 FontSize="20" BorderColor="Red" BorderWidth="2" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
   
         </Grid>
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
             <HorizontalStackLayout
                 BindableLayout.ItemsSource="{Binding CurrentThreePlaylists}">
 
@@ -113,7 +100,12 @@
                                     TextColor="Purple"
                                     FontSize="22"/> 
 
-                                <Button Text="Play" Grid.Column="1" Grid.Row="1" />
+                                <Button Text="Play ▶️" 
+                                        Grid.Column="1" Grid.Row="1" 
+                                      Command="{Binding BindingContext.PlayPlaylistCommand, Source={x:Reference Page}}"
+                                        CommandParameter="{Binding .}"
+                                        
+                                        />
 
 
                             </Grid>
