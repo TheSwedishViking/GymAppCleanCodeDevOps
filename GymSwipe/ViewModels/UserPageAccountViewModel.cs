@@ -47,7 +47,8 @@ namespace GymSwipe.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public GymUser CurrentUser { get; set; }
+    
+        public GymUser CurrentUser { get; private set; }
         private readonly LoggedInUser _loggedInUser;
         private readonly HttpClient _httpClient;
         private readonly IGymPlaylistService _gymPlaylistService;
@@ -55,7 +56,7 @@ namespace GymSwipe.ViewModels
         {
             _loggedInUser = loggedInUser;
             _httpClient = httpClient;
-            CurrentUser = _loggedInUser.CurrentUser;
+           
             _gymPlaylistService = gymPlaylistService;
             NextPageCommand = new Command(() => ChangePage(1));
             PreviousPageCommand = new Command(() => ChangePage(-1));
@@ -69,7 +70,9 @@ namespace GymSwipe.ViewModels
 
         public async Task InitalizeAsync()
         {
+            CurrentUser = _loggedInUser.CurrentUser;
             await GetAllTheUsersPlaylists();
+
         }
 
         public async Task GetAllTheUsersPlaylists()
@@ -81,6 +84,7 @@ namespace GymSwipe.ViewModels
                 return;
             }
             var playlists = await _gymPlaylistService.GetPlaylistsByUserId(CurrentUser.Id);
+            _allPlaylists = playlists;
             _currentPage = 0;
             ShowCurrentPage();
         }
@@ -98,13 +102,6 @@ namespace GymSwipe.ViewModels
             foreach (var list in _allPlaylists.Skip(_currentPage * PageSize).Take(PageSize))
                 CurrentThreePlaylists.Add(list);
         }
-
-
-
-
-
-
-
 
         public void OnPropertyChanged(string propertyName)
         {
