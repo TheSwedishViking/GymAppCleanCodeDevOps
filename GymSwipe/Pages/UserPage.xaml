@@ -78,7 +78,7 @@
 
             
             <HorizontalStackLayout
-                BindableLayout.ItemsSource="{Binding TakeThreeLists}">
+                BindableLayout.ItemsSource="{Binding CurrentThreePlaylists}">
 
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>

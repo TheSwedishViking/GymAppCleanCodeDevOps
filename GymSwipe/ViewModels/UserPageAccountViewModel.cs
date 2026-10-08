@@ -10,12 +10,11 @@ namespace GymSwipe.ViewModels
     public class UserPageAccountViewModel : INotifyPropertyChanged
     {
 
-        public GymUser CurrentUser { get; set; }
 
         private List<GymPlaylist> _allPlaylists = new();
         private int _currentPage = 0;
         private const int PageSize = 3;
-        public ObservableCollection<GymPlaylist> TakeThreeLists { get; } = new();
+        public ObservableCollection<GymPlaylist> CurrentThreePlaylists { get; } = new();
 
 
         private string _buttonText = "Todays Message!";
@@ -41,7 +40,6 @@ namespace GymSwipe.ViewModels
         }
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
-
         public ICommand GreetUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
 
@@ -49,9 +47,10 @@ namespace GymSwipe.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private LoggedInUser _loggedInUser;
-        private HttpClient _httpClient;
-        private GymSwipe.ApplicationLayer.Interfaces.IGymPlaylistService _gymPlaylistService;
+        public GymUser CurrentUser { get; set; }
+        private readonly LoggedInUser _loggedInUser;
+        private readonly HttpClient _httpClient;
+        private readonly IGymPlaylistService _gymPlaylistService;
         public UserPageAccountViewModel(LoggedInUser loggedInUser, HttpClient httpClient, IGymPlaylistService gymPlaylistService)
         {
             _loggedInUser = loggedInUser;
@@ -60,15 +59,17 @@ namespace GymSwipe.ViewModels
             _gymPlaylistService = gymPlaylistService;
             NextPageCommand = new Command(() => ChangePage(1));
             PreviousPageCommand = new Command(() => ChangePage(-1));
-            GreetUserCommand = new Command(async () =>
-            {
-                await GreetUser();
-            });
+            GreetUserCommand = new Command(GreetUser);
+
             DeleteUserCommand = new Command(async () =>
             {
                 await DeleteUser();
             });
         }
+
+
+
+
 
         public async Task GetAllTheUsersPlaylists()
         {
@@ -86,10 +87,14 @@ namespace GymSwipe.ViewModels
 
         private void ShowCurrentPage()
         {
-            TakeThreeLists.Clear();
+            CurrentThreePlaylists.Clear();
             foreach (var list in _allPlaylists.Skip(_currentPage * PageSize).Take(PageSize))
-                TakeThreeLists.Add(list);
+                CurrentThreePlaylists.Add(list);
         }
+
+
+
+
 
 
 
@@ -98,7 +103,7 @@ namespace GymSwipe.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public async Task GreetUser()
+        public void GreetUser()
         {
             ButtonText = " = )";
             GreetingUser = $"You are looking swole today {_loggedInUser.CurrentUser.Firstname} {_loggedInUser.CurrentUser.Id}!";
