@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.Facades;
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
 using GymSwipe.Infrastructure.Repos;
@@ -44,12 +45,13 @@ namespace GymSwipe
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
             builder.Services.AddScoped<IGymPlaylistService, GymPlaylistService>();
             builder.Services.AddScoped<IDateHandler, DateHandler>();
-
+            builder.Services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
             //*******REPOSITORIES*******
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepo>();
             builder.Services.AddScoped<ITraningAreaRepo, TrainingAreaRepo>();
             builder.Services.AddScoped<IGymPlaylistRepository, GymPlaylistRepo>();
+            builder.Services.AddScoped<IExerciseRecordsRepository, ExerciseRecordsRepository>();
 
             //*******FACADES*******
             builder.Services.AddScoped<IUserFacade, UserActionsFacade>();
@@ -60,14 +62,18 @@ namespace GymSwipe
             builder.Services.AddScoped<IWorkoutFacade, WorkoutFacade>();
             //builder.Services.AddScoped<IPlaylistFacade>();  
 
-            //*******VIEW MODELS*******
+            //******SINGELTON-SESSION-DATA*******
             builder.Services.AddSingleton<LoggedInUser>();
+            builder.Services.AddSingleton<WorkoutSession>();
+
+            //*******VIEW MODELS*******
 
             builder.Services.AddSingleton<UserPageAccountViewModel>();
             builder.Services.AddTransient<UserPageSignInViewModel>();
             builder.Services.AddTransient<UserRegisterViewModel>();
             builder.Services.AddTransient<RandomExerciseViewModel>();
             builder.Services.AddTransient<CardSwipeViewModel>();
+            builder.Services.AddTransient<ExerciseEvaulationViewModel>();
             builder.Services.AddTransient<AdminRegisterNewExerciseViewModel>();
             builder.Services.AddTransient<AdminRegisterNewTrainingAreaViewModel>();
             builder.Services.AddTransient<ActiveWorkoutViewModel>();

@@ -1,4 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,22 @@ namespace GymSwipe.ApplicationLayer.Facades
         private readonly IExerciseService _exerciseService;
         private readonly IUserService _userService;
         private readonly IGymPlaylistService _playlistService;
+        private readonly WorkoutSession _workoutSession;
         private GymPlaylist _playlist;
         private PlaylistExcercise _currentExercise;
         private Stopwatch stopwatch;
-        public WorkoutFacade(IExerciseService exerciseService, IUserService userService, IGymPlaylistService gymPlaylistService)
+        public WorkoutFacade(
+            IExerciseService exerciseService, 
+            IUserService userService, 
+            IGymPlaylistService gymPlaylistService,
+            WorkoutSession session)
         {
             _exerciseService = exerciseService;
             _playlistService = gymPlaylistService;
             _userService = userService;
+            _workoutSession = session;
             stopwatch = new Stopwatch();
+
         }
         public async Task<GymPlaylist> GetPlaylistByUserId(int userId)
         {
@@ -37,7 +45,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             }
 
            _playlist = await _playlistService.GetTodaysPlaylist(userId);
-
+            _workoutSession.Start(_playlist);
             return _playlist;
         }
 
@@ -89,6 +97,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         public async Task<bool> QuitWorkout()
         {
+            _workoutSession.Clear();
             return true;
         }
 

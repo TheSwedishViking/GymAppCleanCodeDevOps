@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymSwipe.Pages.ExerciseEvaulationPage"
+             Title="ExerciseEvaulationPage">
+    <VerticalStackLayout>
+        <Label 
+            Text="Here we evalute how the workout was!"
+            FontSize="Large"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Grid 
+     x:Name="CardShell" 
+     WidthRequest="300"
+     >
+            <Border x:Name="Card" StrokeShape="RoundRectangle 16" Padding="6">
+                <VerticalStackLayout>
+                    <Label Text="{Binding GymPlaylist.Name}"/>
+                    <Label FontSize="Large" Text="{Binding CurrentExercise.Exercise.Name}" HorizontalTextAlignment="Center"/>
+                    <Label Text="{Binding CurrentExercise.Exercise.VideoSourceLink}" HorizontalTextAlignment="Center"/>
+                    <Label Text="{Binding CurrentExercise.Id}" HorizontalTextAlignment="Center"/>
+                    <Label Text="{Binding CurrentExercise.PlaylistOrder}" HorizontalTextAlignment="Center"/>
+                    <Image  x:Name="CardImage" Source="sceptile_card.jpg"/>
+                    <Label Text="Video link" FontAttributes="Italic" HorizontalOptions="Center"/>
+                    <!--Input fields-->
+                    <VerticalStackLayout HorizontalOptions="Center" >
+                        <Label
+                            Text="Weight (kg)"/>
+                        <Entry
+                            />
+                        <Label
+                            Text="Repitions (count)"/>
+                        <Entry/>
+                        <Label
+                            Text="Sets ()"/>
+                        <Entry/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>

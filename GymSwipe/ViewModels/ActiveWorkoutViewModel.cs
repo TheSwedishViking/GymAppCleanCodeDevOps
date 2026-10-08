@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.Interfaces;
-using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
+using GymSwipe.Pages;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,6 +44,19 @@ namespace GymSwipe.ViewModels
             }
         }
 
+        private ExerciseRecords _currentRecord;
+        public ExerciseRecords CurrentRecords
+        {
+            get { return _currentRecord; }
+            set
+            {
+                if(_currentRecord == value) return;
+                _currentRecord = value;
+                OnPropertyChanged(nameof(CurrentRecords));
+            }
+        }
+
+        public bool UserIsEvaulatingGymplaylistExercise { get; set; }
         public ICommand StartPlaylistCommand { get; }
         public ICommand NextExerciseCommand { get; }
         public ICommand PausePlaylistCommand {  get; }
@@ -66,14 +80,15 @@ namespace GymSwipe.ViewModels
         public async Task NextExercise() 
         {
             CurrentExercise = await _workoutFacade.GetNextExercise(CurrentExercise);
+            //When done
             if(CurrentExercise == null)
             {
-                await _workoutFacade.RecordUserWorkout();
-                var saveStatus = await _workoutFacade.QuitWorkout();
-                if(saveStatus == true)
-                {
-                    await Shell.Current.Navigation.PopToRootAsync();
-                }
+                await Shell.Current.GoToAsync(nameof(ExerciseEvaulationPage), new Dictionary<string, object> { ["PlaylistId"] = GymPlaylist.Id } );
+                //var saveStatus = await _workoutFacade.QuitWorkout();
+                //if(saveStatus == true)
+                //{
+                //    await Shell.Current.Navigation.PopToRootAsync();
+                //}
             }
         }
         public async Task PausePlaylist() 
@@ -112,7 +127,6 @@ namespace GymSwipe.ViewModels
             {
                 GymPlaylist = await _workoutFacade.GetPlaylistByUserId(_loggedInUser.CurrentUser.Id);
             }
-          
             Console.WriteLine(GymPlaylist);
         }
 
