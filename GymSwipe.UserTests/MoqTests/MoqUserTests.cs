@@ -73,19 +73,7 @@ namespace GymSwipe.UserTests.MoqTests
             Assert.Equal("Mocked Exercise", result.Excercise.First().Exercise.Name);
         }
 
-        [Fact]
-        public async Task CardSwipe_Test()
-        {
-            // Arrange
 
-
-
-
-            // Act
-
-
-            //asser
-        }
 
     }
 

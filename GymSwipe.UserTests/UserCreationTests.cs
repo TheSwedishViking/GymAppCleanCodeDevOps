@@ -3,6 +3,7 @@ using GymSwipe.ApplicationLayer.Services;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace GymSwipe.UserTests
 {
@@ -10,10 +11,13 @@ namespace GymSwipe.UserTests
     {
 
         private readonly HttpClient _client;
+        private readonly ITestOutputHelper _output;
 
-        public UserCreationTests(UserApiFixture fixture)
+        public UserCreationTests(UserApiFixture fixture, ITestOutputHelper output)
         {
             _client = fixture.GetClient();
+            _output = output;
+
         }
 
 
@@ -76,6 +80,37 @@ namespace GymSwipe.UserTests
             var response = await _client.GetFromJsonAsync<bool>("api/User/Unique-Email/" + email);
 
             Assert.Equal(expected, response);
+        }
+
+        [InlineData(100, 194, true)]
+        [InlineData(0, 160, false)]
+        [InlineData(65, null, false)]
+        [InlineData(65, 500, false)]
+        [InlineData(2, 160, false)]
+        [Theory]
+        public async Task CreatedUser_PersonalPropertiesWithinReasonableRangeOtherwise_Expected(double weight, int height, bool expected)
+        {
+            //a
+            var createUser = new RequestCreateGymUserDTO
+            {
+                Firstname = "Peter",
+                Surname = "Stormare",
+                Gender = true,
+                HeightCm = height,
+                WeightKg = weight
+            };
+
+            //a
+            var service = new UserInputPropertiesValidator();
+            var okWeight = await service.ValidateUserWeight(weight);
+            var okHeight = await service.ValidateUserHeight(height);
+            _output.WriteLine(okHeight.Message);
+            _output.WriteLine(okWeight.Message);
+
+            //a
+            Assert.Equal(expected, okWeight.Success && okHeight.Success);
+
+
         }
 
     }
