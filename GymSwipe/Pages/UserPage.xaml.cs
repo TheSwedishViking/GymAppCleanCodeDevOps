@@ -14,6 +14,14 @@ public partial class UserPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _vm.GetAllTheUsersPlaylists();
+        try
+        {
+            await _vm.InitalizeAsync();
+
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }

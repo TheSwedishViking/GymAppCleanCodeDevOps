@@ -67,13 +67,20 @@ namespace GymSwipe.ViewModels
             });
         }
 
-
-
-
+        public async Task InitalizeAsync()
+        {
+            await GetAllTheUsersPlaylists();
+        }
 
         public async Task GetAllTheUsersPlaylists()
         {
-            _allPlaylists = (await _gymPlaylistService.GetPlaylistsByUserId(CurrentUser.Id)).ToList();
+            if (CurrentUser == null)
+            {
+                await Task.Yield();
+                await Shell.Current.Navigation.PopToRootAsync();
+                return;
+            }
+            var playlists = await _gymPlaylistService.GetPlaylistsByUserId(CurrentUser.Id);
             _currentPage = 0;
             ShowCurrentPage();
         }
