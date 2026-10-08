@@ -60,6 +60,7 @@ namespace GymSwipe
             builder.Services.AddScoped<IAdminAddTrainingAreaFacade, AdminAddTraningAreaFacade>();
             builder.Services.AddScoped<ICardSwipeFacade, CardSwipeFacade>();
             builder.Services.AddScoped<IWorkoutFacade, WorkoutFacade>();
+            builder.Services.AddScoped<IExerciseRecordsFacade, ExerciseRecordsFacade>();
             //builder.Services.AddScoped<IPlaylistFacade>();  
 
             //******SINGELTON-SESSION-DATA*******

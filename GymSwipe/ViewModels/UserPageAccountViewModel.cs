@@ -1,9 +1,9 @@
-﻿using GymSwipe.ApplicationLayer.Services;
-using GymSwipe.Domain.Models;
+﻿using GymSwipe.Domain.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Services.SessionServices;
 
 
 namespace GymSwipe.ViewModels

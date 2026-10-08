@@ -27,13 +27,25 @@
                         <Label
                             Text="Weight (kg)"/>
                         <Entry
+                            Text="{Binding CurrentRecord.WeightKg}"
                             />
                         <Label
                             Text="Repitions (count)"/>
-                        <Entry/>
+                        <Entry
+                            Text="{Binding CurrentRecord.Repetitions}"
+                            />  
                         <Label
                             Text="Sets ()"/>
-                        <Entry/>
+                        <Entry
+                            Text="{Binding CurrentRecord.Sets}"/>
+                        <Label
+                            Text="Rate the enjoyment of the exercise ⭐"/>
+                                <Entry
+                            Text="{Binding CurrentRecord.UserRating}"/>   
+                    </VerticalStackLayout>
+                    <VerticalStackLayout HorizontalOptions="Center">
+                        <Button
+                            Text="Next"/>
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>
