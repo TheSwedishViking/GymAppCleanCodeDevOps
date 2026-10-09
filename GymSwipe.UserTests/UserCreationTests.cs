@@ -14,17 +14,22 @@ namespace GymSwipe.UserTests
 
         private readonly HttpClient _client;
         private readonly ITestOutputHelper _output;
+        private readonly UserInputValidatorService _validatorService;
+        private readonly UserInputPropertiesValidator _propertiesValidator;
 
-        public UserCreationTests(UserApiFixture fixture, ITestOutputHelper output)
+
+        public UserCreationTests(UserApiFixture fixture, ITestOutputHelper output,
+        UserInputValidatorService validatorService, UserInputPropertiesValidator propertiesValidator)
         {
             _client = fixture.GetClient();
             _output = output;
-
+            _validatorService = validatorService;
+            _propertiesValidator = propertiesValidator;
         }
 
 
         [Fact]
-        public async Task CreateadUser_IsSavedToDb_ReturnsExpected()
+        public async Task CreateUser()
         {
             var request = new RequestCreateGymUserDTO
             {
@@ -35,6 +40,7 @@ namespace GymSwipe.UserTests
                 WeightKg = 90
             };
 
+
             var response = await _client.PostAsJsonAsync("api/User", request);
 
 
@@ -42,6 +48,7 @@ namespace GymSwipe.UserTests
             _output.WriteLine($"Location: {response.Headers.Location}");
 
             var createdUser = await response.Content.ReadFromJsonAsync<GymUserDTO>();
+
             Assert.NotNull(createdUser);
             _output.WriteLine($"Created user: {createdUser.Firstname} {createdUser.Surname}, Id: {createdUser.Id}, " +
                 $"Height: {createdUser.HeightCm}cm, Weight: {createdUser.WeightKg}kg");
@@ -69,9 +76,8 @@ namespace GymSwipe.UserTests
             string? Surname = "";
 
 
-            var service = new UserInputValidatorService();
-            Firstname = service.UserNameValidator(firstName);
-            Surname = service.UserNameValidator(surName);
+            Firstname = _validatorService.UserNameValidator(firstName);
+            Surname = _validatorService.UserNameValidator(surName);
 
             if (Firstname == null || Surname == null)
             {
@@ -110,9 +116,8 @@ namespace GymSwipe.UserTests
             };
 
             //a
-            var service = new UserInputPropertiesValidator();
-            var okWeight = await service.ValidateUserWeight(weight);
-            var okHeight = await service.ValidateUserHeight(height);
+            var okWeight = await _propertiesValidator.ValidateUserWeight(weight);
+            var okHeight = await _propertiesValidator.ValidateUserHeight(height);
             _output.WriteLine(okHeight.Message);
             _output.WriteLine(okWeight.Message);
 
