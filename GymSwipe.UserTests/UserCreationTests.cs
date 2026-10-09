@@ -2,6 +2,7 @@
 using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
 using GymSwipe.ApplicationLayer.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;
@@ -16,15 +17,15 @@ namespace GymSwipe.UserTests
         private readonly ITestOutputHelper _output;
         private readonly UserInputValidatorService _validatorService;
         private readonly UserInputPropertiesValidator _propertiesValidator;
+        private readonly IServiceScope _scope;
 
-
-        public UserCreationTests(UserApiFixture fixture, ITestOutputHelper output,
-        UserInputValidatorService validatorService, UserInputPropertiesValidator propertiesValidator)
+        public UserCreationTests(UserApiFixture fixture, ITestOutputHelper output)
         {
             _client = fixture.GetClient();
             _output = output;
-            _validatorService = validatorService;
-            _propertiesValidator = propertiesValidator;
+            _scope = fixture.ServiceProvider.CreateScope();
+            _validatorService = _scope.ServiceProvider.GetRequiredService<UserInputValidatorService>();
+            _propertiesValidator = _scope.ServiceProvider.GetRequiredService<UserInputPropertiesValidator>();
         }
 
 
@@ -45,6 +46,7 @@ namespace GymSwipe.UserTests
 
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
             _output.WriteLine($"Location: {response.Headers.Location}");
 
             var createdUser = await response.Content.ReadFromJsonAsync<GymUserDTO>();
@@ -116,6 +118,8 @@ namespace GymSwipe.UserTests
             };
 
             //a
+
+
             var okWeight = await _propertiesValidator.ValidateUserWeight(weight);
             var okHeight = await _propertiesValidator.ValidateUserHeight(height);
             _output.WriteLine(okHeight.Message);
