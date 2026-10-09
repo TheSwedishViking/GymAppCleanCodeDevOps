@@ -26,10 +26,8 @@ namespace GymSwipe.API.Controllers
 
             }
             var user = await _userService.TryAndCreateUserThroughRequestModelAsync(request);
-
-            return Ok(user);
+            return Created("CreatedUser", user);
         }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

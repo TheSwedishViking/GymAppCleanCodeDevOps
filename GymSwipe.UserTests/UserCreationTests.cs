@@ -1,5 +1,7 @@
-﻿using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
 using GymSwipe.ApplicationLayer.Services;
+using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;
@@ -35,11 +37,20 @@ namespace GymSwipe.UserTests
 
             var response = await _client.PostAsJsonAsync("api/User", request);
 
-            response.EnsureSuccessStatusCode();
 
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            _output.WriteLine($"Location: {response.Headers.Location}");
 
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var createdUser = await response.Content.ReadFromJsonAsync<GymUserDTO>();
+            Assert.NotNull(createdUser);
+            _output.WriteLine($"Created user: {createdUser.Firstname} {createdUser.Surname}, Id: {createdUser.Id}, " +
+                $"Height: {createdUser.HeightCm}cm, Weight: {createdUser.WeightKg}kg");
+
+            Assert.Equal(request.Firstname, createdUser.Firstname);
+            Assert.Equal(request.Surname, createdUser.Surname);
+            Assert.Equal(request.HeightCm, createdUser.HeightCm);
         }
+
 
 
         [InlineData("Peter", "Stormare", true)]
@@ -73,12 +84,10 @@ namespace GymSwipe.UserTests
         [InlineData("PeterStormare@gmail.com", false)]
         [InlineData("bATLover@gmail.com", false)]
         [InlineData("robinbertling@gmail.com", false)]
-
         [Theory]
         public async Task CreateadUser_HasUniqueEmail_ReturnExpected(string email, bool expected)
         {
             var response = await _client.GetFromJsonAsync<bool>("api/User/Unique-Email/" + email);
-
             Assert.Equal(expected, response);
         }
 

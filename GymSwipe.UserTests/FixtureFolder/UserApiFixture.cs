@@ -30,7 +30,7 @@ namespace GymSwipe.UserTests
 
         }
 
-       
+
         //Initalize db once for client use
         public HttpClient GetClient()
         {
