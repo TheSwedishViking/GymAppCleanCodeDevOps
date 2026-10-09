@@ -53,6 +53,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         {
             if (_playlist == null || _playlist.Excercise == null) return null;
             _currentExercise = _playlist.Excercise.FirstOrDefault();
+            _workoutSession.Start(_playlist);
             stopwatch.Start();
             return _currentExercise;
         }

@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymSwipe.Pages.ExerciseEvaulationPage"
+                x:Name="Page"
              Title="ExerciseEvaulationPage">
     <VerticalStackLayout>
         <Label 
@@ -44,8 +45,9 @@
                             Text="{Binding CurrentRecord.UserRating}"/>   
                     </VerticalStackLayout>
                     <VerticalStackLayout HorizontalOptions="Center">
-                        <Button
-                            Text="Next"/>
+                        <Button Text="Next ▶️" 
+                         Command="{Binding BindingContext.NextExerciseToEvaluateCommand, Source={x:Reference Page}}"
+                           CommandParameter="{Binding .}"  />
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>

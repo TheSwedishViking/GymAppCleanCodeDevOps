@@ -51,7 +51,6 @@ namespace GymSwipe.UserTests.FixtureFolder
                 await ServiceProvider.DisposeAsync();
             }
         }
-
         public  async Task InitializeAsync()
         {
             using (var scope = ServiceProvider.CreateScope())

@@ -1,4 +1,5 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
 using System;
@@ -11,6 +12,7 @@ namespace GymSwipe.ApplicationLayer.Facades
     {
         private readonly IExerciseRecordsService _exerciseRecordsService;
         private WorkoutSession _session;
+        private List<ExerciseRecordDTO> _addedRecords = new List<ExerciseRecordDTO>();
 
         public ExerciseRecordsFacade(IExerciseRecordsService exerciseRecordsService, WorkoutSession workoutSession)
         {
@@ -18,12 +20,23 @@ namespace GymSwipe.ApplicationLayer.Facades
             _session = workoutSession;
         }
 
+        public async Task AddRecord(ExerciseRecordDTO currentRecord)
+        {
+            if (currentRecord == null) return;
+            _addedRecords.Add(currentRecord);
+        }
+
         public async Task<bool> GetActiveStatus()
         {
             return  _session.IsActive;
         }
 
-        public async Task<PlaylistExcercise> GetNextExercise(PlaylistExcercise current)
+        public async Task<PlaylistExcercise> GetFirstExercise()
+        {
+            return _session.CurrentPlaylist.Excercise.FirstOrDefault();
+        }
+
+        public async Task<PlaylistExcercise> GetNextExercise(ExerciseDTO current)
         {
             throw new NotImplementedException();
         }
@@ -37,7 +50,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             return  _session.CurrentPlaylist.Excercise.ToList();
         }
 
-        public Task<bool> SaveRecords(List<ExerciseRecords> records)
+        public Task<bool> SaveRecords(List<ExerciseRecordDTO> records)
         {
             throw new NotImplementedException();
         }
