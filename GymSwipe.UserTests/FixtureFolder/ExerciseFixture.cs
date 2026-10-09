@@ -6,9 +6,6 @@ using GymSwipe.Infrastructure.Repos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace GymSwipe.UserTests.FixtureFolder
@@ -46,13 +43,13 @@ namespace GymSwipe.UserTests.FixtureFolder
         }
         public async Task DisposeAsync()
         {
-            if(ServiceProvider != null)
+            if (ServiceProvider != null)
             {
                 await ServiceProvider.DisposeAsync();
             }
         }
 
-        public  async Task InitializeAsync()
+        public async Task InitializeAsync()
         {
             using (var scope = ServiceProvider.CreateScope())
             {

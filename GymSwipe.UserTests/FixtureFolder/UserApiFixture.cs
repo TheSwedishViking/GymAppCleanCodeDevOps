@@ -1,4 +1,5 @@
-﻿using GymSwipe.Domain;
+﻿using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -12,6 +13,7 @@ namespace GymSwipe.UserTests
     public class UserApiFixture : WebApplicationFactory<GymSwipe.API.Program>
     {
         private bool _init = false;
+        public ServiceProvider ServiceProvider { get; private set; }
 
         //Inital build
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -24,13 +26,30 @@ namespace GymSwipe.UserTests
                 services.RemoveAll<IDbContextOptionsConfiguration<GymAppDbContext>>();
                 services.RemoveAll<GymAppDbContext>();
 
+
+
                 services.AddDbContext<GymAppDbContext>(options =>
                     options.UseInMemoryDatabase("GymSwipeTestDb"));
+
+                services = new ServiceCollection();
+
+                services.AddScoped<UserInputValidatorService>();
+                services.AddScoped<UserInputPropertiesValidator>();
+
+
+                ServiceProvider = services.BuildServiceProvider();
             });
 
         }
+        public UserApiFixture()
+        {
 
-       
+
+
+        }
+
+
+
         //Initalize db once for client use
         public HttpClient GetClient()
         {

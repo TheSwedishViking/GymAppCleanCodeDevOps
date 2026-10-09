@@ -1,8 +1,12 @@
-﻿using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
 using GymSwipe.ApplicationLayer.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace GymSwipe.UserTests
 {
@@ -10,15 +14,23 @@ namespace GymSwipe.UserTests
     {
 
         private readonly HttpClient _client;
+        private readonly ITestOutputHelper _output;
+        private readonly UserInputValidatorService _validatorService;
+        private readonly UserInputPropertiesValidator _propertiesValidator;
+        private readonly IServiceScope _scope;
 
-        public UserCreationTests(UserApiFixture fixture)
+        public UserCreationTests(UserApiFixture fixture, ITestOutputHelper output)
         {
             _client = fixture.GetClient();
+            _output = output;
+            _scope = fixture.ServiceProvider.CreateScope();
+            _validatorService = _scope.ServiceProvider.GetRequiredService<UserInputValidatorService>();
+            _propertiesValidator = _scope.ServiceProvider.GetRequiredService<UserInputPropertiesValidator>();
         }
 
 
         [Fact]
-        public async Task CreateadUser_IsSavedToDb_ReturnsExpected()
+        public async Task CreateUser()
         {
             var request = new RequestCreateGymUserDTO
             {
@@ -29,13 +41,25 @@ namespace GymSwipe.UserTests
                 WeightKg = 90
             };
 
+
             var response = await _client.PostAsJsonAsync("api/User", request);
 
-            response.EnsureSuccessStatusCode();
 
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            _output.WriteLine($"Location: {response.Headers.Location}");
+
+            var createdUser = await response.Content.ReadFromJsonAsync<GymUserDTO>();
+
+            Assert.NotNull(createdUser);
+            _output.WriteLine($"Created user: {createdUser.Firstname} {createdUser.Surname}, Id: {createdUser.Id}, " +
+                $"Height: {createdUser.HeightCm}cm, Weight: {createdUser.WeightKg}kg");
+
+            Assert.Equal(request.Firstname, createdUser.Firstname);
+            Assert.Equal(request.Surname, createdUser.Surname);
+            Assert.Equal(request.HeightCm, createdUser.HeightCm);
         }
+
 
 
         [InlineData("Peter", "Stormare", true)]
@@ -54,9 +78,8 @@ namespace GymSwipe.UserTests
             string? Surname = "";
 
 
-            var service = new UserInputValidatorService();
-            Firstname = service.UserNameValidator(firstName);
-            Surname = service.UserNameValidator(surName);
+            Firstname = _validatorService.UserNameValidator(firstName);
+            Surname = _validatorService.UserNameValidator(surName);
 
             if (Firstname == null || Surname == null)
             {
@@ -69,13 +92,43 @@ namespace GymSwipe.UserTests
         [InlineData("PeterStormare@gmail.com", false)]
         [InlineData("bATLover@gmail.com", false)]
         [InlineData("robinbertling@gmail.com", false)]
-
         [Theory]
         public async Task CreateadUser_HasUniqueEmail_ReturnExpected(string email, bool expected)
         {
             var response = await _client.GetFromJsonAsync<bool>("api/User/Unique-Email/" + email);
-
             Assert.Equal(expected, response);
+        }
+
+        [InlineData(100, 194, true)]
+        [InlineData(0, 160, false)]
+        [InlineData(65, null, false)]
+        [InlineData(65, 500, false)]
+        [InlineData(2, 160, false)]
+        [Theory]
+        public async Task CreatedUser_PersonalPropertiesWithinReasonableRangeOtherwise_Expected(double weight, int height, bool expected)
+        {
+            //a
+            var createUser = new RequestCreateGymUserDTO
+            {
+                Firstname = "Peter",
+                Surname = "Stormare",
+                Gender = true,
+                HeightCm = height,
+                WeightKg = weight
+            };
+
+            //a
+
+
+            var okWeight = await _propertiesValidator.ValidateUserWeight(weight);
+            var okHeight = await _propertiesValidator.ValidateUserHeight(height);
+            _output.WriteLine(okHeight.Message);
+            _output.WriteLine(okWeight.Message);
+
+            //a
+            Assert.Equal(expected, okWeight.Success && okHeight.Success);
+
+
         }
 
     }

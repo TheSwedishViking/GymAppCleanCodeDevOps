@@ -36,23 +36,27 @@ namespace GymSwipe.Infrastructure.Repos
             return user;
         }
 
-        public async Task<GymUserDTO> GetUserById(int id)
+        public async Task<GymUserDTO?> GetUserById(int id)
         {
             GymUser foundUser = _db.Users.FirstOrDefault(u => u.Id == id);
             Console.WriteLine();
-            foundUser.SetFriendCode();
-
-            return new GymUserDTO
+            if (foundUser != null)
             {
-                Id = foundUser.Id,
-                Firstname = foundUser.Firstname,
-                Surname = foundUser.Surname,
-                Email = foundUser.Email,
-                HeightCm = foundUser.HeightCm,
-                WeightKg = foundUser.WeightKg,
-                Gender = foundUser.Gender,
-                FriendCode = foundUser.FriendCode
-            };
+                foundUser.SetFriendCode();
+
+                return new GymUserDTO
+                {
+                    Id = foundUser.Id,
+                    Firstname = foundUser.Firstname,
+                    Surname = foundUser.Surname,
+                    Email = foundUser.Email,
+                    HeightCm = foundUser.HeightCm,
+                    WeightKg = foundUser.WeightKg,
+                    Gender = foundUser.Gender,
+                    FriendCode = foundUser.FriendCode
+                };
+            }
+            return null;
         }
 
         public async Task<bool> GetUserByEmail(string email) // bad naming But a hazzle to change
