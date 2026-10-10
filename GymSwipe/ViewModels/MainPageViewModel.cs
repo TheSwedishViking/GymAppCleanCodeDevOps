@@ -1,4 +1,4 @@
-﻿using GymSwipe.ApplicationLayer.Services;
+﻿using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
 using System;
 using System.Collections.Generic;

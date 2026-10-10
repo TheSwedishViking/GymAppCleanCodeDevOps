@@ -17,6 +17,33 @@ namespace GymSwipe.ApplicationLayer.Services
             _dateHandler = dateHandler;
         }
 
+        public async Task<PlaylistExcercise> GetNextExercise(PlaylistExcercise current, ICollection<PlaylistExcercise> excercises)
+        {
+            var list = excercises.ToList();
+            var index = list.FindIndex(e => e.Id == current.Id);
+            if (index < 0)
+            {
+                return current;
+            }
+            if (index + 1 >= excercises.Count)
+            {
+                return null;
+            }
+            var newEx = list[index + 1];
+            return newEx;
+        }
+        public async Task<PlaylistExcercise> GetPreviousExercise(PlaylistExcercise current, ICollection<PlaylistExcercise> excercise)
+        {
+            var list = excercise.ToList();
+            var index = list.FindIndex(e => e.Id == current.Id);
+            if (index - 1 < 0)
+            {
+                return current;
+            }
+            var oldEx = list[index - 1];
+            return oldEx;
+        }
+
         public async Task<GymPlaylist> GetPlaylist(int id)
         {
             return await _playlistRepo.GetPlaylist(id);
@@ -24,6 +51,13 @@ namespace GymSwipe.ApplicationLayer.Services
         public async Task<List<GymPlaylist>> GetPlaylistsByUserId(int userId)
         {
             return await _playlistRepo.GetPlaylistsByUserId(userId);
+        }
+
+       
+
+        public async Task<GymPlaylist> GetTodaysPlaylist(int userId)
+        {
+            return await _playlistRepo.GetTodaysPlaylistByUserId(userId, await _dateHandler.SetDateAsDateOnly());
         }
 
         public async Task SavePlayListToUser(List<ExerciseDTO> addedExercises, GymUser currentUser)
@@ -53,6 +87,10 @@ namespace GymSwipe.ApplicationLayer.Services
                 PlaylistOrder = order,
             };
 
+        }
+        public async Task<PlaylistExcercise> GetFirstExercise(ICollection<PlaylistExcercise> excercise)
+        {
+            return  excercise.OrderBy(e=>e.PlaylistOrder).FirstOrDefault();
         }
     }
 }

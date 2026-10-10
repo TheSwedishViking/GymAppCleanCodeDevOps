@@ -48,5 +48,11 @@ namespace GymSwipe
         {
             await Shell.Current.GoToAsync(nameof(Pages.AdminAddNewTargetArea));
         }
+        private async void GoTo_ActiveWorkout(object? sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(Pages.ActiveWorkoutPage));
+
+        }
+       
     }
 }
