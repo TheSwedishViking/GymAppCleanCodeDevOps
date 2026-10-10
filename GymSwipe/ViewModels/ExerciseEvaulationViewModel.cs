@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Input;
+using System.Windows.Markup;
 
 namespace GymSwipe.ViewModels
 {
@@ -24,6 +25,7 @@ namespace GymSwipe.ViewModels
             {
                 if(_currentExerciseToRecord ==  value) return;
                 _currentExerciseToRecord = value;
+                CurrentRecord = value is null ? null : new ExerciseRecordDTO { ExerciseId = value.ExerciseId };
                 OnPropertyChanged(nameof(CurrentExercise));
                 OnPropertyChanged(nameof(CurrentRecord));
 
@@ -43,14 +45,23 @@ namespace GymSwipe.ViewModels
         public ObservableCollection<PlaylistExcercise> Excercises { get; set; } = new ObservableCollection<PlaylistExcercise>();
 
         public ICommand NextExerciseToEvaluateCommand { get; }
-
+        public ICommand PreviousExerciseCommand { get; }
         private readonly IExerciseRecordsFacade _exerciseRecordsFacade;
         public ExerciseEvaulationViewModel(IExerciseRecordsFacade exerciseRecordsFacade)
         {
             _exerciseRecordsFacade = exerciseRecordsFacade;
             NextExerciseToEvaluateCommand = new Command<ExerciseRecordDTO>(async e => await RegisterRecord(e));
+            PreviousExerciseCommand = new Command(async e => await PreviousRecord());
+
+            CurrentRecord = new ExerciseRecordDTO();
         }
         public async Task RegisterRecord(ExerciseRecordDTO record)
+        {
+            await _exerciseRecordsFacade.AddRecord(record);
+            await ResetRecordBinding();
+            await NextExercise(CurrentExercise);
+        }
+        public async Task PreviousRecord()
         {
 
         }
@@ -70,20 +81,36 @@ namespace GymSwipe.ViewModels
         {
             Excercises.Clear();
             Excercises = new ObservableCollection<PlaylistExcercise>(await _exerciseRecordsFacade.GetPlaylistExercises());
-            CurrentExercise = await _exerciseRecordsFacade.GetNextExercise();
+            CurrentExercise = await _exerciseRecordsFacade.GetFirstExercise(Excercises);
+            //CurrentExercise = await _exerciseRecordsFacade.GetNextExercise(CurrentExercise);
+            if(CurrentExercise == null)
+            {
+                Console.WriteLine("Done!");
+            }
         }
-        public async Task NextExercise(ExerciseDTO ex)
+        public async Task NextExercise(PlaylistExcercise ex)
         {
-            await _exerciseRecordsFacade.AddRecord(CurrentRecord);
-            await ResetRecordBinding(CurrentRecord);
+             await _exerciseRecordsFacade.AddRecord(CurrentRecord);
+            await ResetRecordBinding();
             CurrentExercise = await _exerciseRecordsFacade.GetNextExercise(ex);
+            if(CurrentExercise == null)
+            {
+                await Shell.Current.Navigation.PopToRootAsync();
+            }
+        }
+        public async Task PreviousExercise(PlaylistExcercise ex)
+        {
+            //await _exerciseRecordsFacade.AddRecord(CurrentRecord);
+            await ResetRecordBinding();
+            CurrentExercise = await _exerciseRecordsFacade.GetPreviousExercise(ex);
         }
 
-        private async Task ResetRecordBinding(ExerciseRecordDTO currentRecord)
+        private async Task ResetRecordBinding()
         {
-            currentRecord.WeightKg = 0;
-            currentRecord.Sets = 0;
-            currentRecord.Repetitions = 0;
+            CurrentRecord = new ExerciseRecordDTO
+            {
+                ExerciseId = CurrentExercise.ExerciseId 
+            };
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

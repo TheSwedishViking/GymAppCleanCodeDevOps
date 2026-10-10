@@ -4,6 +4,7 @@ using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Facades
@@ -11,18 +12,31 @@ namespace GymSwipe.ApplicationLayer.Facades
     public class ExerciseRecordsFacade:IExerciseRecordsFacade
     {
         private readonly IExerciseRecordsService _exerciseRecordsService;
+        private readonly IGymPlaylistService _playlistService;
+        private PlaylistExcercise _currentExercise;
         private WorkoutSession _session;
+        private readonly LoggedInUser _user;
         private List<ExerciseRecordDTO> _addedRecords = new List<ExerciseRecordDTO>();
 
-        public ExerciseRecordsFacade(IExerciseRecordsService exerciseRecordsService, WorkoutSession workoutSession)
+        public ExerciseRecordsFacade(
+            IExerciseRecordsService exerciseRecordsService,
+            IGymPlaylistService gymPlaylistService,
+            LoggedInUser loggedInUser,
+            WorkoutSession workoutSession )
         {
             _exerciseRecordsService = exerciseRecordsService;
+            _playlistService = gymPlaylistService;
             _session = workoutSession;
+            _user = loggedInUser;
         }
 
         public async Task AddRecord(ExerciseRecordDTO currentRecord)
         {
-            if (currentRecord == null) return;
+            if (currentRecord == null)
+            {
+                throw new ArgumentNullException(nameof(currentRecord));
+            }
+            currentRecord.UserId = _user.CurrentUser.Id;
             _addedRecords.Add(currentRecord);
         }
 
@@ -31,14 +45,29 @@ namespace GymSwipe.ApplicationLayer.Facades
             return  _session.IsActive;
         }
 
-        public async Task<PlaylistExcercise> GetFirstExercise()
+        public async Task<PlaylistExcercise> GetFirstExercise(ObservableCollection<PlaylistExcercise> excercises)
         {
-            return _session.CurrentPlaylist.Excercise.FirstOrDefault();
+            _currentExercise = await _playlistService.GetFirstExercise(_session.CurrentPlaylist.Excercise);
+            return _currentExercise;
         }
 
-        public async Task<PlaylistExcercise> GetNextExercise(ExerciseDTO current)
+        public async Task<PlaylistExcercise> GetNextExercise(PlaylistExcercise current)
         {
-            throw new NotImplementedException();
+            _currentExercise = await _playlistService.GetNextExercise(current, _session.CurrentPlaylist.Excercise);
+            if(current == _currentExercise)
+            {
+                throw new Exception("NUll exercise to go back to ");
+            }
+            return _currentExercise;
+        }
+        public async Task<PlaylistExcercise> GetPreviousExercise(PlaylistExcercise ex)
+        {
+            _currentExercise = await _playlistService.GetNextExercise(ex, _session.CurrentPlaylist.Excercise);
+            if (ex == _currentExercise)
+            {
+                return null;
+            }
+            return _currentExercise;
         }
 
         public async Task<List<PlaylistExcercise>> GetPlaylistExercises()
@@ -50,9 +79,12 @@ namespace GymSwipe.ApplicationLayer.Facades
             return  _session.CurrentPlaylist.Excercise.ToList();
         }
 
+
         public Task<bool> SaveRecords(List<ExerciseRecordDTO> records)
         {
             throw new NotImplementedException();
         }
+
+       
     }
 }

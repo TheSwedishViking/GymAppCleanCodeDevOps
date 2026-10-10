@@ -59,29 +59,20 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         public async Task<PlaylistExcercise> GetNextExercise(PlaylistExcercise current)
         {
-            var list = _playlist.Excercise.ToList();
-            var index = list.FindIndex(e=>e.Id== current.Id);
-            if(index < 0)
-            {
-                return _currentExercise;
-            }
-            if(index+1>= list.Count)
+            _currentExercise = await _playlistService.GetNextExercise(current, _playlist.Excercise);
+            if(_currentExercise == current)
             {
                 return null;
             }
-            _currentExercise = list[index + 1];
             return _currentExercise;
         }
         public async Task<PlaylistExcercise> GetPreviousExercise(PlaylistExcercise current)
         {
-            
-            var list = _playlist.Excercise.ToList();
-            var index = list.FindIndex(e => e.Id == current.Id);
-            if (index -1<0)
+            _currentExercise = await _playlistService.GetPreviousExercise(current, _playlist.Excercise);
+            if(_currentExercise == null)
             {
-                return _currentExercise;
+                throw new Exception("Null exercise");
             }
-            _currentExercise = list[index - 1];
             return _currentExercise;
         }
 

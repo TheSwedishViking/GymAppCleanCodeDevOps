@@ -45,9 +45,12 @@
                             Text="{Binding CurrentRecord.UserRating}"/>   
                     </VerticalStackLayout>
                     <VerticalStackLayout HorizontalOptions="Center">
-                        <Button Text="Next ▶️" 
-                         Command="{Binding BindingContext.NextExerciseToEvaluateCommand, Source={x:Reference Page}}"
-                           CommandParameter="{Binding .}"  />
+                        <Button Text="Next ▶️"
+            Command="{Binding NextExerciseToEvaluateCommand}"
+            CommandParameter="{Binding CurrentRecord}" />
+                        <Button Text="Previous" 
+                        Command="{Binding BindingContext.PreviousExerciseCommand, Source={x:Reference Page}}"
+                          CommandParameter="{Binding .}"  />        
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>

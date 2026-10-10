@@ -99,10 +99,6 @@ namespace GymSwipe.ViewModels
         {
             CurrentExercise = await _workoutFacade.GetPreviousExercise(CurrentExercise);
         }
-        public async Task UpdateExercise()
-        {
-
-        }
 
         public void OnPropertyChanged(string propertyName)
         {
