@@ -90,7 +90,7 @@ namespace GymSwipe.ViewModels
             if (_isSaving == false)
             {
                 _isSaving = true;
-                await _cardFacade.SavePlayList();
+                await _cardFacade.SavePlayList(await _cardFacade.GetCurrentUser());
                 await Task.Delay(3000);
                 await Shell.Current.GoToAsync(nameof(Pages.UserPage));
             }
@@ -164,7 +164,6 @@ namespace GymSwipe.ViewModels
         }
         public async Task UpdateCard()
         {
-
             CardImageSource = await _cardFacade.GetApproptiateImageForExercise(CurrentExercise);
             CardDeckInfo = await _cardFacade.DeckInfo();
         }

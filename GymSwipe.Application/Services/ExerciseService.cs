@@ -41,7 +41,6 @@ namespace GymSwipe.ApplicationLayer.Services
                   Id = e.Id,
                   VideoSourceLink = e.VideoSourceLink,
                   Name = e.Name,
-
                   TargetAreaNames = e.TargetAreas.
                   Select(e => e.ExerciseCategoryName).
                   ToList(),

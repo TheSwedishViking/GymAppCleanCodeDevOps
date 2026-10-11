@@ -1,5 +1,7 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.Facades;
+using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
 using GymSwipe.Infrastructure.Repos;
@@ -22,7 +24,7 @@ namespace GymSwipe.UserTests.FixtureFolder
 
             var services = new ServiceCollection();
 
-            var connString = config["Connections:LocalConnection"];
+            var connString = "";
 
             //Use in memory
             if (string.IsNullOrEmpty(connString))
@@ -36,11 +38,33 @@ namespace GymSwipe.UserTests.FixtureFolder
 
             }
 
-            services.AddScoped<IExerciseRepository, ExerciseRepo>();
-            services.AddScoped<IExerciseService, ExerciseService>();
+            //*******SERVICES*******
             services.AddScoped<IDatabaseInitalizer, DatabaseInitalizer>();
-            services.AddScoped<ITraningAreaRepo, TrainingAreaRepo>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITraningAreaService, TrainingAreaService>();
+            services.AddScoped<IExerciseService, ExerciseService>();
+            services.AddScoped<IGymPlaylistService, GymPlaylistService>();
+            services.AddScoped<IDateHandler, DateHandler>();
+            services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
+
+            //*******REPOSITORIES*******
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IExerciseRepository, ExerciseRepo>();
+            services.AddScoped<ITraningAreaRepo, TrainingAreaRepo>();
+            services.AddScoped<IGymPlaylistRepository, GymPlaylistRepo>();
+            services.AddScoped<IExerciseRecordsRepository, ExerciseRecordsRepository>();
+
+            //*******FACADES*******
+            services.AddScoped<IUserFacade, UserActionsFacade>();
+            services.AddScoped<IExerciseFacade, ExerciseFacade>();
+            services.AddScoped<IAdminAddExerciseFacade, AdminAddExerciseFacade>();
+            services.AddScoped<IAdminAddTrainingAreaFacade, AdminAddTraningAreaFacade>();
+            services.AddScoped<ICardSwipeFacade, CardSwipeFacade>();
+            services.AddScoped<IWorkoutFacade, WorkoutFacade>();
+            services.AddScoped<IExerciseRecordsFacade, ExerciseRecordsFacade>();
+
+            //****SINGLETON SESSION*****
+            services.AddScoped<LoggedInUser>();
 
             ServiceProvider = services.BuildServiceProvider();
         }

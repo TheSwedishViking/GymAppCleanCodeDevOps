@@ -129,10 +129,9 @@ namespace GymSwipe.UserTests
             else
             {
                 Assert.Null(result);
-
             }
         }
-
+       
 
     }
 }
