@@ -5,7 +5,7 @@ using System.Text;
 namespace GymSwipe.Domain.Models
 {
     //Users recorded exercises, i e Johns Leg Press on the 23 sep
-    public class ExerciseRecords
+    public class ExerciseRecord
     {
         public int Id { get; set; }
         public int UserId { get; set; }

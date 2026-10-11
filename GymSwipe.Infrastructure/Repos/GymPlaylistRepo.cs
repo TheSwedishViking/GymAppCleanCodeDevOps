@@ -17,7 +17,7 @@ namespace GymSwipe.Infrastructure.Repos
         public async Task<GymPlaylist?> GetPlaylist(int id)
         {
             return await _db.GymPlaylists
-                .Include(p => p.Excercise.OrderBy(pe => pe.PlaylistOrder))
+                .Include(p => p.Exercises.OrderBy(pe => pe.PlaylistOrder))
                 .ThenInclude(pe => pe.Exercise)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
@@ -25,7 +25,7 @@ namespace GymSwipe.Infrastructure.Repos
         {
             return await _db.GymPlaylists
                 .Where(p => p.UserId == userId)
-                .Include(p => p.Excercise.OrderBy(pe => pe.PlaylistOrder))
+                .Include(p => p.Exercises.OrderBy(pe => pe.PlaylistOrder))
                     .ThenInclude(pe => pe.Exercise)
                 .ToListAsync();
         }
@@ -34,7 +34,7 @@ namespace GymSwipe.Infrastructure.Repos
         {
             var playlist =  _db.GymPlaylists
                 .Where(p => p.UserId == userId)
-                .Include(p => p.Excercise.OrderBy(pr => pr.PlaylistOrder))
+                .Include(p => p.Exercises.OrderBy(pr => pr.PlaylistOrder))
                 .ThenInclude(pl => pl.Exercise)
                 .FirstOrDefault(today => today.DateCreated == todaysDate);
 
@@ -43,7 +43,7 @@ namespace GymSwipe.Infrastructure.Repos
                 //Nothing for today, yesterdays instead? Random other? Create random? Food for though, thought for food
                 var all = _db.GymPlaylists.
                     Where(p => p.UserId == userId)
-                    .Include(p => p.Excercise.OrderBy(pr => pr.PlaylistOrder))
+                    .Include(p => p.Exercises.OrderBy(pr => pr.PlaylistOrder))
                     .ThenInclude(pl => pl.Exercise).ToArray();
 
                 //return a random for now

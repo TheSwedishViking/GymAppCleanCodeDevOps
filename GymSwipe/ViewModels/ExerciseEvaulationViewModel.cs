@@ -17,8 +17,8 @@ namespace GymSwipe.ViewModels
     {
         private int? _playListId;
 
-        private PlaylistExcercise _currentExerciseToRecord;
-        public PlaylistExcercise CurrentExercise
+        private PlaylistExercise _currentExerciseToRecord;
+        public PlaylistExercise CurrentExercise
         {
             get => _currentExerciseToRecord;
             set
@@ -42,7 +42,7 @@ namespace GymSwipe.ViewModels
             
             }
         }
-        public ObservableCollection<PlaylistExcercise> Excercises { get; set; } = new ObservableCollection<PlaylistExcercise>();
+        public ObservableCollection<PlaylistExercise> Excercises { get; set; } = new ObservableCollection<PlaylistExercise>();
 
         public ICommand NextExerciseToEvaluateCommand { get; }
         public ICommand PreviousExerciseCommand { get; }
@@ -80,7 +80,7 @@ namespace GymSwipe.ViewModels
         public async Task LoadExercises()
         {
             Excercises.Clear();
-            Excercises = new ObservableCollection<PlaylistExcercise>(await _exerciseRecordsFacade.GetPlaylistExercises());
+            Excercises = new ObservableCollection<PlaylistExercise>(await _exerciseRecordsFacade.GetPlaylistExercises());
             CurrentExercise = await _exerciseRecordsFacade.GetFirstExercise(Excercises);
             //CurrentExercise = await _exerciseRecordsFacade.GetNextExercise(CurrentExercise);
             if(CurrentExercise == null)
@@ -88,17 +88,19 @@ namespace GymSwipe.ViewModels
                 Console.WriteLine("Done!");
             }
         }
-        public async Task NextExercise(PlaylistExcercise ex)
+        public async Task NextExercise(PlaylistExercise ex)
         {
-             await _exerciseRecordsFacade.AddRecord(CurrentRecord);
-            await ResetRecordBinding();
+             //await _exerciseRecordsFacade.AddRecord(CurrentRecord);
             CurrentExercise = await _exerciseRecordsFacade.GetNextExercise(ex);
             if(CurrentExercise == null)
             {
+                 bool result=    await _exerciseRecordsFacade.SaveRecords(await _exerciseRecordsFacade.GetActiveRecords());
+                await Task.Yield();
                 await Shell.Current.Navigation.PopToRootAsync();
+                return;
             }
         }
-        public async Task PreviousExercise(PlaylistExcercise ex)
+        public async Task PreviousExercise(PlaylistExercise ex)
         {
             //await _exerciseRecordsFacade.AddRecord(CurrentRecord);
             await ResetRecordBinding();

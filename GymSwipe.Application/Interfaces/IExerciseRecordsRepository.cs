@@ -7,7 +7,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface IExerciseRecordsRepository
     {
-        Task<ExerciseRecords> GetRecordsById(int exerciseId, int userId);
-        Task SaveRecords(ExerciseRecords records);
+        Task<ExerciseRecord> GetRecordsById(int exerciseId, int userId);
+        Task SaveRecords(List<ExerciseRecord> records);
     }
 }

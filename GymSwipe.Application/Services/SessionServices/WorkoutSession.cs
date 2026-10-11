@@ -9,7 +9,7 @@ namespace GymSwipe.ApplicationLayer.Services.SessionServices
     public class WorkoutSession
     {
         public GymPlaylist CurrentPlaylist { get; private set; }
-        public List<ExerciseRecords> Records { get; } = new List<ExerciseRecords>();
+        public List<ExerciseRecord> Records { get; } = new List<ExerciseRecord>();
         public bool IsActive => CurrentPlaylist != null;
 
         public void Start(GymPlaylist playlist)

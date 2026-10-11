@@ -17,7 +17,7 @@ namespace GymSwipe.ApplicationLayer.Services
             _dateHandler = dateHandler;
         }
 
-        public async Task<PlaylistExcercise> GetNextExercise(PlaylistExcercise current, ICollection<PlaylistExcercise> excercises)
+        public async Task<PlaylistExercise> GetNextExercise(PlaylistExercise current, ICollection<PlaylistExercise> excercises)
         {
             var list = excercises.ToList();
             var index = list.FindIndex(e => e.Id == current.Id);
@@ -32,7 +32,7 @@ namespace GymSwipe.ApplicationLayer.Services
             var newEx = list[index + 1];
             return newEx;
         }
-        public async Task<PlaylistExcercise> GetPreviousExercise(PlaylistExcercise current, ICollection<PlaylistExcercise> excercise)
+        public async Task<PlaylistExercise> GetPreviousExercise(PlaylistExercise current, ICollection<PlaylistExercise> excercise)
         {
             var list = excercise.ToList();
             var index = list.FindIndex(e => e.Id == current.Id);
@@ -66,7 +66,7 @@ namespace GymSwipe.ApplicationLayer.Services
 
             for (int i = 0; i < addedExercises.Count; i++)
             {
-                newPlaylist.Excercise.Add(ConvertToDomain(addedExercises[i], i));
+                newPlaylist.Exercises.Add(ConvertToDomain(addedExercises[i], i));
             }
             newPlaylist.Name = await SetNameOfPlaylist(currentUser.Firstname);
             newPlaylist.UserId = currentUser.Id;
@@ -78,17 +78,17 @@ namespace GymSwipe.ApplicationLayer.Services
         {
             return $"{user}'s gymplaylist {await _dateHandler.SetDateAsString()}";
         }
-        private PlaylistExcercise ConvertToDomain(ExerciseDTO dTO, int order)
+        private PlaylistExercise ConvertToDomain(ExerciseDTO dTO, int order)
         {
             //Minimal needed to point towards correct entities without EF issues
-            return new PlaylistExcercise
+            return new PlaylistExercise
             {
                 ExerciseId = dTO.Id,
                 PlaylistOrder = order,
             };
 
         }
-        public async Task<PlaylistExcercise> GetFirstExercise(ICollection<PlaylistExcercise> excercise)
+        public async Task<PlaylistExercise> GetFirstExercise(ICollection<PlaylistExercise> excercise)
         {
             return  excercise.OrderBy(e=>e.PlaylistOrder).FirstOrDefault();
         }

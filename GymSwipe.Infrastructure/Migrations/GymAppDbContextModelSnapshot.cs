@@ -58,7 +58,7 @@ namespace GymSwipe.Infrastructure.Migrations
                     b.ToTable("Exercises");
                 });
 
-            modelBuilder.Entity("GymSwipe.Domain.Models.ExerciseRecords", b =>
+            modelBuilder.Entity("GymSwipe.Domain.Models.ExerciseRecord", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -91,7 +91,7 @@ namespace GymSwipe.Infrastructure.Migrations
 
                     b.HasIndex("ExerciseId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "ExerciseId", "DateRecorded");
 
                     b.ToTable("ExerciseRecords");
                 });
@@ -106,6 +106,9 @@ namespace GymSwipe.Infrastructure.Migrations
 
                     b.Property<string>("ExerciseCategoryName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageOfTargetArea")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -124,9 +127,15 @@ namespace GymSwipe.Infrastructure.Migrations
                     b.Property<DateOnly>("DateCreated")
                         .HasColumnType("date");
 
+                    b.Property<bool>("HasBeenPlayedBefore")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TimesPlayed")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -183,7 +192,7 @@ namespace GymSwipe.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("GymSwipe.Domain.Models.PlaylistExcercise", b =>
+            modelBuilder.Entity("GymSwipe.Domain.Models.PlaylistExercise", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -224,7 +233,7 @@ namespace GymSwipe.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GymSwipe.Domain.Models.ExerciseRecords", b =>
+            modelBuilder.Entity("GymSwipe.Domain.Models.ExerciseRecord", b =>
                 {
                     b.HasOne("GymSwipe.Domain.Models.Exercise", "Exercise")
                         .WithMany()
@@ -254,7 +263,7 @@ namespace GymSwipe.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("GymSwipe.Domain.Models.PlaylistExcercise", b =>
+            modelBuilder.Entity("GymSwipe.Domain.Models.PlaylistExercise", b =>
                 {
                     b.HasOne("GymSwipe.Domain.Models.Exercise", "Exercise")
                         .WithMany()
@@ -263,7 +272,7 @@ namespace GymSwipe.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("GymSwipe.Domain.Models.GymPlaylist", "Playlist")
-                        .WithMany("Excercise")
+                        .WithMany("Exercises")
                         .HasForeignKey("PlaylistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -275,7 +284,7 @@ namespace GymSwipe.Infrastructure.Migrations
 
             modelBuilder.Entity("GymSwipe.Domain.Models.GymPlaylist", b =>
                 {
-                    b.Navigation("Excercise");
+                    b.Navigation("Exercises");
                 });
 
             modelBuilder.Entity("GymSwipe.Domain.Models.GymUser", b =>

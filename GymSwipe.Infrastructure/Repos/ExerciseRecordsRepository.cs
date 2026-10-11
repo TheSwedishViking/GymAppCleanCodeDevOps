@@ -14,14 +14,17 @@ namespace GymSwipe.Infrastructure.Repos
         {
             _db = gymAppDbContext;
         }
-        public Task<ExerciseRecords> GetRecordsById(int exerciseId, int userId)
+        public Task<ExerciseRecord> GetRecordsById(int exerciseId, int userId)
         {
             throw new NotImplementedException();
         }
-
-        public Task SaveRecords(ExerciseRecords records)
+        public async Task SaveRecords(List<ExerciseRecord> records)
         {
-            throw new NotImplementedException();
+            foreach(var record in records)
+            {
+                _db.ExerciseRecords.Add(record);
+            }
+            await _db.SaveChangesAsync();
         }
     }
 }

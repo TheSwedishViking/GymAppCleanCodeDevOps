@@ -7,10 +7,10 @@ namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface IWorkoutFacade
     {
-        Task<PlaylistExcercise> StartWorkout();
+        Task<PlaylistExercise> StartWorkout();
         Task PauseWorkout();
-        Task<PlaylistExcercise> GetNextExercise(PlaylistExcercise current);
-        Task<PlaylistExcercise> GetPreviousExercise(PlaylistExcercise current);
+        Task<PlaylistExercise> GetNextExercise(PlaylistExercise current);
+        Task<PlaylistExercise> GetPreviousExercise(PlaylistExercise current);
         Task<GymPlaylist> GetPlaylistById(int id);
         Task<GymPlaylist> GetPlaylistByUserId(int userId);
         Task<bool> QuitWorkout();

@@ -10,11 +10,12 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     public interface IExerciseRecordsFacade
     {
         Task<bool> GetActiveStatus();
-        Task<List<PlaylistExcercise>> GetPlaylistExercises();
-        Task<PlaylistExcercise> GetNextExercise(PlaylistExcercise current);
+        Task<List<PlaylistExercise>> GetPlaylistExercises();
+        Task<PlaylistExercise> GetNextExercise(PlaylistExercise current);
+        Task<List<ExerciseRecordDTO>> GetActiveRecords();
         Task<bool> SaveRecords(List<ExerciseRecordDTO> records);
         Task AddRecord(ExerciseRecordDTO currentRecord);
-        Task<PlaylistExcercise> GetPreviousExercise(PlaylistExcercise ex);
-        Task<PlaylistExcercise> GetFirstExercise(ObservableCollection<PlaylistExcercise> excercises);
+        Task<PlaylistExercise> GetPreviousExercise(PlaylistExercise ex);
+        Task<PlaylistExercise> GetFirstExercise(ObservableCollection<PlaylistExercise> excercises);
     }
 }

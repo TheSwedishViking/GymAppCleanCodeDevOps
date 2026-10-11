@@ -32,8 +32,8 @@ namespace GymSwipe.ViewModels
                 OnPropertyChanged(nameof(GymPlaylist));
             }
         }
-        private PlaylistExcercise _currentExercise;
-        public PlaylistExcercise CurrentExercise
+        private PlaylistExercise _currentExercise;
+        public PlaylistExercise CurrentExercise
         {
             get { return _currentExercise; }
             set
@@ -44,8 +44,8 @@ namespace GymSwipe.ViewModels
             }
         }
 
-        private ExerciseRecords _currentRecord;
-        public ExerciseRecords CurrentRecords
+        private ExerciseRecord _currentRecord;
+        public ExerciseRecord CurrentRecords
         {
             get { return _currentRecord; }
             set

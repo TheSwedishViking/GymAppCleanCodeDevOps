@@ -15,7 +15,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         private readonly IGymPlaylistService _playlistService;
         private readonly WorkoutSession _workoutSession;
         private GymPlaylist _playlist;
-        private PlaylistExcercise _currentExercise;
+        private PlaylistExercise _currentExercise;
         private Stopwatch stopwatch;
         public WorkoutFacade(
             IExerciseService exerciseService, 
@@ -49,26 +49,26 @@ namespace GymSwipe.ApplicationLayer.Facades
             return _playlist;
         }
 
-        public async Task<PlaylistExcercise> StartWorkout()
+        public async Task<PlaylistExercise> StartWorkout()
         {
-            if (_playlist == null || _playlist.Excercise == null) return null;
-            _currentExercise = _playlist.Excercise.FirstOrDefault();
+            if (_playlist == null || _playlist.Exercises == null) return null;
+            _currentExercise = _playlist.Exercises.FirstOrDefault();
             _workoutSession.Start(_playlist);
             stopwatch.Start();
             return _currentExercise;
         }
-        public async Task<PlaylistExcercise> GetNextExercise(PlaylistExcercise current)
+        public async Task<PlaylistExercise> GetNextExercise(PlaylistExercise current)
         {
-            _currentExercise = await _playlistService.GetNextExercise(current, _playlist.Excercise);
+            _currentExercise = await _playlistService.GetNextExercise(current, _playlist.Exercises);
             if(_currentExercise == current)
             {
                 return null;
             }
             return _currentExercise;
         }
-        public async Task<PlaylistExcercise> GetPreviousExercise(PlaylistExcercise current)
+        public async Task<PlaylistExercise> GetPreviousExercise(PlaylistExercise current)
         {
-            _currentExercise = await _playlistService.GetPreviousExercise(current, _playlist.Excercise);
+            _currentExercise = await _playlistService.GetPreviousExercise(current, _playlist.Exercises);
             if(_currentExercise == null)
             {
                 throw new Exception("Null exercise");
