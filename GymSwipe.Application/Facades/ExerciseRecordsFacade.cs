@@ -56,7 +56,6 @@ namespace GymSwipe.ApplicationLayer.Facades
             _currentExercise = await _playlistService.GetNextExercise(current, _session.CurrentPlaylist.Excercise);
             if(current == _currentExercise)
             {
-                throw new Exception("NUll exercise to go back to ");
             }
             return _currentExercise;
         }
