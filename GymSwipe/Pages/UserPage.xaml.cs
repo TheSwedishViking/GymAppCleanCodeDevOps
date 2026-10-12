@@ -11,15 +11,17 @@ public partial class UserPage : ContentPage
         _vm = vm;
         BindingContext = vm;
     }
-
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _vm.GetAllTheUsersPlaylists();
-    }
+        try
+        {
+            await _vm.InitalizeAsync();
 
-    private async void OnClickGreetUser(object sender, EventArgs e)
-    {
-        lblGreeted.TextColor = Colors.Red;
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }

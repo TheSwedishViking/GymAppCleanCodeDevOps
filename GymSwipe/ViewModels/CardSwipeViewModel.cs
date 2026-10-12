@@ -76,6 +76,7 @@ namespace GymSwipe.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private readonly ICardSwipeFacade _cardFacade;
+        private bool _isSaving= false;
         public CardSwipeViewModel(ICardSwipeFacade cardSwipeFacade)
         {
             DiscardX -= SwipeLimitForRegistration;
@@ -85,7 +86,14 @@ namespace GymSwipe.ViewModels
         }
         public async Task SavePlaylist()
         {
-            await _cardFacade.SavePlayList();
+            //Progess bar or icon for saving could be nice
+            if (_isSaving == false)
+            {
+                _isSaving = true;
+                await _cardFacade.SavePlayList(await _cardFacade.GetCurrentUser());
+                await Task.Delay(3000);
+                await Shell.Current.GoToAsync(nameof(Pages.UserPage));
+            }
         }
         public async Task InitalizeAsync()
         {
@@ -128,9 +136,9 @@ namespace GymSwipe.ViewModels
         {
             if (CurrentExercise != null)
             {
-                CurrentExercise = await _cardFacade.ApproveCard(_currentExercise);
-                AddedExercises.Add(CurrentExercise);
-                //AddedCards.Add(_currentCard);
+                var approvedCard = CurrentExercise;
+                CurrentExercise = await _cardFacade.ApproveCard(approvedCard);
+                AddedExercises.Add(approvedCard);
                 await ValidateAfterSwipe();
             }
 
@@ -157,7 +165,6 @@ namespace GymSwipe.ViewModels
         }
         public async Task UpdateCard()
         {
-
             CardImageSource = await _cardFacade.GetApproptiateImageForExercise(CurrentExercise);
             CardDeckInfo = await _cardFacade.DeckInfo();
         }

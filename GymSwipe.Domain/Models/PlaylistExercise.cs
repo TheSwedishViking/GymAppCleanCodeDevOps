@@ -1,6 +1,6 @@
 ﻿namespace GymSwipe.Domain.Models
 {
-    public class PlaylistExcercise
+    public class PlaylistExercise
     {
         public int Id { get; set; }
         public int ExerciseId { get; set; }

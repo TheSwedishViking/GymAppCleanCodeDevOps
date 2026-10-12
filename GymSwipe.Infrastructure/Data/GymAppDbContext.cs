@@ -10,11 +10,11 @@ namespace GymSwipe.Infrastructure.Data
         public GymAppDbContext(DbContextOptions<GymAppDbContext> options) : base(options) { }
 
         public DbSet<Exercise> Exercises { get; set; }
-        public DbSet<ExerciseRecords> ExerciseRecords { get; set; }
+        public DbSet<ExerciseRecord> ExerciseRecords { get; set; }
         public DbSet<ExerciseTargetArea> ExercisesTargetAreas { get; set; }
         public DbSet<GymPlaylist> GymPlaylists { get; set; }
         public DbSet<GymUser> Users { get; set; }
-        public DbSet<PlaylistExcercise> UserPlaylistExercises { get; set; }
+        public DbSet<PlaylistExercise> UserPlaylistExercises { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -23,7 +23,7 @@ namespace GymSwipe.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //User has records, delete records when user is removed
-            modelBuilder.Entity<ExerciseRecords>(exr =>
+            modelBuilder.Entity<ExerciseRecord>(exr =>
             {
                 exr.HasOne(r => r.User)
                 .WithMany(ex => ex.UserRecords)
@@ -35,6 +35,8 @@ namespace GymSwipe.Infrastructure.Data
                 .HasForeignKey(e => e.ExerciseId)
                 .OnDelete(DeleteBehavior.Restrict); //Don't remove and excresive if its used, would be a bit weird => Review later if null would be better later
             });
+                    modelBuilder.Entity<ExerciseRecord>()
+                .HasIndex(r => new { r.UserId, r.ExerciseId, r.DateRecorded });
             modelBuilder.Entity<Exercise>(e =>
             {
                 e.HasMany(er => er.TargetAreas)
@@ -56,10 +58,10 @@ namespace GymSwipe.Infrastructure.Data
                 .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<PlaylistExcercise>(pe =>
+            modelBuilder.Entity<PlaylistExercise>(pe =>
             {
                 pe.HasOne(x => x.Playlist)
-                  .WithMany(p => p.Excercise)
+                  .WithMany(p => p.Exercises)
                   .HasForeignKey(x => x.PlaylistId)
                   .OnDelete(DeleteBehavior.Cascade);
 
@@ -68,6 +70,7 @@ namespace GymSwipe.Infrastructure.Data
                   .HasForeignKey(x => x.ExerciseId)
                   .OnDelete(DeleteBehavior.Restrict);
             });
+
         }
     }
 }

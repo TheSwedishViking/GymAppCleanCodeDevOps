@@ -1,6 +1,11 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
-using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.ApplicationLayer.Services.SessionServices;
+using GymSwipe.Domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
+using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Facades
 {
@@ -28,11 +33,18 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         public async Task InitalizeAsync()
         {
-            await GetExercises();
+            await LoadExercisesById(null);
         }
-        public async Task GetExercises()
+        public async Task LoadExercisesById(int? possibleId)
         {
-            AvailableExercises = await _exerciseService.GetAllExercisesAsync();
+            if (possibleId.HasValue)
+            {
+                AvailableExercises = await _exerciseService.GetExerciseByIdAsync(possibleId.Value);
+            }
+            else
+            {
+                AvailableExercises = await _exerciseService.GetAllExercisesAsync();
+            }
         }
         public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; }
 
@@ -45,7 +57,7 @@ namespace GymSwipe.ApplicationLayer.Facades
                 "sceptile_card.jpg"
             };
         }
-        public async Task SavePlayList()
+        public async Task SavePlayList(GymUser curentUser)
         {
             if (AddedExercises != null && AddedExercises.Count > 0)
             {

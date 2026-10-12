@@ -5,16 +5,6 @@
              x:Class="GymSwipe.Pages.CardSwipe"
              Title="CardSwipe">
     <VerticalStackLayout>
-        <!--<Image
-            x:Name="ExampleCard"
-            Source="sceptile_card.jpg"
-            HeightRequest="300"
-            WidthRequest="140"
-            >
-            <Image.GestureRecognizers>
-                <PanGestureRecognizer/>
-            </Image.GestureRecognizers>
-        </Image>-->
         <Label FontSize="Large" Text="Card-Swipe Demo"/>
         <Label Text="{Binding CardDeckInfo}" />
         <Grid 

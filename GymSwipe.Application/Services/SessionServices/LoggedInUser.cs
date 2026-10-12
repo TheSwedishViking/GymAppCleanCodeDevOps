@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace GymSwipe.ApplicationLayer.Services
+namespace GymSwipe.ApplicationLayer.Services.SessionServices
 {
     public class LoggedInUser:INotifyPropertyChanged
     {
