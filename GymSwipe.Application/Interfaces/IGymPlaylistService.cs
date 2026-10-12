@@ -5,9 +5,10 @@ namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface IGymPlaylistService
     {
-        Task<GymPlaylist> GetPlaylist(int id);
+        Task<GymPlaylistDTO> GetPlaylist(int id);
         Task<List<GymPlaylist>> GetPlaylistsByUserId(int userId);
-        Task SavePlayListToUser(List<ExerciseDTO> addedExercises, GymUser currentUser);
+        Task<List<GymPlaylistDTO>> GetPlaylistDTOsByUserId(int userId);
+        Task SavePlaylistToUser(List<ExerciseDTO> addedExercises, GymUser currentUser);
 
     }
 }

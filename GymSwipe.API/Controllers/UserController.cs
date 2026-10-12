@@ -22,7 +22,7 @@ namespace GymSwipe.API.Controllers
 
             if (request == null)
             {
-                return BadRequest(/*result*/);
+                return BadRequest();
 
             }
             var user = await _userService.TryAndCreateUserThroughRequestModelAsync(request);

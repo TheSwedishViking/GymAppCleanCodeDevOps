@@ -8,25 +8,61 @@ namespace GymSwipe.ApplicationLayer.Services
     {
         private readonly IGymPlaylistRepository _playlistRepo;
         private readonly IDateHandler _dateHandler;
+        LoggedInUser currentUser;
 
         public GymPlaylistService(
-            IGymPlaylistRepository playlistRepo, 
+            IGymPlaylistRepository playlistRepo,
             IDateHandler dateHandler)
         {
             _playlistRepo = playlistRepo;
             _dateHandler = dateHandler;
         }
 
-        public async Task<GymPlaylist> GetPlaylist(int id)
+        public async Task<GymPlaylistDTO> GetPlaylist(int id)
         {
-            return await _playlistRepo.GetPlaylist(id);
+            var playlist = await _playlistRepo.GetPlaylist(id);
+            return playlist == null ? null : MapPlaylist(playlist);
         }
+
+
+
+
+
+
+
         public async Task<List<GymPlaylist>> GetPlaylistsByUserId(int userId)
         {
             return await _playlistRepo.GetPlaylistsByUserId(userId);
         }
 
-        public async Task SavePlayListToUser(List<ExerciseDTO> addedExercises, GymUser currentUser)
+        public async Task<List<GymPlaylistDTO>> GetPlaylistDTOsByUserId(int userId)
+        {
+            var playlists = await _playlistRepo.GetPlaylistsByUserId(userId);
+            return playlists.Select(MapPlaylist).ToList();
+        }
+
+
+
+
+        private static GymPlaylistDTO MapPlaylist(GymPlaylist playlist)
+        {
+            return new GymPlaylistDTO
+            {
+                Id = playlist.Id,
+                Name = playlist.Name,
+                DateCreated = playlist.DateCreated,
+                UserId = playlist.UserId,
+                Excercise = playlist.Excercise.Select(exercise => new PlaylistExerciseDTO
+                {
+                    ExerciseId = exercise.ExerciseId,
+                    Name = exercise.Exercise?.Name ?? string.Empty,
+                    VideoSourceLink = exercise.Exercise?.VideoSourceLink ?? string.Empty,
+                    PlaylistOrder = exercise.PlaylistOrder
+                }).ToList()
+            };
+        }
+
+        public async Task SavePlaylistToUser(List<ExerciseDTO> addedExercises, GymUser currentUser)
         {
             GymPlaylist newPlaylist = new GymPlaylist();
 
@@ -40,13 +76,16 @@ namespace GymSwipe.ApplicationLayer.Services
 
             await _playlistRepo.SavePlayList(newPlaylist);
         }
+
+
         public async Task<string> SetNameOfPlaylist(string user)
         {
             return $"{user}'s gymplaylist {await _dateHandler.SetDateAsString()}";
         }
+
+
         private PlaylistExcercise ConvertToDomain(ExerciseDTO dTO, int order)
         {
-            //Minimal needed to point towards correct entities without EF issues
             return new PlaylistExcercise
             {
                 ExerciseId = dTO.Id,

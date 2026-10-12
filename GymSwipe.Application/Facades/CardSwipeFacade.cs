@@ -1,11 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services;
-using GymSwipe.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Facades
 {
@@ -39,7 +34,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         {
             AvailableExercises = await _exerciseService.GetAllExercisesAsync();
         }
-        public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; } 
+        public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; }
 
         private List<string> GetCards()
         {
@@ -52,9 +47,9 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         public async Task SavePlayList()
         {
-            if(AddedExercises != null&& AddedExercises.Count > 0)
+            if (AddedExercises != null && AddedExercises.Count > 0)
             {
-                await _playlistService.SavePlayListToUser(AddedExercises, _user.CurrentUser);
+                await _playlistService.SavePlaylistToUser(AddedExercises, _user.CurrentUser);
             }
         }
 
@@ -91,7 +86,8 @@ namespace GymSwipe.ApplicationLayer.Facades
 
         public async Task<string> DeckInfo()
         {
-            if (HasDrawnAllCards()){
+            if (HasDrawnAllCards())
+            {
                 return "Last card!";
             }
             return $"There are {AvailableExercises.Count} cards remaning in the deck";
@@ -99,10 +95,10 @@ namespace GymSwipe.ApplicationLayer.Facades
 
         public async Task<string> GetApproptiateImageForExercise(ExerciseDTO currentExercise)
         {
-        
+
             return AvailableCards[Random.Shared.Next(AvailableCards.Count)];
         }
 
-     
+
     }
 }

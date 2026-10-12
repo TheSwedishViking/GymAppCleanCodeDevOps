@@ -1,11 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.Domain.Enums;
-using GymSwipe.Domain.ExampleData;
 using GymSwipe.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Services
 {
@@ -21,7 +17,7 @@ namespace GymSwipe.ApplicationLayer.Services
         public async Task<List<ExerciseDTO>> GetAllExercisesAsync()
         {
             var exercises = await _repo.GetAllExercisesAsync();
-            List<ExerciseDTO> dtos = (await Task.WhenAll(exercises.Select(ConvertToDTO))).ToList(); 
+            List<ExerciseDTO> dtos = (await Task.WhenAll(exercises.Select(ConvertToDTO))).ToList();
             return dtos;
         }
 
@@ -50,10 +46,15 @@ namespace GymSwipe.ApplicationLayer.Services
             return dtos;
         }
 
+
+
+
+
+
         public async Task<ExerciseDTO> GetExerciseByName(string name)
         {
-            var ex = await _repo.GetExerciseByName(name);   
-            if(ex == null)
+            var ex = await _repo.GetExerciseByName(name);
+            if (ex == null)
             {
                 return null;
             }
@@ -69,15 +70,15 @@ namespace GymSwipe.ApplicationLayer.Services
         }
         public async Task<ExerciseDTO> ConvertToDTO(Exercise exercise)
         {
-           return new ExerciseDTO
+            return new ExerciseDTO
             {
                 Id = exercise.Id,
                 VideoSourceLink = exercise.VideoSourceLink,
                 Name = exercise.Name,
 
                 TargetAreaNames = exercise.TargetAreas.
-                Select(e => e.ExerciseCategoryName).
-                ToList(),
+                 Select(e => e.ExerciseCategoryName).
+                 ToList(),
             };
         }
 
@@ -97,7 +98,7 @@ namespace GymSwipe.ApplicationLayer.Services
                 VideoSourceLink = newExercise.VideoSourceLink,
                 TargetAreas = targetAreas,
             };
-           return await _repo.AddExercise(domain);
+            return await _repo.AddExercise(domain);
         }
     }
 }
