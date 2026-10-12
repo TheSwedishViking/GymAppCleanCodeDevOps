@@ -1,8 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Interfaces
 {
@@ -12,5 +9,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task<List<TargetAreaDTO>> ConvertToDTOsFromDomainAsync(List<ExerciseTargetArea> areas);
         Task<TargetAreaDTO> GetTargetAreaByName(string name);
         Task<bool> AddNewArea(TargetAreaDTO targetAreaDTO);
+        Task<string> GetTargetAreaImage(int id);
+
     }
 }

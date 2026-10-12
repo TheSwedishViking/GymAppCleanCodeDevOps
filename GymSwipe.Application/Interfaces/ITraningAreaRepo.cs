@@ -1,7 +1,4 @@
 ﻿using GymSwipe.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Interfaces
 {
@@ -12,6 +9,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task<bool> AddTargetArea(ExerciseTargetArea area);
         Task RemoveTargetArea(int id);
         Task UpdateTargetArea(ExerciseTargetArea area);
+        Task<string> GetTargetAreaImage(int id);
 
     }
 }
