@@ -19,6 +19,9 @@ namespace GymSwipe.Infrastructure.Repos
                 .ThenInclude(pe => pe.Exercise)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
+
+
+
         public async Task<List<GymPlaylist>> GetPlaylistsByUserId(int userId)
         {
             return await _db.GymPlaylists

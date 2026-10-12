@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GymSwipe.Domain.Models
+﻿namespace GymSwipe.Domain.Models
 {
     public class GymPlaylist
     {

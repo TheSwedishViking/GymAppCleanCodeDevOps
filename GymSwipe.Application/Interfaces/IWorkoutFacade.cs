@@ -1,4 +1,5 @@
-﻿using GymSwipe.Domain.Models;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,8 +13,8 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task CompleteWorkout();
         Task<PlaylistExercise> GetNextExercise(PlaylistExercise current);
         Task<PlaylistExercise> GetPreviousExercise(PlaylistExercise current);
-        Task<GymPlaylist> GetPlaylistById(int id);
-        Task<GymPlaylist> GetPlaylistByUserId(int userId);
+        Task<GymPlaylistDTO> GetPlaylistById(int id);
+        Task<GymPlaylistDTO> GetPlaylistByUserId(int userId);
         Task<bool> QuitWorkout();
         Task RecordUserWorkout();
     }

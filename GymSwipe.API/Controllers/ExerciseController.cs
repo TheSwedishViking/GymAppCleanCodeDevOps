@@ -18,7 +18,7 @@ namespace GymSwipe.API.Controllers
         [HttpPost]
         public async Task<IActionResult> PostNewExercise([FromBody] ExerciseDTO exercise)
         {
-            if(exercise == null)
+            if (exercise == null)
             {
                 return BadRequest();
             }
@@ -32,36 +32,48 @@ namespace GymSwipe.API.Controllers
         public async Task<ActionResult<List<ExerciseDTO>>> GetExerciseDTOsAsync()
         {
             var exs = await _exerciseService.GetAllExercisesAsync();
-            if(exs == null)
+            if (exs == null)
             {
                 return NotFound("No exercieses found; Db might be empty");
             }
             return Ok(exs);
         }
 
-        [HttpGet("get-chest-exercises", Name ="GetOnlyChestExercises")]
+        [HttpGet("get-chest-exercises", Name = "GetOnlyChestExercises")]
         public async Task<ActionResult<List<ExerciseDTO>>> GetChestExerciesDTOsAsync()
         {
             var chest = await _exerciseService.GetExerciseByIdAsync(1);
-            if(chest == null)
+            if (chest == null)
             {
                 return NotFound("No chest exercies found; check db or connection string");
             }
             return Ok(chest);
         }
 
-        [HttpGet("get-random-exercises", Name ="GetRandomExercises")]
+        [HttpGet("get-category-exercises/{id}", Name = "GetTargetAreaExercises")]
+        public async Task<ActionResult<List<ExerciseDTO>>> GetTargetAreaExerciesDTOsAsync(int id)
+        {
+            var areaExercises = await _exerciseService.GetExerciseByIdAsync(id);
+            if (areaExercises == null)
+            {
+                return NotFound("No exercises found for the specified category");
+            }
+            return Ok(areaExercises);
+        }
+
+
+        [HttpGet("get-random-exercises", Name = "GetRandomExercises")]
         public async Task<ActionResult<List<ExerciseDTO>>> GetRandomExercisesAsync()
         {
             var random = await _exerciseService.GetRandomExercisesAsync();
-            if(random == null)
+            if (random == null)
             {
                 return NotFound("No random was found; Db might be empty");
             }
             return Ok(random);
         }
-        [HttpGet("get-exercises/{id}", Name = "GetSpecificExercises")]
-        public async Task<ActionResult<List<ExerciseDTO>>> GetRandomExercisesAsync( int id)
+        [HttpGet("get-exercises-by-category/{id}", Name = "GetSpecificExercises")]
+        public async Task<ActionResult<List<ExerciseDTO>>> GetRandomExercisesAsync(int id)
         {
             var random = await _exerciseService.GetExerciseByIdAsync(id);
             if (random == null)

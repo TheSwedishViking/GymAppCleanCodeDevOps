@@ -1,4 +1,5 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
 using System;
@@ -37,7 +38,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             stopwatch = new Stopwatch();
 
         }
-        public async Task<GymPlaylist> GetPlaylistByUserId(int userId)
+        public async Task<GymPlaylistDTO> GetPlaylistByUserId(int userId)
         {
             var userValid = await _userService.GetUserById(userId);
             if (userValid == null)
@@ -53,7 +54,7 @@ namespace GymSwipe.ApplicationLayer.Facades
 
            _playlist = await _playlistService.GetTodaysPlaylist(userId);
             _workoutSession.Start(_playlist);
-            return _playlist;
+            return new GymPlaylistDTO();
         }
 
         public async Task<PlaylistExercise> StartWorkout()
@@ -100,7 +101,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             return true;
         }
 
-        public async Task<GymPlaylist> GetPlaylistById(int id)
+        public async Task<GymPlaylistDTO> GetPlaylistById(int id)
         {
             try
             {
@@ -109,14 +110,14 @@ namespace GymSwipe.ApplicationLayer.Facades
                 {
                     throw new ArgumentNullException("No playlist found, but we have a provided Id?");
                 }
-                _playlist = playlist;
-                return _playlist;
+                return new DTOs.GymPlaylistDTO();
+             
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return new GymPlaylist();
+            return new GymPlaylistDTO();
         }
 
         public async Task CompleteWorkout()
@@ -131,5 +132,7 @@ namespace GymSwipe.ApplicationLayer.Facades
 
             await _playlistService.UpdatePlaylistInfo(_playlist);
         }
+
+   
     }
 }

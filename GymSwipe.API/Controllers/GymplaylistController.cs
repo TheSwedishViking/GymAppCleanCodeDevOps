@@ -1,4 +1,5 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymSwipe.API.Controllers
@@ -16,14 +17,19 @@ namespace GymSwipe.API.Controllers
         }
 
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetPlaylist(int id)
+        [HttpGet("GetAllPlaylistsByUserId/{id}")]
+        public async Task<ActionResult<List<GymPlaylistDTO>>> GetAllPlayListsByUserId(int id)
         {
-            var playlist = await _playlistService.GetPlaylistsByUserId(id);
+            var playlist = await _playlistService.GetPlaylistDTOsByUserId(id);
             return Ok(playlist);
         }
 
-
+        [HttpGet("GetPlaylistBy/{id}")]
+        public async Task<ActionResult<List<GymPlaylistDTO>>> GetPlayList(int id)
+        {
+            var playlist = await _playlistService.GetPlaylist(id);
+            return Ok(playlist);
+        }
 
 
     }

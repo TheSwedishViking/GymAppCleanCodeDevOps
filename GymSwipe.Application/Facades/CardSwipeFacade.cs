@@ -46,7 +46,7 @@ namespace GymSwipe.ApplicationLayer.Facades
                 AvailableExercises = await _exerciseService.GetAllExercisesAsync();
             }
         }
-        public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; } 
+        public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; }
 
         private List<string> GetCards()
         {
@@ -59,9 +59,9 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         public async Task SavePlayList(GymUser curentUser)
         {
-            if(AddedExercises != null&& AddedExercises.Count > 0)
+            if (AddedExercises != null && AddedExercises.Count > 0)
             {
-                await _playlistService.SavePlayListToUser(AddedExercises, curentUser);
+                await _playlistService.SavePlaylistToUser(AddedExercises, _user.CurrentUser);
             }
         }
 
@@ -98,7 +98,8 @@ namespace GymSwipe.ApplicationLayer.Facades
 
         public async Task<string> DeckInfo()
         {
-            if (HasDrawnAllCards()){
+            if (HasDrawnAllCards())
+            {
                 return "Last card!";
             }
             return $"There are {AvailableExercises.Count} cards remaning in the deck";
@@ -106,28 +107,18 @@ namespace GymSwipe.ApplicationLayer.Facades
 
         public async Task<string> GetApproptiateImageForExercise(ExerciseDTO currentExercise)
         {
-        
+
             return AvailableCards[Random.Shared.Next(AvailableCards.Count)];
         }
 
         public async Task<List<ExerciseDTO>> GetLoadedExercises()
         {
-            if(AvailableExercises == null)
-            {
-                throw new ArgumentNullException("No loaded exercises! Can't return null exercises!");
-            }
             return AvailableExercises;
         }
 
         public async Task<GymUser> GetCurrentUser()
         {
-            if (_user.CurrentUser == null)
-            {
-                throw new ArgumentException("User null; return");
-            }
             return _user.CurrentUser;
         }
-
-      
     }
 }

@@ -42,7 +42,6 @@ namespace GymSwipe.Infrastructure.Repos
             Console.WriteLine();
             if (foundUser != null)
             {
-                foundUser.SetFriendCode();
 
                 return new GymUserDTO
                 {
