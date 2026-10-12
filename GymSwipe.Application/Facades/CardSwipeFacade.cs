@@ -1,6 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
-using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -33,11 +33,18 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         public async Task InitalizeAsync()
         {
-            await GetExercises();
+            await LoadExercisesById(null);
         }
-        public async Task GetExercises()
+        public async Task LoadExercisesById(int? possibleId)
         {
-            AvailableExercises = await _exerciseService.GetAllExercisesAsync();
+            if (possibleId.HasValue)
+            {
+                AvailableExercises = await _exerciseService.GetExerciseByIdAsync(possibleId.Value);
+            }
+            else
+            {
+                AvailableExercises = await _exerciseService.GetAllExercisesAsync();
+            }
         }
         public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; } 
 
@@ -50,11 +57,11 @@ namespace GymSwipe.ApplicationLayer.Facades
                 "sceptile_card.jpg"
             };
         }
-        public async Task SavePlayList()
+        public async Task SavePlayList(GymUser curentUser)
         {
             if(AddedExercises != null&& AddedExercises.Count > 0)
             {
-                await _playlistService.SavePlayListToUser(AddedExercises, _user.CurrentUser);
+                await _playlistService.SavePlayListToUser(AddedExercises, curentUser);
             }
         }
 
@@ -103,6 +110,24 @@ namespace GymSwipe.ApplicationLayer.Facades
             return AvailableCards[Random.Shared.Next(AvailableCards.Count)];
         }
 
-     
+        public async Task<List<ExerciseDTO>> GetLoadedExercises()
+        {
+            if(AvailableExercises == null)
+            {
+                throw new ArgumentNullException("No loaded exercises! Can't return null exercises!");
+            }
+            return AvailableExercises;
+        }
+
+        public async Task<GymUser> GetCurrentUser()
+        {
+            if (_user.CurrentUser == null)
+            {
+                throw new ArgumentException("User null; return");
+            }
+            return _user.CurrentUser;
+        }
+
+      
     }
 }

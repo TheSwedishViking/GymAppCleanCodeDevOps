@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymSwipe.Pages.ActiveWorkoutPage"
+             Title="ActiveWorkoutPage">
+    <VerticalStackLayout>
+        <Label 
+            Text="Users active workout here"
+            Grid.Column="2"
+            Grid.Row="2"
+            />
+        <Grid 
+             x:Name="CardShell" 
+             WidthRequest="300"
+             >
+            <Border x:Name="Card" StrokeShape="RoundRectangle 16" Padding="6">
+                <VerticalStackLayout>
+                    <Label Text="{Binding GymPlaylist.Name}"/>
+                    <Label FontSize="Large" Text="{Binding CurrentExercise.Exercise.Name}" HorizontalTextAlignment="Center"/>
+                    <Label Text="{Binding CurrentExercise.Exercise.VideoSourceLink}" HorizontalTextAlignment="Center"/>
+                    <Label Text="{Binding CurrentExercise.Id}" HorizontalTextAlignment="Center"/>
+                    <Label Text="{Binding CurrentExercise.PlaylistOrder}"/>
+                    <Image  x:Name="CardImage" Source="sceptile_card.jpg"/>
+                    <Label Text="Video link" FontAttributes="Italic" HorizontalOptions="Center"/>
+                    <HorizontalStackLayout HorizontalOptions="Center" >
+                        <Button
+                            Text="⬅️"
+                            Margin="10"
+                            Command="{Binding PreviousExerciseCommand}"
+                            />
+                        <Button
+                            Text="▶️"
+                              Margin="10"
+                            Command="{Binding StartPlaylistCommand}"
+                            />
+                        <Button
+                            Text="➡️"
+                              Margin="10"
+                            Command="{Binding NextExerciseCommand}"
+                            />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>

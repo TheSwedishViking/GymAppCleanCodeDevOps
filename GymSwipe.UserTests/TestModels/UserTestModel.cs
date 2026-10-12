@@ -41,7 +41,7 @@ namespace GymSwipe.UserTests.TestModels
         public double WeightKg { get; set; }
         public bool? Gender { get; set; }
         public virtual ICollection<GymPlaylist>? UserPlaylists { get; set; } = new List<GymPlaylist>();
-        public virtual ICollection<ExerciseRecords>? UserRecords { get; set; } = new List<ExerciseRecords>();
+        public virtual ICollection<ExerciseRecord>? UserRecords { get; set; } = new List<ExerciseRecord>();
         public string FriendCode { get; private set; } = "";
 
         public event PropertyChangedEventHandler? PropertyChanged;

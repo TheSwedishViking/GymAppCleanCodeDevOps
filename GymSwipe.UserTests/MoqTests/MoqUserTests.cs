@@ -47,9 +47,9 @@ namespace GymSwipe.UserTests.MoqTests
             {
                 Id = 1,
                 Name = "Mocked Playlist",
-                Excercise = new List<PlaylistExcercise>
+                Exercises = new List<PlaylistExercise>
                 {
-                    new PlaylistExcercise
+                    new PlaylistExercise
                     {
                         Id = 1,
                         ExerciseId = 1,
@@ -59,7 +59,7 @@ namespace GymSwipe.UserTests.MoqTests
                     }
                 }
             };
-            _output.WriteLine(playlist.Excercise.FirstOrDefault().Exercise.Name);
+            _output.WriteLine(playlist.Exercises.FirstOrDefault().Exercise.Name);
 
             var repoGym = new Mock<IGymPlaylistRepository>();
             var dateMock = new Mock<IDateHandler>();
@@ -70,7 +70,7 @@ namespace GymSwipe.UserTests.MoqTests
             // Act
             var result = await service.GetPlaylist(1);
 
-            Assert.Equal("Mocked Exercise", result.Excercise.First().Exercise.Name);
+            Assert.Equal("Mocked Exercise", result.Exercises.First().Exercise.Name);
         }
 
 

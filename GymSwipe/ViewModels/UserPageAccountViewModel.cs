@@ -1,15 +1,15 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
-using GymSwipe.ApplicationLayer.Services;
-using GymSwipe.Domain.Models;
+﻿using GymSwipe.Domain.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Services.SessionServices;
+
 
 namespace GymSwipe.ViewModels
 {
     public class UserPageAccountViewModel : INotifyPropertyChanged
     {
-
 
         private List<GymPlaylist> _allPlaylists = new();
         private int _currentPage = 0;
@@ -42,12 +42,14 @@ namespace GymSwipe.ViewModels
         public ICommand PreviousPageCommand { get; }
         public ICommand GreetUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
+        public ICommand PlayPlaylistCommand {  get; }
 
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public GymUser CurrentUser { get; set; }
+    
+        public GymUser CurrentUser { get; private set; }
         private readonly LoggedInUser _loggedInUser;
         private readonly HttpClient _httpClient;
         private readonly IGymPlaylistService _gymPlaylistService;
@@ -55,25 +57,45 @@ namespace GymSwipe.ViewModels
         {
             _loggedInUser = loggedInUser;
             _httpClient = httpClient;
-            CurrentUser = _loggedInUser.CurrentUser;
+           
             _gymPlaylistService = gymPlaylistService;
             NextPageCommand = new Command(() => ChangePage(1));
             PreviousPageCommand = new Command(() => ChangePage(-1));
             GreetUserCommand = new Command(GreetUser);
-
             DeleteUserCommand = new Command(async () =>
             {
                 await DeleteUser();
             });
+
+            PlayPlaylistCommand = new Command<GymPlaylist>(async e => await StartThisPlayList(e));
+
+
         }
+        public async Task StartThisPlayList(GymPlaylist gymPlaylist)
+        {
+            Console.WriteLine(gymPlaylist);
+            await Shell.Current.GoToAsync(nameof(Pages.ActiveWorkoutPage), new Dictionary<string, object>
+            {
+                ["PlayListId"] = gymPlaylist.Id
+            });
+        }
+        public async Task InitalizeAsync()
+        {
+            CurrentUser = _loggedInUser.CurrentUser;
+            await GetAllTheUsersPlaylists();
 
-
-
-
+        }
 
         public async Task GetAllTheUsersPlaylists()
         {
-            _allPlaylists = (await _gymPlaylistService.GetPlaylistsByUserId(CurrentUser.Id)).ToList();
+            if (CurrentUser == null)
+            {
+                await Task.Yield();
+                await Shell.Current.Navigation.PopToRootAsync();
+                return;
+            }
+            var playlists = await _gymPlaylistService.GetPlaylistsByUserId(CurrentUser.Id);
+            _allPlaylists = playlists;
             _currentPage = 0;
             ShowCurrentPage();
         }
@@ -91,13 +113,6 @@ namespace GymSwipe.ViewModels
             foreach (var list in _allPlaylists.Skip(_currentPage * PageSize).Take(PageSize))
                 CurrentThreePlaylists.Add(list);
         }
-
-
-
-
-
-
-
 
         public void OnPropertyChanged(string propertyName)
         {

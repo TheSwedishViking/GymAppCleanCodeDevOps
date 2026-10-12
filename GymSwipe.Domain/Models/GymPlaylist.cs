@@ -11,6 +11,16 @@ namespace GymSwipe.Domain.Models
         public DateOnly DateCreated { get; set; }
         public int UserId { get; set; }
         public GymUser User { get; set; } = null!;
-        public ICollection<PlaylistExcercise> Excercise { get; set; } = new List<PlaylistExcercise>();
+        public ICollection<PlaylistExercise> Exercises { get; set; } = new List<PlaylistExercise>();
+        public bool HasBeenPlayedBefore { get; set; } = false;
+        public int TimesPlayed {  get; set; }
+        public TimeSpan LatestElapsedTime { get; set; }
+        public DateTime LastPlayed { get; set; }
+        public double CaloriesBurnedFromLatestWorkout { get; set; }
+
+        public async Task<DateTime> SetDate()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

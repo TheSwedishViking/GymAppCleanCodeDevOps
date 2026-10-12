@@ -4,7 +4,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface IPlaylistExecericseRepository
     {
-        Task<List<PlaylistExcercise>> GetExercisesByPlaylistIdAsync(int playlistId);
+        Task<List<PlaylistExercise>> GetExercisesByPlaylistIdAsync(int playlistId);
         Task SavePlayList(GymPlaylist newPlaylist);
     }
 }
