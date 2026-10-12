@@ -45,7 +45,17 @@ namespace GymSwipe.ViewModels
         public ICommand PlayPlaylistCommand {  get; }
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public GymUser CurrentUser { get; private set; }
+        private GymUser _currentUser;
+        public GymUser CurrentUser
+        {
+            get => _currentUser;
+            set
+            {
+                if (_currentUser == value) return;
+                _currentUser = value;
+                OnPropertyChanged(nameof(CurrentUser));
+            }
+        }
         private readonly LoggedInUser _loggedInUser;
         private readonly HttpClient _httpClient;
         private readonly IGymPlaylistService _gymPlaylistService;
