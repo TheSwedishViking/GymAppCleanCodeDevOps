@@ -70,7 +70,7 @@ namespace GymSwipe.UserTests.MoqTests
             // Act
             var result = await service.GetPlaylist(1);
 
-            Assert.Equal("Mocked Exercise", result.Exercises.First().Exercise.Name);
+            Assert.Equal("Mocked Exercise", result.Excercise.First().Name);
         }
 
 

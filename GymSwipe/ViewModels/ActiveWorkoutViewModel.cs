@@ -114,11 +114,11 @@ namespace GymSwipe.ViewModels
             }
             if(_playListId is int id)
             {
-                GymPlaylist = await _workoutFacade.GetPlaylistById(id);
+                //GymPlaylist = await _workoutFacade.GetPlaylistById(id);
             }
             else
             {
-                GymPlaylist = await _workoutFacade.GetPlaylistByUserId(_loggedInUser.CurrentUser.Id);
+                //GymPlaylist = await _workoutFacade.GetPlaylistByUserId(_loggedInUser.CurrentUser.Id);
             }
             Console.WriteLine(GymPlaylist);
         }

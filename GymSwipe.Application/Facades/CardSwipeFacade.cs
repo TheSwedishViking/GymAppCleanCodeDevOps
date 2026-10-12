@@ -111,6 +111,14 @@ namespace GymSwipe.ApplicationLayer.Facades
             return AvailableCards[Random.Shared.Next(AvailableCards.Count)];
         }
 
+        public async Task<List<ExerciseDTO>> GetLoadedExercises()
+        {
+            return AvailableExercises;
+        }
 
+        public async Task<GymUser> GetCurrentUser()
+        {
+            return _user.CurrentUser;
+        }
     }
 }
