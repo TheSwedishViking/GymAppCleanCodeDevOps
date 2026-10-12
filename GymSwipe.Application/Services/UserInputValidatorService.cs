@@ -21,8 +21,7 @@ namespace GymSwipe.ApplicationLayer.Services
                     trimmedName += c;
                 }
             }
-            //Titta på läng imorgon
-            Regex namePattern = new Regex(@"^([a-z]{3,15})$");
+            Regex namePattern = new Regex(@"^([a-åäö]{1,15})$");
 
             string lowerName = trimmedName.ToLower();
             if (!namePattern.IsMatch(lowerName))
@@ -45,7 +44,7 @@ namespace GymSwipe.ApplicationLayer.Services
                 return (false, null);
             }
             string emailLower = email.ToLower();
-            Regex emailPattern = new Regex(@"^[a-z0-9]{5,40}@[a-z0-9]{1,15}\.[a-z]{2,6}$");
+            Regex emailPattern = new Regex(@"^[a-åäö0-9]{3,40}@[a-z0-9]{1,15}\.[a-åäö]{2,6}$");
             if (!emailPattern.IsMatch(emailLower))
             {
                 return (false, null);
