@@ -64,10 +64,12 @@ namespace GymSwipe.Infrastructure.Repos
         {
             var existing = await _db.GymPlaylists.FirstOrDefaultAsync(p=>p.Id == playlistService.Id);
             if (existing == null) return;
+
             existing.HasBeenPlayedBefore = playlistService.HasBeenPlayedBefore;
             existing.CaloriesBurnedFromLatestWorkout = playlistService.CaloriesBurnedFromLatestWorkout;
             existing.LastPlayed = playlistService.LastPlayed;
             existing.LatestElapsedTime = playlistService.LatestElapsedTime;
+
             await _db.SaveChangesAsync();
         }
     }

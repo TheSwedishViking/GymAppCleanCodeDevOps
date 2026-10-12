@@ -17,8 +17,8 @@
             <Border x:Name="Card" StrokeShape="RoundRectangle 16" Padding="6">
                 <VerticalStackLayout>
                     <Label Text="{Binding GymPlaylist.Name}"/>
-                    <Label FontSize="Large" Text="{Binding CurrentExercise.Exercise.Name}" HorizontalTextAlignment="Center"/>
-                    <Label Text="{Binding CurrentExercise.Exercise.VideoSourceLink}" HorizontalTextAlignment="Center"/>
+                    <Label FontSize="Large" Text="{Binding CurrentExercise.Name}" HorizontalTextAlignment="Center"/>
+                    <Label Text="{Binding CurrentExercise.VideoSourceLink}" HorizontalTextAlignment="Center"/>
                     <Label Text="{Binding CurrentExercise.Id}" HorizontalTextAlignment="Center"/>
                     <Label Text="{Binding CurrentExercise.PlaylistOrder}" HorizontalTextAlignment="Center"/>
                     <Image  x:Name="CardImage" Source="sceptile_card.jpg"/>

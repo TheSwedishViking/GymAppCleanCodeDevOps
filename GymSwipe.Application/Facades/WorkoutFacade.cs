@@ -11,15 +11,14 @@ namespace GymSwipe.ApplicationLayer.Facades
 {
     public class WorkoutFacade : IWorkoutFacade
     {
-        private readonly IExerciseService _exerciseService;
         private readonly IUserService _userService;
         private readonly IGymPlaylistService _playlistService;
         private readonly ICalorieCountingService _calorieCountingService;
         private readonly LoggedInUser _loggedInUser;
         private readonly WorkoutSession _workoutSession;
         private GymUser _user;
-        private GymPlaylist _playlist;
-        private PlaylistExercise _currentExercise;
+        private GymPlaylistDTO _playlist;
+        private PlaylistExerciseDTO _currentExercise;
         private Stopwatch stopwatch;
         public WorkoutFacade(
             IExerciseService exerciseService, 
@@ -29,7 +28,6 @@ namespace GymSwipe.ApplicationLayer.Facades
             LoggedInUser loggedInUser,
             WorkoutSession session)
         {
-            _exerciseService = exerciseService;
             _playlistService = gymPlaylistService;
             _calorieCountingService = calorieCountingService;
             _userService = userService;
@@ -54,29 +52,29 @@ namespace GymSwipe.ApplicationLayer.Facades
 
            _playlist = await _playlistService.GetTodaysPlaylist(userId);
             _workoutSession.Start(_playlist);
-            return new GymPlaylistDTO();
+            return _playlist;
         }
 
-        public async Task<PlaylistExercise> StartWorkout()
+        public async Task<PlaylistExerciseDTO> StartWorkout()
         {
-            if (_playlist == null || _playlist.Exercises == null) return null;
-            _currentExercise = _playlist.Exercises.FirstOrDefault();
+            if (_playlist == null || _playlist.Excercise == null) return null;
+            _currentExercise = _playlist.Excercise.FirstOrDefault();
             _workoutSession.Start(_playlist);
             stopwatch.Start();
             return _currentExercise;
         }
-        public async Task<PlaylistExercise> GetNextExercise(PlaylistExercise current)
+        public async Task<PlaylistExerciseDTO> GetNextExercise(PlaylistExerciseDTO current)
         {
-            _currentExercise = await _playlistService.GetNextExercise(current, _playlist.Exercises);
+            _currentExercise = await _playlistService.GetNextExercise(current, _playlist.Excercise);
             if(_currentExercise == current)
             {
                 return null;
             }
             return _currentExercise;
         }
-        public async Task<PlaylistExercise> GetPreviousExercise(PlaylistExercise current)
+        public async Task<PlaylistExerciseDTO> GetPreviousExercise(PlaylistExerciseDTO current)
         {
-            _currentExercise = await _playlistService.GetPreviousExercise(current, _playlist.Exercises);
+            _currentExercise = await _playlistService.GetPreviousExercise(current, _playlist.Excercise);
             if(_currentExercise == null)
             {
                 throw new Exception("Null exercise");
@@ -110,8 +108,8 @@ namespace GymSwipe.ApplicationLayer.Facades
                 {
                     throw new ArgumentNullException("No playlist found, but we have a provided Id?");
                 }
-                return new DTOs.GymPlaylistDTO();
-             
+                _playlist = playlist;
+                return _playlist;
             }
             catch (Exception ex)
             {
@@ -128,7 +126,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             _playlist.LastPlayed = await _playlistService.SetDate();
             _playlist.TimesPlayed = await _playlistService.IncrimentTimesPlayed(_playlist.TimesPlayed);
 
-            _playlist.CaloriesBurnedFromLatestWorkout = await _calorieCountingService.CalculateCalories(_playlist.LatestElapsedTime, _user.WeightKg, 5);
+            _playlist.CaloriesBurnedFromLatestWorkout = await _calorieCountingService.CalculateCalories(_playlist.LatestElapsedTime, _loggedInUser.CurrentUser.WeightKg, 5);
 
             await _playlistService.UpdatePlaylistInfo(_playlist);
         }

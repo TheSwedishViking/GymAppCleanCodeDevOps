@@ -1,4 +1,5 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
 using GymSwipe.Pages;
@@ -22,8 +23,8 @@ namespace GymSwipe.ViewModels
         {
             _playListId = query.TryGetValue("PlayListId", out var value) && value is int id ? id : null;
         }
-        private GymPlaylist _playList;
-        public GymPlaylist GymPlaylist
+        private GymPlaylistDTO _playList;
+        public GymPlaylistDTO GymPlaylist
         {
             get { return _playList; }
             set
@@ -32,8 +33,8 @@ namespace GymSwipe.ViewModels
                 OnPropertyChanged(nameof(GymPlaylist));
             }
         }
-        private PlaylistExercise _currentExercise;
-        public PlaylistExercise CurrentExercise
+        private PlaylistExerciseDTO _currentExercise;
+        public PlaylistExerciseDTO CurrentExercise
         {
             get { return _currentExercise; }
             set
@@ -114,11 +115,11 @@ namespace GymSwipe.ViewModels
             }
             if(_playListId is int id)
             {
-                //GymPlaylist = await _workoutFacade.GetPlaylistById(id);
+                GymPlaylist = await _workoutFacade.GetPlaylistById(id);
             }
             else
             {
-                //GymPlaylist = await _workoutFacade.GetPlaylistByUserId(_loggedInUser.CurrentUser.Id);
+                GymPlaylist = await _workoutFacade.GetPlaylistByUserId(_loggedInUser.CurrentUser.Id);
             }
             Console.WriteLine(GymPlaylist);
         }

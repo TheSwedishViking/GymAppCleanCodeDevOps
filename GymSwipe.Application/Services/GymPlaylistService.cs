@@ -22,10 +22,10 @@ namespace GymSwipe.ApplicationLayer.Services
             var playlist = await _playlistRepo.GetPlaylist(id);
             return playlist == null ? null : MapPlaylist(playlist);
         }
-        public async Task<PlaylistExercise> GetNextExercise(PlaylistExercise current, ICollection<PlaylistExercise> excercises)
+        public async Task<PlaylistExerciseDTO> GetNextExercise(PlaylistExerciseDTO current, List<PlaylistExerciseDTO> excercises)
         {
             var list = excercises.ToList();
-            var index = list.FindIndex(e => e.Id == current.Id);
+            var index = list.FindIndex(e => e.PlaylistOrder == current.PlaylistOrder);
             if (index < 0)
             {
                 return current;
@@ -37,10 +37,10 @@ namespace GymSwipe.ApplicationLayer.Services
             var newEx = list[index + 1];
             return newEx;
         }
-        public async Task<PlaylistExercise> GetPreviousExercise(PlaylistExercise current, ICollection<PlaylistExercise> excercise)
+        public async Task<PlaylistExerciseDTO> GetPreviousExercise(PlaylistExerciseDTO current, List<PlaylistExerciseDTO> excercise)
         {
             var list = excercise.ToList();
-            var index = list.FindIndex(e => e.Id == current.Id);
+            var index = list.FindIndex(e => e.PlaylistOrder == current.PlaylistOrder);
             if (index - 1 < 0)
             {
                 return current;
@@ -59,9 +59,6 @@ namespace GymSwipe.ApplicationLayer.Services
             return playlists.Select(MapPlaylist).ToList();
         }
 
-
-
-
         private static GymPlaylistDTO MapPlaylist(GymPlaylist playlist)
         {
             return new GymPlaylistDTO
@@ -70,13 +67,17 @@ namespace GymSwipe.ApplicationLayer.Services
                 Name = playlist.Name,
                 DateCreated = playlist.DateCreated,
                 UserId = playlist.UserId,
-                Excercise = playlist.Exercises.Select(exercise => new PlaylistExerciseDTO
-                {
-                    ExerciseId = exercise.ExerciseId,
-                    Name = exercise.Exercise?.Name ?? string.Empty,
-                    VideoSourceLink = exercise.Exercise?.VideoSourceLink ?? string.Empty,
-                    PlaylistOrder = exercise.PlaylistOrder
-                }).ToList()
+                Excercise = playlist.Exercises.Select(MapExercise).ToList()
+            };
+        }
+        public static PlaylistExerciseDTO MapExercise(PlaylistExercise exercise)
+        {
+            return new PlaylistExerciseDTO
+            {
+                ExerciseId = exercise.Id,
+                Name = exercise.Exercise.Name,
+                VideoSourceLink = exercise.Exercise.VideoSourceLink ?? string.Empty,
+                PlaylistOrder = exercise.PlaylistOrder
             };
         }
 
@@ -96,9 +97,11 @@ namespace GymSwipe.ApplicationLayer.Services
         }
 
 
-        public async Task<GymPlaylist> GetTodaysPlaylist(int userId)
+        public async Task<GymPlaylistDTO> GetTodaysPlaylist(int userId)
         {
-            return await _playlistRepo.GetTodaysPlaylistByUserId(userId, await _dateHandler.SetDateAsDateOnly());
+            var domain = await _playlistRepo.GetTodaysPlaylistByUserId(userId, await _dateHandler.SetDateAsDateOnly());
+            var dto = MapPlaylist(domain);
+            return dto;
         }
 
         public async Task SavePlayListToUser(List<ExerciseDTO> addedExercises, GymUser currentUser)
@@ -133,21 +136,46 @@ namespace GymSwipe.ApplicationLayer.Services
             };
 
         }
-        public async Task<PlaylistExercise> GetFirstExercise(ICollection<PlaylistExercise> excercise)
+        public async Task<PlaylistExerciseDTO> GetFirstExercise(List<PlaylistExerciseDTO> excercise)
         {
             return  excercise.OrderBy(e=>e.PlaylistOrder).FirstOrDefault();
         }
 
-        public async Task UpdatePlaylistInfo(GymPlaylist playlistService)
+        public async Task UpdatePlaylistInfo(GymPlaylistDTO playlist)
         {
-            var existsAlready = await _playlistRepo.GetPlaylist(playlistService.Id);
+            var existsAlready = await _playlistRepo.GetPlaylist(playlist.Id);
             if(existsAlready == null)
             {
-                throw new Exception("Can't find playlist to update; error");
+               //New info? Add? Think over
             }
-            await _playlistRepo.UpdatePlaylist(playlistService);
+            var domain = DomainMapPlaylist(playlist);
+            await _playlistRepo.UpdatePlaylist(domain);
         }
 
+        private static GymPlaylist DomainMapPlaylist(GymPlaylistDTO playlist)
+        {
+            return new GymPlaylist
+            {
+                Id = playlist.Id,
+                Name = playlist.Name,
+                UserId = playlist.UserId,
+                HasBeenPlayedBefore = true,
+                CaloriesBurnedFromLatestWorkout = playlist.CaloriesBurnedFromLatestWorkout,
+                DateCreated = playlist.DateCreated,
+                TimesPlayed = playlist.TimesPlayed,
+                LastPlayed = playlist.LastPlayed,
+                LatestElapsedTime = playlist.LatestElapsedTime,
+                //Exercises = playlist.Excercise.Select(DomainMapPlaylistExercise).ToList(),
+            };
+        }
+        private static PlaylistExercise DomainMapPlaylistExercise(PlaylistExerciseDTO dto)
+        {
+            return new PlaylistExercise
+            {
+                ExerciseId = dto.ExerciseId,
+                PlaylistOrder = dto.PlaylistOrder,
+            };
+        }
         public async Task<TimeSpan> SetTime(Stopwatch stopwatch)
         {
             return  TimeSpan.FromMinutes(stopwatch.Elapsed.TotalMinutes);
