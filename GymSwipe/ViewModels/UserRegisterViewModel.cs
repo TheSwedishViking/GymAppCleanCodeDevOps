@@ -12,6 +12,7 @@ namespace GymSwipe.ViewModels
     {
 
         private readonly UserInputValidatorService _validator = new();
+        private readonly UserInputPropertiesValidator _validatorProps = new();
 
 
         public GymUser CurrentUser { get; set; } = new GymUser();
@@ -71,6 +72,18 @@ namespace GymSwipe.ViewModels
             if (uniqueEmail == false)
             {
                 StatusCheck = correctEmail.Email + " already in use. Try being original!";
+                return;
+            }
+            var validHeight = await _validatorProps.ValidateUserHeight(CurrentUser.HeightCm);
+            if (validHeight.Success == false)
+            {
+                StatusCheck = validHeight.Message;
+                return;
+            }
+            var validWeight = await _validatorProps.ValidateUserWeight(CurrentUser.WeightKg);
+            if (validWeight.Success == false)
+            {
+                StatusCheck = validWeight.Message;
                 return;
             }
 
