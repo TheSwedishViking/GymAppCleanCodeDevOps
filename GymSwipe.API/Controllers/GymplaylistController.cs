@@ -19,9 +19,11 @@ namespace GymSwipe.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPlaylist(int id)
         {
-            var playlist = await _playlistService.GetPlaylist(id);
+            var playlist = await _playlistService.GetPlaylistsByUserId(id);
             return Ok(playlist);
         }
+
+
 
 
     }
