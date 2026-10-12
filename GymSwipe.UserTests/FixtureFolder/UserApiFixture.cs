@@ -31,20 +31,20 @@ namespace GymSwipe.UserTests
                 services.AddDbContext<GymAppDbContext>(options =>
                     options.UseInMemoryDatabase("GymSwipeTestDb"));
 
-                services = new ServiceCollection();
 
-                services.AddScoped<UserInputValidatorService>();
-                services.AddScoped<UserInputPropertiesValidator>();
-
-
-                ServiceProvider = services.BuildServiceProvider();
             });
 
         }
         public UserApiFixture()
         {
 
+            var services = new ServiceCollection();
 
+            services.AddScoped<UserInputValidatorService>();
+            services.AddScoped<UserInputPropertiesValidator>();
+
+
+            ServiceProvider = services.BuildServiceProvider();
 
         }
 
