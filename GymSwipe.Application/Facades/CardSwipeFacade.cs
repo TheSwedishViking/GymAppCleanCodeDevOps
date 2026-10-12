@@ -106,11 +106,11 @@ namespace GymSwipe.ApplicationLayer.Facades
             return $"There are {AvailableExercises.Count} cards remaning in the deck";
         }
 
-        public async Task<string> GetApproptiateImageForExercise(ExerciseDTO currentExercise)
+        public async Task<string> GetApproptiateImageForExercise(int id)
         {
-            string img = await _traningAreaService.GetTargetAreaImage(currentExercise.Id);
+            string img = await _traningAreaService.GetTargetAreaImage(id);
 
-            return img + "_card";
+            return img + "_card.jpg";
 
             //return AvailableCards[Random.Shared.Next(AvailableCards.Count)];
         }

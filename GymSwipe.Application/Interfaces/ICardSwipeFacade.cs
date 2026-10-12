@@ -1,8 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Interfaces
 {
@@ -19,6 +16,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task<List<ExerciseDTO>> GetLoadedExercises();
         Task<GymUser> GetCurrentUser();
         Task SavePlayList(GymUser curentUser);
-        Task<string> GetApproptiateImageForExercise(ExerciseDTO currentExercise);
+        Task<string> GetApproptiateImageForExercise(int id);
     }
 }

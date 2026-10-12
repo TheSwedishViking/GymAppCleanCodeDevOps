@@ -29,20 +29,19 @@ namespace GymSwipe.Infrastructure.Repos
             return await _db.ExercisesTargetAreas.ToListAsync() ?? new List<ExerciseTargetArea>();
         }
 
-
-
-
-        public async Task<string> GetTargetAreaImage(int id)
+        public async Task<string> GetTargetAreaImage(int exerciseId)
         {
-            var imagePath = await _db.ExercisesTargetAreas.Where(e => e.Id == id).Select(e => e.ImageOfTargetArea).FirstOrDefaultAsync();
 
-            if (string.IsNullOrEmpty(imagePath))
-            {
-                return "Unknown_card";
-            }
-            return imagePath;
+            var imagePath = await _db.Exercises
+                            .Where(exercise => exercise.Id == exerciseId)
+                            .SelectMany(exercise => exercise.TargetAreas) // Add collection, then sort
+                            .Select(area => area.ImageOfTargetArea)
+                            .FirstOrDefaultAsync();
 
+            return string.IsNullOrEmpty(imagePath) ? "Unknown_card" : imagePath;
         }
+
+
 
 
 
