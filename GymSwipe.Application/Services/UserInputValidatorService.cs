@@ -21,7 +21,7 @@ namespace GymSwipe.ApplicationLayer.Services
                     trimmedName += c;
                 }
             }
-            Regex namePattern = new Regex(@"^([a-åäö]{1,15})$");
+            Regex namePattern = new Regex(@"^([a-åäö]{2,21})$");
 
             string lowerName = trimmedName.ToLower();
             if (!namePattern.IsMatch(lowerName))
@@ -47,7 +47,8 @@ namespace GymSwipe.ApplicationLayer.Services
             Regex emailPattern = new Regex(@"^[a-åäö0-9]{3,40}@[a-z0-9]{1,15}\.[a-åäö]{2,6}$");
             if (!emailPattern.IsMatch(emailLower))
             {
-                return (false, null);
+                emailLower = "Email incorrect format. ex JohnDoe@gmail.com 40 letters and numbers for name and a valid email provider"; //response message
+                return (false, emailLower);
             }
 
             return (true, emailLower); //emailValid

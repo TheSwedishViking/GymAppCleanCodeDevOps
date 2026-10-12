@@ -65,7 +65,7 @@ namespace GymSwipe.UserTests
         [InlineData("Peter", "Stormare", true)]
         [InlineData("peter", "stormare", true)]
         [InlineData("Pet    er", "Stor        mare", true)]
-        [InlineData("Pe", "St", false)]
+        [InlineData("P", "S", false)]
         [InlineData("P3ter", "Sto12", true)]
         [InlineData("@GOdare", "St1 ma$re", true)]
         [InlineData(null, null, false)]
