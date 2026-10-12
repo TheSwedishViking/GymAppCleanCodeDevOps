@@ -46,6 +46,7 @@ namespace GymSwipe.UserTests.FixtureFolder
             services.AddScoped<IGymPlaylistService, GymPlaylistService>();
             services.AddScoped<IDateHandler, DateHandler>();
             services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
+            services.AddScoped<ICalorieCountingService, CalorieCountingService>();
 
             //*******REPOSITORIES*******
             services.AddScoped<IUserRepository, UserRepository>();

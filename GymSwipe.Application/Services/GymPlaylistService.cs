@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.Domain.Models;
+using System.Diagnostics;
 
 namespace GymSwipe.ApplicationLayer.Services
 {
@@ -91,6 +92,30 @@ namespace GymSwipe.ApplicationLayer.Services
         public async Task<PlaylistExercise> GetFirstExercise(ICollection<PlaylistExercise> excercise)
         {
             return  excercise.OrderBy(e=>e.PlaylistOrder).FirstOrDefault();
+        }
+
+        public async Task UpdatePlaylistInfo(GymPlaylist playlistService)
+        {
+            var existsAlready = await _playlistRepo.GetPlaylist(playlistService.Id);
+            if(existsAlready == null)
+            {
+                throw new Exception("Can't find playlist to update; error");
+            }
+            await _playlistRepo.UpdatePlaylist(playlistService);
+        }
+
+        public async Task<TimeSpan> SetTime(Stopwatch stopwatch)
+        {
+            return  TimeSpan.FromMinutes(stopwatch.Elapsed.TotalMinutes);
+        }
+        public Task<DateTime> SetDate()
+        {
+            return _dateHandler.SetDateAsDateTime();
+        }
+
+        public async Task<int> IncrimentTimesPlayed(int timesPlayed)
+        {
+            return timesPlayed+=1;
         }
     }
 }

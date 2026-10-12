@@ -83,12 +83,9 @@ namespace GymSwipe.ViewModels
             //When done
             if(CurrentExercise == null)
             {
-                await Shell.Current.GoToAsync(nameof(ExerciseEvaulationPage), new Dictionary<string, object> { ["PlaylistId"] = GymPlaylist.Id } );
-                //var saveStatus = await _workoutFacade.QuitWorkout();
-                //if(saveStatus == true)
-                //{
-                //    await Shell.Current.Navigation.PopToRootAsync();
-                //}
+                await _workoutFacade.CompleteWorkout();
+                await Task.Yield();
+                await Shell.Current.GoToAsync(nameof(ExerciseEvaulationPage), new Dictionary<string, object> { ["PlaylistId"] = GymPlaylist.Id });
             }
         }
         public async Task PausePlaylist() 

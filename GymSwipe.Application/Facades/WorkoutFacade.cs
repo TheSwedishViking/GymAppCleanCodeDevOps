@@ -13,19 +13,26 @@ namespace GymSwipe.ApplicationLayer.Facades
         private readonly IExerciseService _exerciseService;
         private readonly IUserService _userService;
         private readonly IGymPlaylistService _playlistService;
+        private readonly ICalorieCountingService _calorieCountingService;
+        private readonly LoggedInUser _loggedInUser;
         private readonly WorkoutSession _workoutSession;
+        private GymUser _user;
         private GymPlaylist _playlist;
         private PlaylistExercise _currentExercise;
         private Stopwatch stopwatch;
         public WorkoutFacade(
             IExerciseService exerciseService, 
             IUserService userService, 
+            ICalorieCountingService calorieCountingService,
             IGymPlaylistService gymPlaylistService,
+            LoggedInUser loggedInUser,
             WorkoutSession session)
         {
             _exerciseService = exerciseService;
             _playlistService = gymPlaylistService;
+            _calorieCountingService = calorieCountingService;
             _userService = userService;
+            _loggedInUser = loggedInUser;
             _workoutSession = session;
             stopwatch = new Stopwatch();
 
@@ -110,6 +117,19 @@ namespace GymSwipe.ApplicationLayer.Facades
                 Console.WriteLine(ex.Message);
             }
             return new GymPlaylist();
+        }
+
+        public async Task CompleteWorkout()
+        {
+             //_workoutSession.Clear();
+            _playlist.HasBeenPlayedBefore = true;
+            _playlist.LatestElapsedTime = await _playlistService.SetTime(stopwatch);
+            _playlist.LastPlayed = await _playlistService.SetDate();
+            _playlist.TimesPlayed = await _playlistService.IncrimentTimesPlayed(_playlist.TimesPlayed);
+
+            _playlist.CaloriesBurnedFromLatestWorkout = await _calorieCountingService.CalculateCalories(_playlist.LatestElapsedTime, _user.WeightKg, 5);
+
+            await _playlistService.UpdatePlaylistInfo(_playlist);
         }
     }
 }

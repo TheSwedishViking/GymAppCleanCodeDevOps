@@ -46,6 +46,7 @@ namespace GymSwipe
             builder.Services.AddScoped<IGymPlaylistService, GymPlaylistService>();
             builder.Services.AddScoped<IDateHandler, DateHandler>();
             builder.Services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
+            builder.Services.AddScoped<ICalorieCountingService, CalorieCountingService>();
             //*******REPOSITORIES*******
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepo>();

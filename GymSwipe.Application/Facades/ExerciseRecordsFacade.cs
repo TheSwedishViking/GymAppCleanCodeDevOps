@@ -13,6 +13,7 @@ namespace GymSwipe.ApplicationLayer.Facades
     {
         private readonly IExerciseRecordsService _exerciseRecordsService;
         private readonly IGymPlaylistService _playlistService;
+        private readonly IDateHandler _dateHandler;
         private PlaylistExercise _currentExercise;
         private WorkoutSession _session;
         private readonly LoggedInUser _user;
@@ -21,11 +22,13 @@ namespace GymSwipe.ApplicationLayer.Facades
         public ExerciseRecordsFacade(
             IExerciseRecordsService exerciseRecordsService,
             IGymPlaylistService gymPlaylistService,
+            IDateHandler dateHandler,
             LoggedInUser loggedInUser,
             WorkoutSession workoutSession )
         {
             _exerciseRecordsService = exerciseRecordsService;
             _playlistService = gymPlaylistService;
+            _dateHandler = dateHandler;
             _session = workoutSession;
             _user = loggedInUser;
         }
@@ -37,6 +40,7 @@ namespace GymSwipe.ApplicationLayer.Facades
                 throw new ArgumentNullException(nameof(currentRecord));
             }
             currentRecord.UserId = _user.CurrentUser.Id;
+            currentRecord.DateRecorded = await _dateHandler.SetDateAsDateTime();
             _addedRecords.Add(currentRecord);
         }
 

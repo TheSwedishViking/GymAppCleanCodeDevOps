@@ -10,9 +10,11 @@ namespace GymSwipe.ApplicationLayer.Services
     public class ExerciseRecordsService : IExerciseRecordsService
     {
         private readonly IExerciseRecordsRepository _repo;
-        public ExerciseRecordsService(IExerciseRecordsRepository recordsRepository)
+        private readonly IDateHandler _dateHandler;
+        public ExerciseRecordsService(IExerciseRecordsRepository recordsRepository, IDateHandler dateHandler)
         {
             _repo = recordsRepository;
+            _dateHandler = dateHandler;
         }
         public Task<ExerciseRecord> GetAExerciseRecordsAsync(int exerciseId, int userId)
         {

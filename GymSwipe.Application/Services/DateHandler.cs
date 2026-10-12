@@ -19,12 +19,12 @@ namespace GymSwipe.ApplicationLayer.Services
 
         public async Task<DateTime> SetDateAsDateTime()
         {
-            return DateTime.UtcNow;
+            return DateTime.Now;
         }
 
         public async Task<string> SetDateAsString()
         {
-            return DateTime.UtcNow.ToString();
+            return DateTime.Now.ToString();
         }
     }
 }

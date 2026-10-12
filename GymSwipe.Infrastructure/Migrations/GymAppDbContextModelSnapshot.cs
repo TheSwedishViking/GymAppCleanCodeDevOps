@@ -124,11 +124,20 @@ namespace GymSwipe.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<double>("CaloriesBurnedFromLatestWorkout")
+                        .HasColumnType("float");
+
                     b.Property<DateOnly>("DateCreated")
                         .HasColumnType("date");
 
                     b.Property<bool>("HasBeenPlayedBefore")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastPlayed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("LatestElapsedTime")
+                        .HasColumnType("time");
 
                     b.Property<string>("Name")
                         .IsRequired()

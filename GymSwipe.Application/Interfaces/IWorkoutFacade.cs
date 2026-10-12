@@ -9,6 +9,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     {
         Task<PlaylistExercise> StartWorkout();
         Task PauseWorkout();
+        Task CompleteWorkout();
         Task<PlaylistExercise> GetNextExercise(PlaylistExercise current);
         Task<PlaylistExercise> GetPreviousExercise(PlaylistExercise current);
         Task<GymPlaylist> GetPlaylistById(int id);

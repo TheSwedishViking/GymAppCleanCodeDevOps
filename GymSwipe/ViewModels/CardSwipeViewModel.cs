@@ -136,8 +136,9 @@ namespace GymSwipe.ViewModels
         {
             if (CurrentExercise != null)
             {
-                CurrentExercise = await _cardFacade.ApproveCard(_currentExercise);
-                AddedExercises.Add(CurrentExercise);
+                var approvedCard = CurrentExercise;
+                CurrentExercise = await _cardFacade.ApproveCard(approvedCard);
+                AddedExercises.Add(approvedCard);
                 await ValidateAfterSwipe();
             }
 
