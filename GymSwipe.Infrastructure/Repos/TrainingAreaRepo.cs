@@ -35,10 +35,14 @@ namespace GymSwipe.Infrastructure.Repos
             var imagePath = await _db.Exercises
                             .Where(exercise => exercise.Id == exerciseId)
                             .SelectMany(exercise => exercise.TargetAreas) // Add collection, then sort
-                            .Select(area => area.ImageOfTargetArea)
+                            .Select(area => area.ExerciseCategoryName)
                             .FirstOrDefaultAsync();
 
-            return string.IsNullOrEmpty(imagePath) ? "unknown" : imagePath;
+            string[] splitName = imagePath.Split(" ");
+            string correctName = string.Join("_", splitName);
+
+
+            return string.IsNullOrEmpty(imagePath) ? "unknown" : correctName.ToLower(); //return the name ínstead of imagename
         }
 
 
