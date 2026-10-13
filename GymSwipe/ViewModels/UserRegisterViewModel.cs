@@ -3,6 +3,7 @@ using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
 using GymSwipe.ApplicationLayer.Services;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
+using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel;
 using System.Net.Http.Json;
 using System.Windows.Input;
@@ -49,30 +50,35 @@ namespace GymSwipe.ViewModels
             var first = _validator.UserNameValidator(CurrentUser.Firstname);
             if (first is null)
             {
-                StatusCheck = "Invalid first name. Use 3-15 letters.";
+                StatusCheck = "Invalid first name. Use 2-20 letters.";
                 return;
             }
             CurrentUser.Firstname = first;
             var last = _validator.UserNameValidator(CurrentUser.Surname);
             if (last is null)
             {
-                StatusCheck = "Invalid surname. Use 3-15 letters.";
+                StatusCheck = "Invalid surname. Use 2-20 letters.";
                 return;
             }
             CurrentUser.Surname = last;
 
+            if (CurrentUser.Email.IsNullOrEmpty())
+            {
+                StatusCheck = "Email cant be empty!";
+                return;
+            }
             var correctEmail = _validator.UserEmailIsValid(CurrentUser.Email);
 
             if (correctEmail.IsValid == false)
             {
-                StatusCheck = "Email incorrect format. Good luck";
+                StatusCheck = correctEmail.Email; //response message
 
                 return;
             }
             bool uniqueEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/Unique-Email/" + correctEmail.Email);
             if (uniqueEmail == false)
             {
-                StatusCheck = correctEmail.Email + " already in use. Try being original!";
+                StatusCheck = correctEmail.Email + " Email is taken!";
                 return;
             }
             var validHeight = await _validatorProps.ValidateUserHeight(CurrentUser.HeightCm);
