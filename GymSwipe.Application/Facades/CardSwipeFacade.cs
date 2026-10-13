@@ -98,5 +98,22 @@ namespace GymSwipe.ApplicationLayer.Facades
             return img + "_card.jpg";
         }
 
+        public async Task<List<ExerciseDTO>> GetLoadedExercises()
+        {
+            if(AvailableExercises == null)
+            {
+                throw new ArgumentNullException(nameof(AvailableExercises));
+            }
+            return AvailableExercises;
+        }
+
+        public async Task<List<ExerciseDTO>> GetAddedExercises()
+        {
+            if(AddedExercises != null)
+            {
+                return AvailableExercises;
+            }
+            return new List<ExerciseDTO>();
+        }
     }
 }

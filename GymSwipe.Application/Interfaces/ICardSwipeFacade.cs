@@ -14,5 +14,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task LoadExercisesById(int? exerciseTypeId);
         Task SavePlayList();
         Task<string> GetApproptiateImageForExercise(int id);
+        Task<List<ExerciseDTO>> GetAddedExercises();
+        Task<List<ExerciseDTO>> GetLoadedExercises();
     }
 }

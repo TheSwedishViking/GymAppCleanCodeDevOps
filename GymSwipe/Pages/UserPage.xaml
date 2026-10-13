@@ -60,7 +60,6 @@
                              WidthRequest="550"
                             Padding="10"
                          >
-                            
                             <VerticalStackLayout Spacing="4" BackgroundColor="DarkSeaGreen">
                                 <Label
                                    Text ="{Binding Name }"

@@ -133,17 +133,13 @@ namespace GymSwipe.ApplicationLayer.Facades
 
              await _playlistService.RecordedCompletedWorkout(_playlist.Id, elapsedTime, calories);
         }
-        public void RecordPlaylistCompletion(TimeSpan elapsed, DateTime now, double calories)
-        {
-
-        }
+      
         public async Task<string> GetApproptiateImageForExercise(int exerciseId)
         {
 
             string img = await _traningAreaService.GetTargetAreaImage(exerciseId);
 
             return img + "_card.jpg";
-
 
         }
     }
