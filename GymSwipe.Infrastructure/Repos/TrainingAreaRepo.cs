@@ -2,6 +2,7 @@
 using GymSwipe.Domain.Models;
 using GymSwipe.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GymSwipe.Infrastructure.Repos
 {
@@ -37,10 +38,13 @@ namespace GymSwipe.Infrastructure.Repos
                             .SelectMany(exercise => exercise.TargetAreas) // Add collection, then sort
                             .Select(area => area.ExerciseCategoryName)
                             .FirstOrDefaultAsync();
+            if (imagePath.IsNullOrEmpty())
+            {
+                return imagePath = "unknown"; //return the name ínstead of imagename
 
+            }
             string[] splitName = imagePath.Split(" ");
             string correctName = string.Join("_", splitName);
-
 
             return string.IsNullOrEmpty(imagePath) ? "unknown" : correctName.ToLower(); //return the name ínstead of imagename
         }

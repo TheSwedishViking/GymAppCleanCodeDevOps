@@ -17,5 +17,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task<GymPlaylistDTO> GetPlaylistByUserId(int userId);
         Task<bool> QuitWorkout();
         Task RecordUserWorkout();
+        Task<string> GetApproptiateImageForExercise(int exerciseId);
     }
 }

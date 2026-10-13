@@ -74,7 +74,7 @@ namespace GymSwipe.ApplicationLayer.Services
         {
             return new PlaylistExerciseDTO
             {
-                ExerciseId = exercise.Id,
+                ExerciseId = exercise.ExerciseId,
                 Name = exercise.Exercise.Name,
                 VideoSourceLink = exercise.Exercise.VideoSourceLink ?? string.Empty,
                 PlaylistOrder = exercise.PlaylistOrder

@@ -2,10 +2,7 @@
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Facades
 {
@@ -16,20 +13,23 @@ namespace GymSwipe.ApplicationLayer.Facades
         private readonly ICalorieCountingService _calorieCountingService;
         private readonly LoggedInUser _loggedInUser;
         private readonly WorkoutSession _workoutSession;
+        private readonly ITraningAreaService _traningAreaService;
         private GymUser _user;
         private GymPlaylistDTO _playlist;
         private PlaylistExerciseDTO _currentExercise;
         private Stopwatch stopwatch;
         public WorkoutFacade(
-            IExerciseService exerciseService, 
-            IUserService userService, 
+            IExerciseService exerciseService,
+            IUserService userService,
             ICalorieCountingService calorieCountingService,
             IGymPlaylistService gymPlaylistService,
+            ITraningAreaService traningAreaService,
             LoggedInUser loggedInUser,
             WorkoutSession session)
         {
             _playlistService = gymPlaylistService;
             _calorieCountingService = calorieCountingService;
+            _traningAreaService = traningAreaService;
             _userService = userService;
             _loggedInUser = loggedInUser;
             _workoutSession = session;
@@ -45,12 +45,12 @@ namespace GymSwipe.ApplicationLayer.Facades
             }
 
             var userHasPlaylists = await _playlistService.GetPlaylistsByUserId(userId);
-            if(userHasPlaylists == null)
+            if (userHasPlaylists == null)
             {
                 throw new Exception("No playlist found; point user towards creating a playlist, alt open swipe automatically");
             }
 
-           _playlist = await _playlistService.GetTodaysPlaylist(userId);
+            _playlist = await _playlistService.GetTodaysPlaylist(userId);
             _workoutSession.Start(_playlist);
             return _playlist;
         }
@@ -66,16 +66,18 @@ namespace GymSwipe.ApplicationLayer.Facades
         public async Task<PlaylistExerciseDTO> GetNextExercise(PlaylistExerciseDTO current)
         {
             _currentExercise = await _playlistService.GetNextExercise(current, _playlist.Excercise);
-            if(_currentExercise == current)
+            if (_currentExercise == current)
             {
                 return null;
             }
+
+
             return _currentExercise;
         }
         public async Task<PlaylistExerciseDTO> GetPreviousExercise(PlaylistExerciseDTO current)
         {
             _currentExercise = await _playlistService.GetPreviousExercise(current, _playlist.Excercise);
-            if(_currentExercise == null)
+            if (_currentExercise == null)
             {
                 throw new Exception("Null exercise");
             }
@@ -91,7 +93,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             //See over models to handle; 
             //A playlist as completed
             //A record of performed sets
-           
+
         }
         public async Task<bool> QuitWorkout()
         {
@@ -120,7 +122,7 @@ namespace GymSwipe.ApplicationLayer.Facades
 
         public async Task CompleteWorkout()
         {
-             //_workoutSession.Clear();
+            //_workoutSession.Clear();
             _playlist.HasBeenPlayedBefore = true;
             _playlist.LatestElapsedTime = await _playlistService.SetTime(stopwatch);
             _playlist.LastPlayed = await _playlistService.SetDate();
@@ -131,6 +133,14 @@ namespace GymSwipe.ApplicationLayer.Facades
             await _playlistService.UpdatePlaylistInfo(_playlist);
         }
 
-   
+        public async Task<string> GetApproptiateImageForExercise(int exerciseId)
+        {
+
+            string img = await _traningAreaService.GetTargetAreaImage(exerciseId);
+
+            return img + "_card.jpg";
+
+
+        }
     }
 }
