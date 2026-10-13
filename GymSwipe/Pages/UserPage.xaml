@@ -31,25 +31,25 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
-        <!--<Button
-        Text="{Binding ButtonText}"
-        Command="{Binding GreetUserCommand}"
-        Clicked="OnClickGreetUser"/>-->
+        
 
         <Button
-            Text="Delete"
-            Command="{Binding DeleteUserCommand}"
+            Text="{Binding ButtonText}"
+            Command="{Binding GreetUserCommand}"
             />
 
         <Label
-            x:Name="lblGreeted"
-            Text ="{Binding GreetingUser}"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+                x:Name="lblGreeted"
+                Text ="{Binding GreetingUser}"
+                FontSize="30"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+
+
 
         <Grid ColumnDefinitions="Auto,Auto, Auto"
                 ColumnSpacing="10"
-                Padding="10,0"
+                Padding="500,10"
                 BackgroundColor="Grey">        
             
             <Label 

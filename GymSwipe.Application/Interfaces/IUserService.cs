@@ -7,7 +7,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     {
         Task<GymUserDTO?> TryAndCreateUserThroughRequestModelAsync(RequestCreateGymUserDTO request);
         Task<GymUserDTO> GetUserById(int id);
-        Task<bool> GetUserByEmail(string email);
+        Task<bool> UserEmailIsTaken(string email);
         Task<GymUserDTO> GetCreatedUserByEmail(string email);
         Task TryToDeleteUserById(int id);
         Task<string> GenerateFriendCode();

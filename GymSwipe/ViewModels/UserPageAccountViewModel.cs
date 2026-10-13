@@ -1,10 +1,10 @@
-﻿using GymSwipe.Domain.Models;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Services.SessionServices;
+using GymSwipe.Domain.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using GymSwipe.ApplicationLayer.Interfaces;
-using GymSwipe.ApplicationLayer.Services.SessionServices;
-using GymSwipe.ApplicationLayer.DTOs;
 
 
 namespace GymSwipe.ViewModels
@@ -14,7 +14,7 @@ namespace GymSwipe.ViewModels
         private List<GymPlaylistDTO> _allPlaylists = new();
         private int _currentPage = 0;
         private const int PageSize = 3;
-        public ObservableCollection<GymPlaylistDTO> CurrentThreePlaylists { get; } = new();
+        public ObservableCollection<GymPlaylistDTO> CurrentThreePlaylists { get; } = new(); // Ui responsive
 
         private string _buttonText = "Todays Message!";
         public string ButtonText
@@ -41,7 +41,7 @@ namespace GymSwipe.ViewModels
         public ICommand PreviousPageCommand { get; }
         public ICommand GreetUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
-        public ICommand PlayPlaylistCommand {  get; }
+        public ICommand PlayPlaylistCommand { get; }
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private GymUser _currentUser;
@@ -62,15 +62,11 @@ namespace GymSwipe.ViewModels
         {
             _loggedInUser = loggedInUser;
             _httpClient = httpClient;
-           
+
             _gymPlaylistService = gymPlaylistService;
-            NextPageCommand = new Command(() => ChangePage(1));
+            NextPageCommand = new Command(() => ChangePage(1)); //Calls method with argument
             PreviousPageCommand = new Command(() => ChangePage(-1));
-            GreetUserCommand = new Command(GreetUser);
-            DeleteUserCommand = new Command(async () =>
-            {
-                await DeleteUser();
-            });
+            GreetUserCommand = new Command(GreetUser);  //Calls method directly
 
             PlayPlaylistCommand = new Command<GymPlaylistDTO>(async e => await StartThisPlayList(e));
 
@@ -78,12 +74,13 @@ namespace GymSwipe.ViewModels
         }
         public async Task StartThisPlayList(GymPlaylistDTO gymPlaylist)
         {
-            Console.WriteLine(gymPlaylist);
-            await Shell.Current.GoToAsync(nameof(Pages.ActiveWorkoutPage), new Dictionary<string, object>
+            await Shell.Current.GoToAsync(nameof(Pages.ActiveWorkoutPage), new Dictionary<string, object> //Navigation to the page with the dictionary
             {
-                ["PlayListId"] = gymPlaylist.Id
+                ["PlayListId"] = gymPlaylist.Id //pass the playlist id to the key
             });
         }
+
+
         public async Task InitalizeAsync()
         {
             CurrentUser = _loggedInUser.CurrentUser;
@@ -95,7 +92,6 @@ namespace GymSwipe.ViewModels
         {
             if (CurrentUser == null)
             {
-                await Task.Yield();
                 await Shell.Current.Navigation.PopToRootAsync();
                 return;
             }
@@ -105,18 +101,29 @@ namespace GymSwipe.ViewModels
             ShowCurrentPage();
         }
 
-        private void ChangePage(int direction)
+        private void ChangePage(int pDirection) // direction for pages whith min max values
         {
-            int lastPage = Math.Max(0, (_allPlaylists.Count - 1) / PageSize);
-            _currentPage = Math.Clamp(_currentPage + direction, 0, lastPage);
+            _currentPage += pDirection;
+
+            if (_currentPage < 0)
+                _currentPage = 0;
+
+            if (_currentPage * PageSize >= _allPlaylists.Count)
+                _currentPage = Math.Max(0, (_allPlaylists.Count - 1) / PageSize);
+
             ShowCurrentPage();
         }
 
         private void ShowCurrentPage()
         {
             CurrentThreePlaylists.Clear();
-            foreach (var list in _allPlaylists.Skip(_currentPage * PageSize).Take(PageSize))
-                CurrentThreePlaylists.Add(list);
+
+            var playlistsToShow = _allPlaylists.Skip(_currentPage * PageSize).Take(PageSize); //Skip when multiple pages deep, take the next 3
+
+            foreach (var playlist in playlistsToShow) //observble cant add range
+            {
+                CurrentThreePlaylists.Add(playlist);
+            }
         }
 
         public void OnPropertyChanged(string propertyName)
@@ -126,13 +133,25 @@ namespace GymSwipe.ViewModels
         public void GreetUser()
         {
             ButtonText = " = )";
-            GreetingUser = $"You are looking swole today {_loggedInUser.CurrentUser.Firstname} {_loggedInUser.CurrentUser.Id}!";
+            GreetingUser = $"You are looking swole today! {_loggedInUser.CurrentUser.Firstname} {_loggedInUser.CurrentUser.Id}!";
         }
-        public async Task DeleteUser()
-        {
-            //finns ej id'n i objekt
-            using var response = await _httpClient.DeleteAsync("api/User/" + _loggedInUser.CurrentUser.Id);
-            response.EnsureSuccessStatusCode();
-        }
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
