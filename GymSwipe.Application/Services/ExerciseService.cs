@@ -8,16 +8,18 @@ namespace GymSwipe.ApplicationLayer.Services
     public class ExerciseService : IExerciseService
     {
         private readonly IExerciseRepository _repo;
-        private readonly ITraningAreaRepo _traningAreaRepo;
-        public ExerciseService(IExerciseRepository exerciseRepository, ITraningAreaRepo traningAreaRepo)
+        private readonly IMapDTOService _mapDTOService;
+        private readonly IMapDomainService _mapDomainService;
+        public ExerciseService(IExerciseRepository exerciseRepository, IMapDTOService mapDTo, IMapDomainService mapDomain)
         {
             _repo = exerciseRepository;
-            _traningAreaRepo = traningAreaRepo;
+            _mapDomainService = mapDomain;
+            _mapDTOService=mapDTo;
         }
         public async Task<List<ExerciseDTO>> GetAllExercisesAsync()
         {
             var exercises = await _repo.GetAllExercisesAsync();
-            List<ExerciseDTO> dtos = (await Task.WhenAll(exercises.Select(ConvertToDTO))).ToList();
+            var dtos = (await Task.WhenAll(exercises.Select(_mapDTOService.MapExerciseDTO))).ToList();
             return dtos;
         }
 
@@ -29,35 +31,21 @@ namespace GymSwipe.ApplicationLayer.Services
 
         public async Task<List<ExerciseDTO>> GetExerciseByIdAsync(int id)
         {
-            var chests = await _repo.GetExercisesByCategoryAsync(id);
-            List<ExerciseDTO> dtos = chests.Select(e =>
-
-              new ExerciseDTO
-              {
-                  Id = e.Id,
-                  VideoSourceLink = e.VideoSourceLink,
-                  Name = e.Name,
-                  TargetAreaNames = e.TargetAreas.
-                  Select(e => e.ExerciseCategoryName).
-                  ToList(),
-              }).ToList();
-
+            var categoryExercises = await _repo.GetExercisesByCategoryAsync(id);
+            var dtos = (await Task.WhenAll(categoryExercises.Select(_mapDTOService.MapExerciseDTO))).ToList();
+        
             return dtos;
         }
-
-
-
-
-
 
         public async Task<ExerciseDTO> GetExerciseByName(string name)
         {
             var ex = await _repo.GetExerciseByName(name);
             if (ex == null)
             {
-                return null;
+                throw new Exception("No exercise found by that name");
             }
-            return await ConvertToDTO(ex);
+            var dto = await _mapDTOService.MapExerciseDTO(ex);
+            return dto;
         }
 
         public async Task<List<ExerciseDTO>?> GetRandomExercisesAsync()
@@ -67,19 +55,7 @@ namespace GymSwipe.ApplicationLayer.Services
             var randoms = arr.Shuffle().Take(3).ToList();
             return randoms;
         }
-        public async Task<ExerciseDTO> ConvertToDTO(Exercise exercise)
-        {
-            return new ExerciseDTO
-            {
-                Id = exercise.Id,
-                VideoSourceLink = exercise.VideoSourceLink,
-                Name = exercise.Name,
-
-                TargetAreaNames = exercise.TargetAreas.
-                 Select(e => e.ExerciseCategoryName).
-                 ToList(),
-            };
-        }
+      
 
         public async Task<bool> SaveExercise(ExerciseDTO newExercise)
         {
@@ -89,14 +65,7 @@ namespace GymSwipe.ApplicationLayer.Services
             {
                 return false;
             }
-
-            var targetAreas = (await Task.WhenAll(newExercise.TargetAreaNames.Select(_traningAreaRepo.GetExerciseTargetAreaByName))).ToList();
-            var domain = new Exercise
-            {
-                Name = newExercise.Name,
-                VideoSourceLink = newExercise.VideoSourceLink,
-                TargetAreas = targetAreas,
-            };
+            var domain = await _mapDomainService.MapExerciseDomain(newExercise);
             return await _repo.AddExercise(domain);
         }
     }

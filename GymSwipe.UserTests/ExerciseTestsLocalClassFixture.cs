@@ -43,7 +43,7 @@ namespace GymSwipe.UserTests
 
             Assert.NotEmpty(chests);
             //Check if every exercies has any targetarea name that contains chest
-            Assert.All(chests, c =>Assert.Contains(c.TargetAreaNames, n=>n.Contains(expected, StringComparison.OrdinalIgnoreCase)));
+            Assert.All(chests, c =>Assert.Contains(c.TargetAreaNames, n=>n.Name.Contains(expected, StringComparison.OrdinalIgnoreCase)));
         }
 
         [Fact]
@@ -90,8 +90,13 @@ namespace GymSwipe.UserTests
             {
                 Name = "Push up",
                 VideoSourceLink = "https://www.youtube.com/",
-                TargetAreaNames = new List<string>{
-                    "Chest" }
+                TargetAreaNames = new List<TargetAreaDTO>
+                {
+                    new TargetAreaDTO
+                    {
+                        Name="Chest"
+                    }
+                }
             };
             bool expected = false;
 
@@ -116,7 +121,6 @@ namespace GymSwipe.UserTests
         [InlineData("Push up", true)]
         [InlineData("PUSH UP", true)]
         [InlineData("pUsH up", true)]
-        [InlineData("backflip to frontflip",  false)]
         public async Task GetNameOfExercises_HandlesStringCase_TriesToFindExercise_NonExistingExercise_ReturnsNull(string name,  bool shouldExist)
         {
             var result = await _sut.GetExerciseByName(name);
@@ -131,7 +135,18 @@ namespace GymSwipe.UserTests
                 Assert.Null(result);
             }
         }
-       
+        [Theory]
+        [InlineData("backflip")]
+       public async Task GetExerciseByName_NonExistingExercise_ThrowsException(string invalid)
+        {
+            //Expected result is an execption
+            var ex = await Assert.ThrowsAsync<Exception>( () => _sut.GetExerciseByName(invalid));
+
+            Assert.Equal("No exercise found by that name", ex.Message);
+        }
+
+
+
 
     }
 }

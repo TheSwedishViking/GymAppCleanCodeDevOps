@@ -43,21 +43,25 @@ namespace GymSwipe.API
             builder.Services.AddScoped<IDatabaseInitalizer, DatabaseInitalizer>();
 
             builder.Services.AddHttpClient();
+            //*******SERVICES*******
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IDateHandler, DateHandler>();
+            builder.Services.AddScoped<ITraningAreaService, TrainingAreaService>();
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
             builder.Services.AddScoped<IGymPlaylistService, GymPlaylistService>();
+            builder.Services.AddScoped<IDateHandler, DateHandler>();
+            builder.Services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
+            builder.Services.AddScoped<ICalorieCountingService, CalorieCountingService>();
+
+            //********MAPPING SERVICES************
+            builder.Services.AddScoped<IMapDomainService, MapDomainService>();
+            builder.Services.AddScoped<IMapDTOService, MapDTOService>();
 
             //*******REPOSITORIES*******
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepo>();
             builder.Services.AddScoped<ITraningAreaRepo, TrainingAreaRepo>();
             builder.Services.AddScoped<IGymPlaylistRepository, GymPlaylistRepo>();
-
-
-
-
-
+            builder.Services.AddScoped<IExerciseRecordsRepository, ExerciseRecordsRepository>();
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

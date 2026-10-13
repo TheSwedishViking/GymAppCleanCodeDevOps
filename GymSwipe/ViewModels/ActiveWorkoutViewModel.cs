@@ -88,7 +88,7 @@ namespace GymSwipe.ViewModels
         public async Task StartPlaylist()
         {
             CurrentExercise = await _workoutFacade.StartWorkout();
-            Console.WriteLine(CurrentExercise);
+            CardImageSource = await _workoutFacade.GetApproptiateImageForExercise(CurrentExercise.ExerciseId);
         }
         public async Task NextExercise()
         {
@@ -111,6 +111,7 @@ namespace GymSwipe.ViewModels
         public async Task PreviousExercise()
         {
             CurrentExercise = await _workoutFacade.GetPreviousExercise(CurrentExercise);
+            CardImageSource = await _workoutFacade.GetApproptiateImageForExercise(CurrentExercise.ExerciseId);
         }
 
         public void OnPropertyChanged(string propertyName)
