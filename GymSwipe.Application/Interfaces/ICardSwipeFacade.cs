@@ -12,7 +12,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task<ExerciseDTO> DiscardCard();
         Task<string> DeckInfo();
         Task LoadExercisesById(int? exerciseTypeId);
-        Task<List<ExerciseDTO>> GetLoadedExercises();
         Task<GymUser> GetCurrentUser();
         Task SavePlayList(GymUser curentUser);
         Task<string> GetApproptiateImageForExercise(int id);

@@ -29,8 +29,9 @@ namespace GymSwipe.ApplicationLayer.Services
 
         public async Task<List<ExerciseDTO>> GetExerciseByIdAsync(int id)
         {
-            var chests = await _repo.GetExercisesByCategoryAsync(id);
-            List<ExerciseDTO> dtos = chests.Select(e =>
+            var categoryExercises = await _repo.GetExercisesByCategoryAsync(id);
+
+            List<ExerciseDTO> dtos = categoryExercises.Select(e =>
 
               new ExerciseDTO
               {
