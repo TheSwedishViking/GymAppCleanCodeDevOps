@@ -90,15 +90,16 @@ namespace GymSwipe.ViewModels
         public async Task NextExercise()
         {
             CurrentExercise = await _workoutFacade.GetNextExercise(CurrentExercise);
-            CardImageSource = await _workoutFacade.GetApproptiateImageForExercise(CurrentExercise.ExerciseId);
-
             //When done
             if (CurrentExercise == null)
             {
                 await _workoutFacade.CompleteWorkout();
                 await Task.Yield();
                 await Shell.Current.GoToAsync(nameof(ExerciseEvaulationPage), new Dictionary<string, object> { ["PlaylistId"] = GymPlaylist.Id });
+                return;
             }
+            CardImageSource = await _workoutFacade.GetApproptiateImageForExercise(CurrentExercise.ExerciseId);
+
         }
         public async Task PausePlaylist()
         {
