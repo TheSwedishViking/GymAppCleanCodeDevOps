@@ -12,7 +12,7 @@ namespace GymSwipe.UserTests
 {
     public class UserCreationTests : IClassFixture<UserApiFixture>
     {
-
+        //comment to push
         private readonly HttpClient _client;
         private readonly ITestOutputHelper _output;
         private readonly UserInputValidatorService _validatorService;
