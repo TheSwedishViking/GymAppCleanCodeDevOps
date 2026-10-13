@@ -2,22 +2,20 @@
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Facades
 {
     public class CardSwipeFacade : ICardSwipeFacade
     {
-        public List<string> AvailableCards { get; set; } = new List<string>();
         public List<string> AddedCards { get; set; } = new List<string>();
         public List<ExerciseDTO> AvailableExercises { get; set; } = new List<ExerciseDTO>();
         public List<ExerciseDTO> AddedExercises { get; set; } = new List<ExerciseDTO>();
+        public List<TargetAreaDTO> TargetAreas { get; set; } = new List<TargetAreaDTO>();
+
 
         private readonly IExerciseService _exerciseService;
         private readonly IGymPlaylistService _playlistService;
+        private readonly ITraningAreaService _traningAreaService;
         private readonly LoggedInUser _user;
         public CardSwipeFacade(
             IExerciseService exerciseService,
@@ -28,8 +26,8 @@ namespace GymSwipe.ApplicationLayer.Facades
         {
             _exerciseService = exerciseService;
             _playlistService = playlistExecericseService;
+            _traningAreaService = traningAreaService;
             _user = user;
-            AvailableCards = GetCards();
         }
         public async Task InitalizeAsync()
         {
@@ -39,6 +37,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         {
             if (possibleId.HasValue)
             {
+                TargetAreas = await _traningAreaService.GetExerciseTargetsAsync();
                 AvailableExercises = await _exerciseService.GetExerciseByIdAsync(possibleId.Value);
             }
             else
@@ -48,15 +47,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; }
 
-        private List<string> GetCards()
-        {
-            return new List<string>
-            {
-                "boufallant_card.png",
-                "metagross_card.jpg",
-                "sceptile_card.jpg"
-            };
-        }
+
         public async Task SavePlayList(GymUser curentUser)
         {
             if (AddedExercises != null && AddedExercises.Count > 0)
@@ -75,16 +66,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             return await DrawNewExerciseCard();
         }
 
-        public async Task<string> DrawNewCard()
-        {
-            if (HasDrawnAllCards())
-            {
-                return "";
-            }
-            var card = AvailableCards[Random.Shared.Next(AvailableCards.Count)];
-            //AvailableCards.Remove(card);
-            return card;
-        }
+
         public async Task<ExerciseDTO> DrawNewExerciseCard()
         {
             if (HasDrawnAllCards())
@@ -105,10 +87,13 @@ namespace GymSwipe.ApplicationLayer.Facades
             return $"There are {AvailableExercises.Count} cards remaning in the deck";
         }
 
-        public async Task<string> GetApproptiateImageForExercise(ExerciseDTO currentExercise)
+        public async Task<string> GetApproptiateImageForExercise(int id)
         {
+            string img = await _traningAreaService.GetTargetAreaImage(id);
 
-            return AvailableCards[Random.Shared.Next(AvailableCards.Count)];
+            return img + "_card.jpg";
+
+            //return AvailableCards[Random.Shared.Next(AvailableCards.Count)];
         }
 
         public async Task<List<ExerciseDTO>> GetLoadedExercises()

@@ -2,9 +2,6 @@
 using GymSwipe.Domain.Models;
 using GymSwipe.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GymSwipe.Infrastructure.Repos
 {
@@ -24,7 +21,7 @@ namespace GymSwipe.Infrastructure.Repos
 
         public async Task<ExerciseTargetArea> GetExerciseTargetAreaByName(string name)
         {
-            return await _db.ExercisesTargetAreas .FirstOrDefaultAsync(e => e.ExerciseCategoryName == name);
+            return await _db.ExercisesTargetAreas.FirstOrDefaultAsync(e => e.ExerciseCategoryName == name);
         }
 
         public async Task<List<ExerciseTargetArea>> GetExerciseTargetAreasAsync()
@@ -32,10 +29,28 @@ namespace GymSwipe.Infrastructure.Repos
             return await _db.ExercisesTargetAreas.ToListAsync() ?? new List<ExerciseTargetArea>();
         }
 
+        public async Task<string> GetTargetAreaImage(int exerciseId)
+        {
+
+            var imagePath = await _db.Exercises
+                            .Where(exercise => exercise.Id == exerciseId)
+                            .SelectMany(exercise => exercise.TargetAreas) // Add collection, then sort
+                            .Select(area => area.ImageOfTargetArea)
+                            .FirstOrDefaultAsync();
+
+            return string.IsNullOrEmpty(imagePath) ? "unknown" : imagePath;
+        }
+
+
+
+
+
+
+
         public async Task RemoveTargetArea(int id)
         {
-            var area = _db.ExercisesTargetAreas.FirstOrDefault(e=>e.Id == id);
-            if(area == null)
+            var area = _db.ExercisesTargetAreas.FirstOrDefault(e => e.Id == id);
+            if (area == null)
             {
                 return;
             }
@@ -45,8 +60,8 @@ namespace GymSwipe.Infrastructure.Repos
 
         public async Task UpdateTargetArea(ExerciseTargetArea area)
         {
-            var thisArea = _db.ExercisesTargetAreas.FirstOrDefault(e=>e.Id == area.Id);
-            if(thisArea == null)
+            var thisArea = _db.ExercisesTargetAreas.FirstOrDefault(e => e.Id == area.Id);
+            if (thisArea == null)
             {
                 return;
             }

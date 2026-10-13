@@ -1,9 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Services
 {
@@ -28,7 +25,7 @@ namespace GymSwipe.ApplicationLayer.Services
         public async Task<List<TargetAreaDTO>> ConvertToDTOsFromDomainAsync(List<ExerciseTargetArea> areas)
         {
 
-            var dtos = (await Task.WhenAll(areas.Select(e=>ConvertToDTO(e)))).ToList();
+            var dtos = (await Task.WhenAll(areas.Select(e => ConvertToDTO(e)))).ToList();
 
             return dtos;
         }
@@ -51,6 +48,11 @@ namespace GymSwipe.ApplicationLayer.Services
                 return null;
             }
             return await ConvertToDTO(ex);
+        }
+
+        public async Task<string> GetTargetAreaImage(int id)
+        {
+            return await _repo.GetTargetAreaImage(id);
         }
 
         private async Task<TargetAreaDTO> ConvertToDTO(ExerciseTargetArea ex)

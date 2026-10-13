@@ -1,10 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text;
 using System.Windows.Input;
 
 namespace GymSwipe.ViewModels
@@ -46,18 +43,18 @@ namespace GymSwipe.ViewModels
         //With the factor of the card width, this will set limit to register as discarded/approved
         public double CardPositionRegistrationThreshold { get; set; } = 1;
         public double CardWidth { get; } = 300;
-        public double DiscardX { get;  }
-        public double ApproveX { get;  }
+        public double DiscardX { get; }
+        public double ApproveX { get; }
         public double SwipeLimitForRegistration => CardWidth * CardPositionRegistrationThreshold;
         public double CardDividend { get; } = 100;
-        public double RotationFactor { get;  } = 5.02;
+        public double RotationFactor { get; } = 5.02;
         private ExerciseDTO _currentExercise;
         public ExerciseDTO CurrentExercise
         {
             get => _currentExercise;
             set
             {
-                if(_currentExercise == value) return;
+                if (_currentExercise == value) return;
                 _currentExercise = value;
                 OnPropertyChanged(nameof(CurrentExercise));
             }
@@ -68,7 +65,7 @@ namespace GymSwipe.ViewModels
             get => _cardImageSource;
             set
             {
-                if(_cardImageSource == value) return;
+                if (_cardImageSource == value) return;
                 _cardImageSource = value;
                 OnPropertyChanged(nameof(CardImageSource));
             }
@@ -76,7 +73,7 @@ namespace GymSwipe.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private readonly ICardSwipeFacade _cardFacade;
-        private bool _isSaving= false;
+        private bool _isSaving = false;
         public CardSwipeViewModel(ICardSwipeFacade cardSwipeFacade)
         {
             DiscardX -= SwipeLimitForRegistration;
@@ -102,21 +99,20 @@ namespace GymSwipe.ViewModels
         }
         public async Task<bool> AllCardsAreDrawn()
         {
-            return  _cardFacade.HasDrawnAllCards() && CurrentExercise==null;
+            return _cardFacade.HasDrawnAllCards() && CurrentExercise == null;
         }
 
         private async Task ShowInitalCard()
         {
-            _currentCard = await _cardFacade.DrawNewCard();
             CurrentExercise = await _cardFacade.DrawNewExerciseCard();
             await UpdateCard();
         }
-    
+
         public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-     
+
         public async Task HandleOnCompleteCardSwipe(double translationX, double width)
         {
             //From center to left => Negative values?s
@@ -154,7 +150,7 @@ namespace GymSwipe.ViewModels
         }
         private async Task ValidateAfterSwipe()
         {
-            if(CurrentExercise is null)
+            if (CurrentExercise is null)
             {
                 IsDeckFinished = true;
                 CardImageSource = null;
@@ -165,10 +161,10 @@ namespace GymSwipe.ViewModels
         }
         public async Task UpdateCard()
         {
-            CardImageSource = await _cardFacade.GetApproptiateImageForExercise(CurrentExercise);
+            CardImageSource = await _cardFacade.GetApproptiateImageForExercise(CurrentExercise.Id);
             CardDeckInfo = await _cardFacade.DeckInfo();
         }
 
-    
+
     }
 }
