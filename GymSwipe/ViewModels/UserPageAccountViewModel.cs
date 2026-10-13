@@ -16,7 +16,6 @@ namespace GymSwipe.ViewModels
         private const int PageSize = 3;
         public ObservableCollection<GymPlaylistDTO> CurrentThreePlaylists { get; } = new();
 
-
         private string _buttonText = "Todays Message!";
         public string ButtonText
         {
@@ -73,11 +72,11 @@ namespace GymSwipe.ViewModels
                 await DeleteUser();
             });
 
-            PlayPlaylistCommand = new Command<GymPlaylist>(async e => await StartThisPlayList(e));
+            PlayPlaylistCommand = new Command<GymPlaylistDTO>(async e => await StartThisPlayList(e));
 
 
         }
-        public async Task StartThisPlayList(GymPlaylist gymPlaylist)
+        public async Task StartThisPlayList(GymPlaylistDTO gymPlaylist)
         {
             Console.WriteLine(gymPlaylist);
             await Shell.Current.GoToAsync(nameof(Pages.ActiveWorkoutPage), new Dictionary<string, object>
