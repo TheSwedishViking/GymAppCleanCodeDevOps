@@ -74,11 +74,11 @@ namespace GymSwipe.ViewModels
 
         }
 
-        public async Task StartThisPlayList(GymPlaylist gymPlaylist) //current playlist
+        public async Task StartThisPlayList(GymPlaylist gymPlaylist) //current playlist clicked
         {
-            await Shell.Current.GoToAsync(nameof(Pages.ActiveWorkoutPage), new Dictionary<string, object> //Passes the playlist to the next page
+            await Shell.Current.GoToAsync(nameof(Pages.ActiveWorkoutPage), new Dictionary<string, object> //Navigation to the page with the dictionary
             {
-                ["PlayListId"] = gymPlaylist.Id //pass paramater as playlistId, other page can retrieve it using the key "PlayListId"
+                ["PlayListId"] = gymPlaylist.Id //pass the playlist id to the key
             });
         }
 
@@ -94,7 +94,6 @@ namespace GymSwipe.ViewModels
         {
             if (CurrentUser == null)
             {
-                await Task.Yield();
                 await Shell.Current.Navigation.PopToRootAsync();
                 return;
             }
@@ -104,18 +103,29 @@ namespace GymSwipe.ViewModels
             ShowCurrentPage();
         }
 
-        private void ChangePage(int direction)
+        private void ChangePage(int pDirection) // direction for pages whith min max values
         {
-            int lastPage = Math.Max(0, (_allPlaylists.Count - 1) / PageSize);
-            _currentPage = Math.Clamp(_currentPage + direction, 0, lastPage);
+            _currentPage += pDirection;
+
+            if (_currentPage < 0)
+                _currentPage = 0;
+
+            if (_currentPage * PageSize >= _allPlaylists.Count)
+                _currentPage = Math.Max(0, (_allPlaylists.Count - 1) / PageSize);
+
             ShowCurrentPage();
         }
 
         private void ShowCurrentPage()
         {
             CurrentThreePlaylists.Clear();
-            foreach (var list in _allPlaylists.Skip(_currentPage * PageSize).Take(PageSize))
-                CurrentThreePlaylists.Add(list);
+
+            var playlistsToShow = _allPlaylists.Skip(_currentPage * PageSize).Take(PageSize); //Skip when multiple pages deep, take the next 3
+
+            foreach (var playlist in playlistsToShow) //observble cant add range
+            {
+                CurrentThreePlaylists.Add(playlist);
+            }
         }
 
         public void OnPropertyChanged(string propertyName)
@@ -130,6 +140,9 @@ namespace GymSwipe.ViewModels
 
     }
 }
+
+
+
 
 
 

@@ -15,16 +15,13 @@ namespace GymSwipe.ViewModels
 
         private readonly IWorkoutFacade _workoutFacade;
         private readonly LoggedInUser _loggedInUser;
-        private int? _playListId;
+        private int? _playListId; //The playlist ID passed from the previous page, if any
 
-
-
-        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        //Recived data from other page
+        public void ApplyQueryAttributes(IDictionary<string, object> sentPlayListQuery)
         {
-            _playListId = query.TryGetValue("PlayListId", out var value) && value is int id ? id : null;
+            _playListId = sentPlayListQuery.TryGetValue("PlayListId", out var value) && value is int id ? id : null; //id passed over
         }
-
-
 
         private GymPlaylistDTO _playList;
         public GymPlaylistDTO GymPlaylist
