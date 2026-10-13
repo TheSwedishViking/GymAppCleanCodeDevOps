@@ -92,7 +92,7 @@ namespace GymSwipe.ViewModels
             if (_isSaving == false)
             {
                 _isSaving = true;
-                await _cardFacade.SavePlayList(await _cardFacade.GetCurrentUser());
+                await _cardFacade.SavePlayList();
                 await Task.Delay(3000);
                 await Shell.Current.GoToAsync(nameof(Pages.UserPage));
             }

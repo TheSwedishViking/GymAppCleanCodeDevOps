@@ -32,7 +32,7 @@ namespace GymSwipe.UserTests
             var dtos = await response.Content.ReadFromJsonAsync<List<ExerciseDTO>>();
 
             Assert.NotEmpty(dtos);
-            Assert.All(dtos, c => Assert.Contains(c.TargetAreaNames, n => n.Contains(expected, StringComparison.OrdinalIgnoreCase)));
+            Assert.All(dtos, c => Assert.Contains(c.TargetAreaNames, n => n.Name.Contains(expected, StringComparison.OrdinalIgnoreCase)));
         }
     }
 }

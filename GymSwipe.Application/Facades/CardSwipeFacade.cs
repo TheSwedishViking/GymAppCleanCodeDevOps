@@ -48,7 +48,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             TargetAreas = await _traningAreaService.GetExerciseTargetsAsync();
         }
         //Saves a playlist to user, needs user to set name of playlist => Firstname + playlist + date
-        public async Task SavePlayList(GymUser curentUser)
+        public async Task SavePlayList()
         {
             //If there's anything relevant to save
             if (AddedExercises != null && AddedExercises.Count > 0)
@@ -80,6 +80,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             return exercise;
         }
 
+        //Print info on the page
         public async Task<string> DeckInfo()
         {
             if (HasDrawnAllCards())
@@ -89,15 +90,13 @@ namespace GymSwipe.ApplicationLayer.Facades
             return $"There are {AvailableExercises.Count} cards remaning in the deck";
         }
 
+        //Looks for a valid image based on a muscle area of an exercise
         public async Task<string> GetApproptiateImageForExercise(int id)
         {
             string img = await _traningAreaService.GetTargetAreaImage(id);
 
             return img + "_card.jpg";
         }
-        public async Task<GymUser> GetCurrentUser()
-        {
-            return _user.CurrentUser;
-        }
+
     }
 }

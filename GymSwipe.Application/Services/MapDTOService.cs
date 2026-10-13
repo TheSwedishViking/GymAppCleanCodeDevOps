@@ -18,7 +18,7 @@ namespace GymSwipe.ApplicationLayer.Services
                 VideoSourceLink = exercise.VideoSourceLink,
                 Name = exercise.Name,
                 //Look over if we need string or TargetAreaDTO in the future
-                TargetAreaNames = targetAreas.Select(e=>e.Name).ToList(),
+                TargetAreaNames = targetAreas
             };
         }
 
