@@ -106,15 +106,11 @@ namespace GymSwipe.ViewModels
 
             using var response = await _httpClient.PostAsJsonAsync("api/User", request);
             response.EnsureSuccessStatusCode();
-            var user = await response.Content.ReadFromJsonAsync<GymUserDTO>();
-            Console.WriteLine(user);
-
-
+            var user = await response.Content.ReadFromJsonAsync<GymUserDTO>(); //Set singleton id
             CurrentUser.Id = user.Id;
-
             _loggedIn.CurrentUser = CurrentUser;
-            Console.WriteLine(CurrentUser);
             _loggedIn.CurrentUser.SetFriendCode();
+
             await Shell.Current.GoToAsync("..");
         }
 

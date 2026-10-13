@@ -109,7 +109,7 @@ namespace GymSwipe.ApplicationLayer.Services
        
         public async Task<PlaylistExerciseDTO> GetFirstExercise(List<PlaylistExerciseDTO> excercise)
         {
-            return  excercise.OrderBy(e=>e.PlaylistOrder).FirstOrDefault();
+            return excercise.OrderBy(e => e.PlaylistOrder).FirstOrDefault();
         }
 
         //Use the already found domain as base to update
@@ -126,7 +126,7 @@ namespace GymSwipe.ApplicationLayer.Services
         }
         public async Task<TimeSpan> SetTime(Stopwatch stopwatch)
         {
-            return  TimeSpan.FromMinutes(stopwatch.Elapsed.TotalMinutes);
+            return TimeSpan.FromMinutes(stopwatch.Elapsed.TotalMinutes);
         }
         public Task<DateTime> SetDate()
         {

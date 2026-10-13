@@ -42,9 +42,9 @@ namespace GymSwipe.ApplicationLayer.Services
             return await _repo.GetCreatedUserByEmail(email);
         }
 
-        public async Task<bool> GetUserByEmail(string email)
+        public async Task<bool> UserEmailIsTaken(string email)
         {
-            return await _repo.GetUserByEmail(email);
+            return await _repo.UserEmailIsTaken(email);
         }
 
 

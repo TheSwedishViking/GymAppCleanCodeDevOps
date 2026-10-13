@@ -52,9 +52,9 @@ namespace GymSwipe.API.Controllers
         }
 
         [HttpGet("Unique-Email/{email}")]
-        public async Task<IActionResult> GetUserByEmail(string email)
+        public async Task<IActionResult> UserEmailIsTaken(string email)
         {
-            bool avaliableEmail = await _userService.GetUserByEmail(email);
+            bool avaliableEmail = await _userService.UserEmailIsTaken(email);
             return Ok(avaliableEmail);
         }
     }
