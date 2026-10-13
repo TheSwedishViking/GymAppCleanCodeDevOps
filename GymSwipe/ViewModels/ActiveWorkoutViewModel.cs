@@ -16,10 +16,16 @@ namespace GymSwipe.ViewModels
         private readonly IWorkoutFacade _workoutFacade;
         private readonly LoggedInUser _loggedInUser;
         private int? _playListId;
+
+
+
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             _playListId = query.TryGetValue("PlayListId", out var value) && value is int id ? id : null;
         }
+
+
+
         private GymPlaylistDTO _playList;
         public GymPlaylistDTO GymPlaylist
         {

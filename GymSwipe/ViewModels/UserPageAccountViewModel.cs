@@ -14,7 +14,7 @@ namespace GymSwipe.ViewModels
         private List<GymPlaylistDTO> _allPlaylists = new();
         private int _currentPage = 0;
         private const int PageSize = 3;
-        public ObservableCollection<GymPlaylistDTO> CurrentThreePlaylists { get; } = new();
+        public ObservableCollection<GymPlaylistDTO> CurrentThreePlaylists { get; } = new(); // Ui responsive
 
 
         private string _buttonText = "Todays Message!";
@@ -65,26 +65,24 @@ namespace GymSwipe.ViewModels
             _httpClient = httpClient;
 
             _gymPlaylistService = gymPlaylistService;
-            NextPageCommand = new Command(() => ChangePage(1));
+            NextPageCommand = new Command(() => ChangePage(1)); //Calls method with argument
             PreviousPageCommand = new Command(() => ChangePage(-1));
-            GreetUserCommand = new Command(GreetUser);
-            DeleteUserCommand = new Command(async () =>
-            {
-                await DeleteUser();
-            });
+            GreetUserCommand = new Command(GreetUser);  //Calls method directly
 
-            PlayPlaylistCommand = new Command<GymPlaylist>(async e => await StartThisPlayList(e));
+            PlayPlaylistCommand = new Command<GymPlaylist>(async p => await StartThisPlayList(p)); //Bound from playlist in UI
 
 
         }
-        public async Task StartThisPlayList(GymPlaylist gymPlaylist)
+
+        public async Task StartThisPlayList(GymPlaylist gymPlaylist) //current playlist
         {
-            Console.WriteLine(gymPlaylist);
-            await Shell.Current.GoToAsync(nameof(Pages.ActiveWorkoutPage), new Dictionary<string, object>
+            await Shell.Current.GoToAsync(nameof(Pages.ActiveWorkoutPage), new Dictionary<string, object> //Passes the playlist to the next page
             {
-                ["PlayListId"] = gymPlaylist.Id
+                ["PlayListId"] = gymPlaylist.Id //pass paramater as playlistId, other page can retrieve it using the key "PlayListId"
             });
         }
+
+
         public async Task InitalizeAsync()
         {
             CurrentUser = _loggedInUser.CurrentUser;
@@ -127,12 +125,22 @@ namespace GymSwipe.ViewModels
         public void GreetUser()
         {
             ButtonText = " = )";
-            GreetingUser = $"You are looking swole today {_loggedInUser.CurrentUser.Firstname} {_loggedInUser.CurrentUser.Id}!";
+            GreetingUser = $"You are looking swole today! {_loggedInUser.CurrentUser.Firstname} {_loggedInUser.CurrentUser.Id}!";
         }
-        public async Task DeleteUser()
-        {
-            using var response = await _httpClient.DeleteAsync("api/User/" + _loggedInUser.CurrentUser.Id);
-            response.EnsureSuccessStatusCode();
-        }
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
