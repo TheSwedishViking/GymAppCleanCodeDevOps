@@ -7,11 +7,9 @@ namespace GymSwipe.ApplicationLayer.Facades
 {
     public class CardSwipeFacade : ICardSwipeFacade
     {
-        public List<string> AddedCards { get; set; } = new List<string>();
         public List<ExerciseDTO> AvailableExercises { get; set; } = new List<ExerciseDTO>();
         public List<ExerciseDTO> AddedExercises { get; set; } = new List<ExerciseDTO>();
         public List<TargetAreaDTO> TargetAreas { get; set; } = new List<TargetAreaDTO>();
-
 
         private readonly IExerciseService _exerciseService;
         private readonly IGymPlaylistService _playlistService;
@@ -29,7 +27,10 @@ namespace GymSwipe.ApplicationLayer.Facades
             _traningAreaService = traningAreaService;
             _user = user;
         }
-        public async Task InitalizeAsync()
+
+        //We can pass a Id to load for example chest exercises
+        //Not implemented, UI related, TODO!
+        public async Task LoadExercisesAsync()
         {
             await LoadExercisesById(null);
         }

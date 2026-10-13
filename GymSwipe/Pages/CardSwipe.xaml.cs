@@ -13,19 +13,20 @@ public partial class CardSwipe : ContentPage
 	{
 		InitializeComponent();
 		BindingContext = _vm = vm;
+		//Inital base value for a card on the page
 		Card.BackgroundColor = Colors.Black;
         _startX = Card.TranslationX; 
 		_startY = Card.TranslationY;
     }
     protected async override void OnAppearing()
 	{
+		//Retrives exercises async
 		base.OnAppearing();
         await _vm.InitalizeAsync();
-
     }
 	public async void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
 	{
-
+		//If there's cards left
 		if (!_vm.IsDeckFinished)
 		{
 			switch (e.StatusType)
@@ -37,10 +38,12 @@ public partial class CardSwipe : ContentPage
 					break;
 				//While moving
 				case GestureStatus.Running:
-					//UI
+					//UI rotation and movement
 					Card.TranslationX = _startX + e.TotalX;
 					Card.TranslationY = _startY + e.TotalY;
 					Card.Rotation = (e.TotalX / _vm.CardDividend) * _vm.RotationFactor;
+
+					//Basic red for discard, green for approve
 					if (Card.TranslationX <= _vm.DiscardX)
 					{
 						Card.BackgroundColor = Colors.Red;
@@ -55,7 +58,7 @@ public partial class CardSwipe : ContentPage
 					}
 					break;
 				case GestureStatus.Completed:
-
+					//Pass result to the viewmodel, passes along to facade
 					await _vm.HandleOnCompleteCardSwipe(Card.TranslationX, Card.Width);
 					ResetCard();
 					break;

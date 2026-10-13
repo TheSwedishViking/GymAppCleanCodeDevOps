@@ -7,7 +7,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     {
         bool HasDrawnAllCards();
         Task<ExerciseDTO> DrawNewExerciseCard();
-        Task InitalizeAsync();
+        Task LoadExercisesAsync();
         Task<ExerciseDTO> ApproveCard(ExerciseDTO card);
         Task<ExerciseDTO> DiscardCard();
         Task<string> DeckInfo();
