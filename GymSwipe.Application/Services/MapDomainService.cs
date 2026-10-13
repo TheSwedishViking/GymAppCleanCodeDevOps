@@ -9,23 +9,15 @@ namespace GymSwipe.ApplicationLayer.Services
 {
     public class MapDomainService : IMapDomainService
     {
-        private IExerciseRecordsRepository _exerciseRecordsRepository;
-        private ITraningAreaRepo _traningAreaRepo;
-        private IUserRepository _userRepository;
         private IExerciseRepository _exerciseRepository;
         private IGymPlaylistRepository _gymPlaylistRepository;
         public MapDomainService(
             IExerciseRepository exerciseRepository, 
-            ITraningAreaRepo traningAreaRepo, 
-            IUserRepository userRepository, 
-            IGymPlaylistRepository gymPlaylistRepository,
-            IExerciseRecordsRepository exerciseRecordsRepository)
+            IGymPlaylistRepository gymPlaylistRepository
+            )
         {
-            _exerciseRecordsRepository = exerciseRecordsRepository;
             _exerciseRepository = exerciseRepository;
             _gymPlaylistRepository = gymPlaylistRepository;
-            _traningAreaRepo = traningAreaRepo;
-            _userRepository = userRepository;
 
         }
         public async Task<Exercise> MapExerciseDomain(ExerciseDTO exercise)
@@ -96,6 +88,14 @@ namespace GymSwipe.ApplicationLayer.Services
                 PlaylistId = playlist.Id,
                 Playlist = playlist,
                 PlaylistOrder = playlistExercise.PlaylistOrder,
+            };
+        }
+
+        public async Task<PlaylistExercise> MapPlaylistExerciseFromExercise(Exercise exercise)
+        {
+            return new PlaylistExercise
+            {
+                ExerciseId = exercise.Id,
             };
         }
 

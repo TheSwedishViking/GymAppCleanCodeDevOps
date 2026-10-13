@@ -10,7 +10,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task<List<GymPlaylist>> GetPlaylistsByUserId(int userId);
         Task<List<GymPlaylistDTO>> GetPlaylistDTOsByUserId(int userId);
         Task SavePlaylistToUser(List<ExerciseDTO> addedExercises, GymUser currentUser);
-        Task SavePlayListToUser(List<ExerciseDTO> addedExercises, GymUser currentUser);
         Task<GymPlaylistDTO> GetTodaysPlaylist(int userId);
         Task<PlaylistExerciseDTO> GetNextExercise(PlaylistExerciseDTO current, List<PlaylistExerciseDTO> excercise);
         Task<PlaylistExerciseDTO> GetPreviousExercise(PlaylistExerciseDTO current, List<PlaylistExerciseDTO> excercise);
