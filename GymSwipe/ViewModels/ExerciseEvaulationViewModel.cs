@@ -17,8 +17,8 @@ namespace GymSwipe.ViewModels
     {
         private int? _playListId;
 
-        private PlaylistExercise _currentExerciseToRecord;
-        public PlaylistExercise CurrentExercise
+        private PlaylistExerciseDTO _currentExerciseToRecord;
+        public PlaylistExerciseDTO CurrentExercise
         {
             get => _currentExerciseToRecord;
             set
@@ -42,7 +42,7 @@ namespace GymSwipe.ViewModels
             
             }
         }
-        public ObservableCollection<PlaylistExercise> Excercises { get; set; } = new ObservableCollection<PlaylistExercise>();
+        public ObservableCollection<PlaylistExerciseDTO> Excercises { get; set; } = new ObservableCollection<PlaylistExerciseDTO>();
 
         public ICommand NextExerciseToEvaluateCommand { get; }
         public ICommand PreviousExerciseCommand { get; }
@@ -52,7 +52,6 @@ namespace GymSwipe.ViewModels
             _exerciseRecordsFacade = exerciseRecordsFacade;
             NextExerciseToEvaluateCommand = new Command<ExerciseRecordDTO>(async e => await RegisterRecord(e));
             PreviousExerciseCommand = new Command(async e => await PreviousRecord());
-
             CurrentRecord = new ExerciseRecordDTO();
         }
         public async Task RegisterRecord(ExerciseRecordDTO record)
@@ -63,7 +62,7 @@ namespace GymSwipe.ViewModels
         }
         public async Task PreviousRecord()
         {
-
+            //Needed? Maybe?
         }
         public async Task InitalizeAsync()
         {
@@ -80,7 +79,7 @@ namespace GymSwipe.ViewModels
         public async Task LoadExercises()
         {
             Excercises.Clear();
-            Excercises = new ObservableCollection<PlaylistExercise>(await _exerciseRecordsFacade.GetPlaylistExercises());
+            Excercises = new ObservableCollection<PlaylistExerciseDTO>(await _exerciseRecordsFacade.GetPlaylistExercises());
             CurrentExercise = await _exerciseRecordsFacade.GetFirstExercise(Excercises);
             //CurrentExercise = await _exerciseRecordsFacade.GetNextExercise(CurrentExercise);
             if(CurrentExercise == null)
@@ -88,7 +87,7 @@ namespace GymSwipe.ViewModels
                 Console.WriteLine("Done!");
             }
         }
-        public async Task NextExercise(PlaylistExercise ex)
+        public async Task NextExercise(PlaylistExerciseDTO ex)
         {
              //await _exerciseRecordsFacade.AddRecord(CurrentRecord);
             CurrentExercise = await _exerciseRecordsFacade.GetNextExercise(ex);
@@ -100,7 +99,7 @@ namespace GymSwipe.ViewModels
                 return;
             }
         }
-        public async Task PreviousExercise(PlaylistExercise ex)
+        public async Task PreviousExercise(PlaylistExerciseDTO ex)
         {
             //await _exerciseRecordsFacade.AddRecord(CurrentRecord);
             await ResetRecordBinding();

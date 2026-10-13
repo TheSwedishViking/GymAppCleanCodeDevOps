@@ -10,13 +10,12 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task<List<GymPlaylist>> GetPlaylistsByUserId(int userId);
         Task<List<GymPlaylistDTO>> GetPlaylistDTOsByUserId(int userId);
         Task SavePlaylistToUser(List<ExerciseDTO> addedExercises, GymUser currentUser);
-
         Task SavePlayListToUser(List<ExerciseDTO> addedExercises, GymUser currentUser);
-        Task<GymPlaylist> GetTodaysPlaylist(int userId);
-        Task<PlaylistExercise> GetNextExercise(PlaylistExercise current, ICollection<PlaylistExercise> excercise);
-        Task<PlaylistExercise> GetPreviousExercise(PlaylistExercise current, ICollection<PlaylistExercise> excercise);
-        Task<PlaylistExercise> GetFirstExercise(ICollection<PlaylistExercise> excercise);
-        Task UpdatePlaylistInfo(GymPlaylist playlistService);
+        Task<GymPlaylistDTO> GetTodaysPlaylist(int userId);
+        Task<PlaylistExerciseDTO> GetNextExercise(PlaylistExerciseDTO current, List<PlaylistExerciseDTO> excercise);
+        Task<PlaylistExerciseDTO> GetPreviousExercise(PlaylistExerciseDTO current, List<PlaylistExerciseDTO> excercise);
+        Task<PlaylistExerciseDTO> GetFirstExercise(List<PlaylistExerciseDTO> excercise);
+        Task UpdatePlaylistInfo(GymPlaylistDTO playlistService);
         Task<TimeSpan> SetTime(Stopwatch stopwatch);
         Task<DateTime> SetDate();
         Task<int> IncrimentTimesPlayed(int timesPlayed);

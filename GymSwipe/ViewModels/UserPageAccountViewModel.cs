@@ -4,17 +4,17 @@ using System.ComponentModel;
 using System.Windows.Input;
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
+using GymSwipe.ApplicationLayer.DTOs;
 
 
 namespace GymSwipe.ViewModels
 {
     public class UserPageAccountViewModel : INotifyPropertyChanged
     {
-
-        private List<GymPlaylist> _allPlaylists = new();
+        private List<GymPlaylistDTO> _allPlaylists = new();
         private int _currentPage = 0;
         private const int PageSize = 3;
-        public ObservableCollection<GymPlaylist> CurrentThreePlaylists { get; } = new();
+        public ObservableCollection<GymPlaylistDTO> CurrentThreePlaylists { get; } = new();
 
 
         private string _buttonText = "Todays Message!";
@@ -43,13 +43,19 @@ namespace GymSwipe.ViewModels
         public ICommand GreetUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
         public ICommand PlayPlaylistCommand {  get; }
-
-
-
         public event PropertyChangedEventHandler? PropertyChanged;
 
-    
-        public GymUser CurrentUser { get; private set; }
+        private GymUser _currentUser;
+        public GymUser CurrentUser
+        {
+            get => _currentUser;
+            set
+            {
+                if (_currentUser == value) return;
+                _currentUser = value;
+                OnPropertyChanged(nameof(CurrentUser));
+            }
+        }
         private readonly LoggedInUser _loggedInUser;
         private readonly HttpClient _httpClient;
         private readonly IGymPlaylistService _gymPlaylistService;
@@ -94,7 +100,7 @@ namespace GymSwipe.ViewModels
                 await Shell.Current.Navigation.PopToRootAsync();
                 return;
             }
-            var playlists = await _gymPlaylistService.GetPlaylistsByUserId(CurrentUser.Id);
+            var playlists = await _gymPlaylistService.GetPlaylistDTOsByUserId(CurrentUser.Id);
             _allPlaylists = playlists;
             _currentPage = 0;
             ShowCurrentPage();

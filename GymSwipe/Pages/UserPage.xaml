@@ -118,25 +118,23 @@
 
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
-
                                         <Grid
                                             ColumnDefinitions="Auto,Auto,2*,Auto"
                                             ColumnSpacing="10"
                                             Padding="10,0"
                                             BackgroundColor="Grey"> 
-
                                                 <Label
                                                     Grid.Column="0"
                                                 Text="{Binding PlaylistOrder}"/>
 
                                                 <Label
                                                     Grid.Column="1"
-                                                    Text="{Binding Exercise.Name}"
+                                                    Text="{Binding Name}"
                                                 FontAttributes="Bold"/>
 
                                             <FlexLayout
                                                         Grid.Column="2"
-                                                        BindableLayout.ItemsSource="{Binding Exercise.TargetAreas}" Wrap="Wrap">                
+                                                        BindableLayout.ItemsSource="{Binding TargetAreas}" Wrap="Wrap">                
                                                 <BindableLayout.ItemTemplate>
                                                         <DataTemplate>
                                                             <Label Text="{Binding Name}" Margin="0,0,4,0"/>
