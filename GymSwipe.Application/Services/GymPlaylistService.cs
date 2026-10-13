@@ -113,15 +113,16 @@ namespace GymSwipe.ApplicationLayer.Services
         }
 
         //Use the already found domain as base to update
-        public async Task UpdatePlaylistInfo(GymPlaylistDTO playlist)
+        public async Task UpdatePlaylistInfo(GymPlaylistDTO dto)
         {
-            var existsAlready = await _playlistRepo.GetPlaylist(playlist.Id);
-            if(existsAlready == null)
-            {
-               //New info? Add? Think over
-            }
-            var domain = await _mapDomainService.MapPlaylistDomain(playlist);
-            await _playlistRepo.UpdatePlaylist(domain);
+            var playlist = await _playlistRepo.GetPlaylist(dto.Id) ?? throw new InvalidOperationException("Can't find stored playlist");
+        
+            playlist.TimesPlayed = dto.TimesPlayed;
+            playlist.CaloriesBurnedFromLatestWorkout = dto.CaloriesBurnedFromLatestWorkout;
+            playlist.LatestElapsedTime = dto.LatestElapsedTime;
+            playlist.LastPlayed = dto.LastPlayed;
+            
+            await _playlistRepo.UpdatePlaylist(playlist);
         }
         public async Task<TimeSpan> SetTime(Stopwatch stopwatch)
         {
@@ -132,9 +133,25 @@ namespace GymSwipe.ApplicationLayer.Services
             return _dateHandler.SetDateAsDateTime();
         }
 
-        public async Task<int> IncrimentTimesPlayed(int timesPlayed)
+        public async Task<int> IncrimentTimesPlayed(int id)
         {
-            return timesPlayed+=1;
+            var playlist = await _playlistRepo.GetPlaylist(id);
+            if (playlist == null) throw new InvalidOperationException("Playlist not found");
+
+            playlist.TimesPlayed++;
+            return playlist.TimesPlayed;
+        }
+
+        public async Task RecordedCompletedWorkout(int id, TimeSpan elapsedTime, double calories)
+        {
+            var playlist = await _playlistRepo.GetPlaylist(id)  ?? throw new InvalidOperationException("Can't find stored playlist");
+
+            playlist.LatestElapsedTime = elapsedTime;
+            playlist.LastPlayed = DateTime.Now;
+            playlist.TimesPlayed++;
+            playlist.CaloriesBurnedFromLatestWorkout = calories;
+
+            await _playlistRepo.UpdatePlaylist(playlist);
         }
     }
 }

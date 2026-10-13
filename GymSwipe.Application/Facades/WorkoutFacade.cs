@@ -122,15 +122,21 @@ namespace GymSwipe.ApplicationLayer.Facades
 
         public async Task CompleteWorkout()
         {
-            //_workoutSession.Clear();
-            _playlist.HasBeenPlayedBefore = true;
-            _playlist.LatestElapsedTime = await _playlistService.SetTime(stopwatch);
-            _playlist.LastPlayed = await _playlistService.SetDate();
-            _playlist.TimesPlayed = await _playlistService.IncrimentTimesPlayed(_playlist.TimesPlayed);
-            _playlist.CaloriesBurnedFromLatestWorkout = await _calorieCountingService.CalculateCalories(_playlist.LatestElapsedTime, _loggedInUser.CurrentUser.WeightKg, 5);
-            await _playlistService.UpdatePlaylistInfo(_playlist);
-        }
+            stopwatch.Stop();
 
+            var elapsedTime = stopwatch.Elapsed;
+
+            var calories = await _calorieCountingService.CalculateCalories(
+                _playlist.LatestElapsedTime
+                ,_loggedInUser.CurrentUser.WeightKg,
+                null);
+
+             await _playlistService.RecordedCompletedWorkout(_playlist.Id, elapsedTime, calories);
+        }
+        public void RecordPlaylistCompletion(TimeSpan elapsed, DateTime now, double calories)
+        {
+
+        }
         public async Task<string> GetApproptiateImageForExercise(int exerciseId)
         {
 

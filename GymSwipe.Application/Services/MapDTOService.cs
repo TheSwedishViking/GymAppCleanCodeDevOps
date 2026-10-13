@@ -9,6 +9,28 @@ namespace GymSwipe.ApplicationLayer.Services
 {
     public class MapDTOService : IMapDTOService
     {
+        public async Task<GymPlaylistDTO> CopyDomainFieldsPlaylistDTO(GymPlaylist existsAlready)
+        {
+            var dtoExercises = (await Task.WhenAll(existsAlready.Exercises.Select(MapPlaylistExerciseDTO))).ToList();
+
+            return new GymPlaylistDTO
+            {
+                Id = existsAlready.Id,
+                Name = existsAlready.Name,
+                UserId = existsAlready.UserId,
+                CaloriesBurnedFromLatestWorkout = existsAlready.CaloriesBurnedFromLatestWorkout,
+                HasBeenPlayedBefore = existsAlready.HasBeenPlayedBefore,
+                DateCreated = existsAlready.DateCreated,
+                LastPlayed = existsAlready.LastPlayed,
+                TimesPlayed = existsAlready.TimesPlayed,
+                LatestElapsedTime = existsAlready.LatestElapsedTime,
+                Excercise = dtoExercises
+            };
+            
+        }
+
+       
+
         public async Task<ExerciseDTO> MapExerciseDTO(Exercise exercise)
         {
             var targetAreas =  (await Task.WhenAll(exercise.TargetAreas.Select(MapTargetAreaDTO))).ToList();
@@ -60,7 +82,14 @@ namespace GymSwipe.ApplicationLayer.Services
             {
                 Id = gymPlaylist.Id,
                 Name = gymPlaylist.Name,
-                Excercise = dtoExercises
+                Excercise = dtoExercises,
+                CaloriesBurnedFromLatestWorkout = gymPlaylist.CaloriesBurnedFromLatestWorkout,
+                DateCreated = gymPlaylist.DateCreated,
+                HasBeenPlayedBefore = gymPlaylist.HasBeenPlayedBefore,
+                LastPlayed = gymPlaylist.LastPlayed,
+                LatestElapsedTime = gymPlaylist.LatestElapsedTime,
+                UserId = gymPlaylist.UserId,
+                TimesPlayed = gymPlaylist.TimesPlayed
             };
         }
 
@@ -73,7 +102,6 @@ namespace GymSwipe.ApplicationLayer.Services
                 VideoSourceLink = playlistExercise.Exercise.VideoSourceLink,
                 PlaylistOrder = playlistExercise.PlaylistOrder
             };
-            throw new NotImplementedException();
         }
 
         public async Task<TargetAreaDTO> MapTargetAreaDTO(ExerciseTargetArea exerciseTargetArea)

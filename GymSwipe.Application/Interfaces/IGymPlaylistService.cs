@@ -17,6 +17,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task UpdatePlaylistInfo(GymPlaylistDTO playlistService);
         Task<TimeSpan> SetTime(Stopwatch stopwatch);
         Task<DateTime> SetDate();
-        Task<int> IncrimentTimesPlayed(int timesPlayed);
+        Task<int> IncrimentTimesPlayed(int id);
+        Task RecordedCompletedWorkout(int id, TimeSpan elapsedTime, double calories);
     }
 }
