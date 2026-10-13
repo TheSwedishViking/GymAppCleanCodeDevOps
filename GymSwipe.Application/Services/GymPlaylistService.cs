@@ -112,6 +112,7 @@ namespace GymSwipe.ApplicationLayer.Services
             return  excercise.OrderBy(e=>e.PlaylistOrder).FirstOrDefault();
         }
 
+        //Use the already found domain as base to update
         public async Task UpdatePlaylistInfo(GymPlaylistDTO playlist)
         {
             var existsAlready = await _playlistRepo.GetPlaylist(playlist.Id);

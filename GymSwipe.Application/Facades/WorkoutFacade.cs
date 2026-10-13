@@ -127,9 +127,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             _playlist.LatestElapsedTime = await _playlistService.SetTime(stopwatch);
             _playlist.LastPlayed = await _playlistService.SetDate();
             _playlist.TimesPlayed = await _playlistService.IncrimentTimesPlayed(_playlist.TimesPlayed);
-
             _playlist.CaloriesBurnedFromLatestWorkout = await _calorieCountingService.CalculateCalories(_playlist.LatestElapsedTime, _loggedInUser.CurrentUser.WeightKg, 5);
-
             await _playlistService.UpdatePlaylistInfo(_playlist);
         }
 

@@ -66,7 +66,7 @@ namespace GymSwipe.Infrastructure.Repos
             existing.CaloriesBurnedFromLatestWorkout = playlistService.CaloriesBurnedFromLatestWorkout;
             existing.LastPlayed = playlistService.LastPlayed;
             existing.LatestElapsedTime = playlistService.LatestElapsedTime;
-
+            existing.TimesPlayed = playlistService.TimesPlayed;
             await _db.SaveChangesAsync();
         }
     }
