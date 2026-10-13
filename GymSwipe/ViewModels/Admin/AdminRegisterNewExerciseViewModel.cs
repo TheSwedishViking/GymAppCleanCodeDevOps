@@ -59,7 +59,7 @@ namespace GymSwipe.ViewModels.Admin
             {
                 return;
             }
-            NewExercise.TargetAreaNames = Selected.Select(e=>e.Name).ToList();
+            NewExercise.TargetAreaNames = Selected.Select(e=>e).ToList();
             Console.WriteLine(NewExercise);
             await _adminAddExerciseFacade.AddExercise(NewExercise);
         }

@@ -7,12 +7,11 @@ namespace GymSwipe.ApplicationLayer.Facades
 {
     public class CardSwipeFacade : ICardSwipeFacade
     {
-        public List<string> AddedCards { get; set; } = new List<string>();
+        //All loaded exercises
         public List<ExerciseDTO> AvailableExercises { get; set; } = new List<ExerciseDTO>();
+        //Exercises user has approved
         public List<ExerciseDTO> AddedExercises { get; set; } = new List<ExerciseDTO>();
         public List<TargetAreaDTO> TargetAreas { get; set; } = new List<TargetAreaDTO>();
-
-
         private readonly IExerciseService _exerciseService;
         private readonly IGymPlaylistService _playlistService;
         private readonly ITraningAreaService _traningAreaService;
@@ -29,7 +28,10 @@ namespace GymSwipe.ApplicationLayer.Facades
             _traningAreaService = traningAreaService;
             _user = user;
         }
-        public async Task InitalizeAsync()
+        //We can pass a Id to load for example chest exercises
+        //Not implemented, UI related, TODO!
+        public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; }
+        public async Task LoadExercisesAsync()
         {
             await LoadExercisesById(null);
         }
@@ -37,47 +39,48 @@ namespace GymSwipe.ApplicationLayer.Facades
         {
             if (possibleId.HasValue)
             {
-                TargetAreas = await _traningAreaService.GetExerciseTargetsAsync();
                 AvailableExercises = await _exerciseService.GetExerciseByIdAsync(possibleId.Value);
             }
             else
             {
                 AvailableExercises = await _exerciseService.GetAllExercisesAsync();
             }
+            TargetAreas = await _traningAreaService.GetExerciseTargetsAsync();
         }
-        public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; }
-
-
-        public async Task SavePlayList(GymUser curentUser)
+        //Saves a playlist to user, needs user to set name of playlist => Firstname + playlist + date
+        public async Task SavePlayList()
         {
+            //If there's anything relevant to save
             if (AddedExercises != null && AddedExercises.Count > 0)
             {
                 await _playlistService.SavePlaylistToUser(AddedExercises, _user.CurrentUser);
             }
         }
-
+        //Swipe right, add, next card
         public async Task<ExerciseDTO> ApproveCard(ExerciseDTO exercise)
         {
             AddedExercises.Add(exercise);
             return await DrawNewExerciseCard();
         }
+        //Swipe left, next card
         public async Task<ExerciseDTO> DiscardCard()
         {
             return await DrawNewExerciseCard();
         }
-
-
+        //If there's no more cards, return null (something else later, a cardresult?)
         public async Task<ExerciseDTO> DrawNewExerciseCard()
         {
             if (HasDrawnAllCards())
             {
                 return null;
             }
+            //Draw a random valid card
             var exercise = AvailableExercises[Random.Shared.Next(AvailableExercises.Count)];
             AvailableExercises.Remove(exercise);
             return exercise;
         }
 
+        //Print info on the page
         public async Task<string> DeckInfo()
         {
             if (HasDrawnAllCards())
@@ -87,23 +90,13 @@ namespace GymSwipe.ApplicationLayer.Facades
             return $"There are {AvailableExercises.Count} cards remaning in the deck";
         }
 
+        //Looks for a valid image based on a muscle area of an exercise
         public async Task<string> GetApproptiateImageForExercise(int id)
         {
             string img = await _traningAreaService.GetTargetAreaImage(id);
 
             return img + "_card.jpg";
-
-            //return AvailableCards[Random.Shared.Next(AvailableCards.Count)];
         }
 
-        public async Task<List<ExerciseDTO>> GetLoadedExercises()
-        {
-            return AvailableExercises;
-        }
-
-        public async Task<GymUser> GetCurrentUser()
-        {
-            return _user.CurrentUser;
-        }
     }
 }

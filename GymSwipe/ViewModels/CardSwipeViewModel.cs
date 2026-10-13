@@ -81,22 +81,23 @@ namespace GymSwipe.ViewModels
             _cardFacade = cardSwipeFacade;
             SavePlaylistCommand = new Command(async () => await SavePlaylist());
         }
+        public async Task InitalizeAsync()
+        {
+            await _cardFacade.LoadExercisesAsync();
+            await ShowInitalCard();
+        }
         public async Task SavePlaylist()
         {
             //Progess bar or icon for saving could be nice
             if (_isSaving == false)
             {
                 _isSaving = true;
-                await _cardFacade.SavePlayList(await _cardFacade.GetCurrentUser());
+                await _cardFacade.SavePlayList();
                 await Task.Delay(3000);
                 await Shell.Current.GoToAsync(nameof(Pages.UserPage));
             }
         }
-        public async Task InitalizeAsync()
-        {
-            await _cardFacade.InitalizeAsync();
-            await ShowInitalCard();
-        }
+       
         public async Task<bool> AllCardsAreDrawn()
         {
             return _cardFacade.HasDrawnAllCards() && CurrentExercise == null;

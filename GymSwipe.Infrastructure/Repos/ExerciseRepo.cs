@@ -13,6 +13,15 @@ namespace GymSwipe.Infrastructure.Repos
             _db = gymAppDbContext;
         }
 
+        public async Task<Exercise> GetExerciseById(int id)
+        {
+            var ex = _db.Exercises.FirstOrDefault(e=>e.Id == id);
+            if(ex == null)
+            {
+                throw new Exception("Did not find exercise by that Id");
+            }
+            return ex;
+        }
 
 
         public async Task<bool> AddExercise(Exercise domain)
@@ -31,6 +40,7 @@ namespace GymSwipe.Infrastructure.Repos
                 Include(e => e.TargetAreas).ToListAsync();
         }
 
+      
         public async Task<Exercise> GetExerciseByName(string name)
         {
             return await _db.Exercises.FirstOrDefaultAsync(e => e.Name.ToLower() == name.ToLower());
