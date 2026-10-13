@@ -99,9 +99,9 @@
 	  <MauiImage Include="Resources\Images\AreaImages\abdonimal_card.jpg" />
 	  <MauiImage Include="Resources\Images\AreaImages\backside_thighs_card.jpg" />
 	  <MauiImage Include="Resources\Images\AreaImages\back_card.jpg" />
-	  <MauiImage Include="Resources\Images\AreaImages\bicep_card.jpg" />
+	  <MauiImage Include="Resources\Images\AreaImages\biceps_card.jpg" />
 	  <MauiImage Include="Resources\Images\AreaImages\chest_card.jpg" />
-	  <MauiImage Include="Resources\Images\AreaImages\front_thigh_card.jpg" />
+	  <MauiImage Include="Resources\Images\AreaImages\front_thighs_card.jpg" />
 	  <MauiImage Include="Resources\Images\AreaImages\lats_card.jpg" />
 	  <MauiImage Include="Resources\Images\AreaImages\shoulders_card.jpg" />
 	  <MauiImage Include="Resources\Images\AreaImages\triceps_card.jpg" />

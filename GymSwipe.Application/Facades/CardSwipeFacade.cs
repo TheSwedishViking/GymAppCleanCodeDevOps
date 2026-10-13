@@ -7,7 +7,6 @@ namespace GymSwipe.ApplicationLayer.Facades
 {
     public class CardSwipeFacade : ICardSwipeFacade
     {
-        public List<string> AvailableCards { get; set; } = new List<string>();
         public List<string> AddedCards { get; set; } = new List<string>();
         public List<ExerciseDTO> AvailableExercises { get; set; } = new List<ExerciseDTO>();
         public List<ExerciseDTO> AddedExercises { get; set; } = new List<ExerciseDTO>();
@@ -29,7 +28,6 @@ namespace GymSwipe.ApplicationLayer.Facades
             _playlistService = playlistExecericseService;
             _traningAreaService = traningAreaService;
             _user = user;
-            AvailableCards = GetCards();
         }
         public async Task InitalizeAsync()
         {
@@ -49,15 +47,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; }
 
-        private List<string> GetCards()
-        {
-            return new List<string>
-            {
-                "boufallant_card.png",
-                "metagross_card.jpg",
-                "sceptile_card.jpg"
-            };
-        }
+
         public async Task SavePlayList(GymUser curentUser)
         {
             if (AddedExercises != null && AddedExercises.Count > 0)
@@ -76,16 +66,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             return await DrawNewExerciseCard();
         }
 
-        public async Task<string> DrawNewCard()
-        {
-            if (HasDrawnAllCards())
-            {
-                return "";
-            }
-            var card = AvailableCards[Random.Shared.Next(AvailableCards.Count)];
-            //AvailableCards.Remove(card);
-            return card;
-        }
+
         public async Task<ExerciseDTO> DrawNewExerciseCard()
         {
             if (HasDrawnAllCards())

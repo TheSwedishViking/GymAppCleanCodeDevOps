@@ -10,7 +10,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task InitalizeAsync();
         Task<ExerciseDTO> ApproveCard(ExerciseDTO card);
         Task<ExerciseDTO> DiscardCard();
-        Task<string> DrawNewCard();
         Task<string> DeckInfo();
         Task LoadExercisesById(int? exerciseTypeId);
         Task<List<ExerciseDTO>> GetLoadedExercises();

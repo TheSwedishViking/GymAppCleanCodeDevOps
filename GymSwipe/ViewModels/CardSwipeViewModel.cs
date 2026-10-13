@@ -104,7 +104,6 @@ namespace GymSwipe.ViewModels
 
         private async Task ShowInitalCard()
         {
-            _currentCard = await _cardFacade.DrawNewCard();
             CurrentExercise = await _cardFacade.DrawNewExerciseCard();
             await UpdateCard();
         }

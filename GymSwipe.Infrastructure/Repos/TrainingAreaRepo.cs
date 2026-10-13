@@ -38,7 +38,7 @@ namespace GymSwipe.Infrastructure.Repos
                             .Select(area => area.ImageOfTargetArea)
                             .FirstOrDefaultAsync();
 
-            return string.IsNullOrEmpty(imagePath) ? "Unknown_card" : imagePath;
+            return string.IsNullOrEmpty(imagePath) ? "unknown" : imagePath;
         }
 
 
