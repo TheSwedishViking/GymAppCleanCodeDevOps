@@ -3,10 +3,7 @@ using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
 using GymSwipe.Pages;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Windows.Input;
 
 namespace GymSwipe.ViewModels
@@ -17,7 +14,7 @@ namespace GymSwipe.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly IWorkoutFacade _workoutFacade;
-        private readonly  LoggedInUser _loggedInUser;
+        private readonly LoggedInUser _loggedInUser;
         private int? _playListId;
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
@@ -39,9 +36,21 @@ namespace GymSwipe.ViewModels
             get { return _currentExercise; }
             set
             {
-                if(_currentExercise == value) return;
+                if (_currentExercise == value) return;
                 _currentExercise = value;
                 OnPropertyChanged(nameof(CurrentExercise));
+            }
+        }
+
+        private string _cardImageSource;
+        public string CardImageSource
+        {
+            get => _cardImageSource;
+            set
+            {
+                if (_cardImageSource == value) return;
+                _cardImageSource = value;
+                OnPropertyChanged(nameof(CardImageSource));
             }
         }
 
@@ -51,7 +60,7 @@ namespace GymSwipe.ViewModels
             get { return _currentRecord; }
             set
             {
-                if(_currentRecord == value) return;
+                if (_currentRecord == value) return;
                 _currentRecord = value;
                 OnPropertyChanged(nameof(CurrentRecords));
             }
@@ -60,14 +69,14 @@ namespace GymSwipe.ViewModels
         public bool UserIsEvaulatingGymplaylistExercise { get; set; }
         public ICommand StartPlaylistCommand { get; }
         public ICommand NextExerciseCommand { get; }
-        public ICommand PausePlaylistCommand {  get; }
+        public ICommand PausePlaylistCommand { get; }
         public ICommand PreviousExerciseCommand { get; }
         public ActiveWorkoutViewModel(IWorkoutFacade workoutFacade, LoggedInUser loggedInUser)
         {
             _workoutFacade = workoutFacade;
             _loggedInUser = loggedInUser;
 
-            StartPlaylistCommand = new Command(async () =>await StartPlaylist());
+            StartPlaylistCommand = new Command(async () => await StartPlaylist());
             NextExerciseCommand = new Command(async () => await NextExercise());
             PausePlaylistCommand = new Command(async () => await PausePlaylist());
             PreviousExerciseCommand = new Command(async () => await PreviousExercise());
@@ -75,21 +84,23 @@ namespace GymSwipe.ViewModels
         }
         public async Task StartPlaylist()
         {
-            CurrentExercise =  await _workoutFacade.StartWorkout();
+            CurrentExercise = await _workoutFacade.StartWorkout();
             Console.WriteLine(CurrentExercise);
         }
-        public async Task NextExercise() 
+        public async Task NextExercise()
         {
             CurrentExercise = await _workoutFacade.GetNextExercise(CurrentExercise);
+            CardImageSource = await _workoutFacade.GetApproptiateImageForExercise(CurrentExercise.ExerciseId);
+
             //When done
-            if(CurrentExercise == null)
+            if (CurrentExercise == null)
             {
                 await _workoutFacade.CompleteWorkout();
                 await Task.Yield();
                 await Shell.Current.GoToAsync(nameof(ExerciseEvaulationPage), new Dictionary<string, object> { ["PlaylistId"] = GymPlaylist.Id });
             }
         }
-        public async Task PausePlaylist() 
+        public async Task PausePlaylist()
         {
             throw new NotImplementedException("Not implmented");
         }
@@ -106,14 +117,14 @@ namespace GymSwipe.ViewModels
         public async Task InitalizeAsync()
         {
             //
-            if(_loggedInUser.CurrentUser == null)
+            if (_loggedInUser.CurrentUser == null)
             {
                 //Pop up warning later
                 await Task.Delay(1000);
                 await Shell.Current.GoToAsync(nameof(Pages.UserRegistrationPage));
                 return;
             }
-            if(_playListId is int id)
+            if (_playListId is int id)
             {
                 GymPlaylist = await _workoutFacade.GetPlaylistById(id);
             }
@@ -124,6 +135,6 @@ namespace GymSwipe.ViewModels
             Console.WriteLine(GymPlaylist);
         }
 
-    
+
     }
 }

@@ -19,7 +19,7 @@
                     <Label FontSize="Large" Text="{Binding CurrentExercise.Name}" HorizontalTextAlignment="Center"/>
                     <Label Text="{Binding CurrentExercise.VideoSourceLink}" HorizontalTextAlignment="Center"/>
                     <Label Text="{Binding CurrentExercise.PlaylistOrder}"/>
-                    <Image  x:Name="CardImage" Source="sceptile_card.jpg"/>
+                    <Image  x:Name="CardImage" Source="{Binding CardImageSource}"/>
                     <Label Text="Video link" FontAttributes="Italic" HorizontalOptions="Center"/>
                     <HorizontalStackLayout HorizontalOptions="Center" >
                         <Button
