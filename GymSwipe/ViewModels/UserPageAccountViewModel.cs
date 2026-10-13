@@ -1,10 +1,10 @@
-﻿using GymSwipe.Domain.Models;
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Services.SessionServices;
+using GymSwipe.Domain.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using GymSwipe.ApplicationLayer.Interfaces;
-using GymSwipe.ApplicationLayer.Services.SessionServices;
-using GymSwipe.ApplicationLayer.DTOs;
 
 
 namespace GymSwipe.ViewModels
@@ -42,7 +42,7 @@ namespace GymSwipe.ViewModels
         public ICommand PreviousPageCommand { get; }
         public ICommand GreetUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
-        public ICommand PlayPlaylistCommand {  get; }
+        public ICommand PlayPlaylistCommand { get; }
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private GymUser _currentUser;
@@ -63,7 +63,7 @@ namespace GymSwipe.ViewModels
         {
             _loggedInUser = loggedInUser;
             _httpClient = httpClient;
-           
+
             _gymPlaylistService = gymPlaylistService;
             NextPageCommand = new Command(() => ChangePage(1));
             PreviousPageCommand = new Command(() => ChangePage(-1));
@@ -131,7 +131,6 @@ namespace GymSwipe.ViewModels
         }
         public async Task DeleteUser()
         {
-            //finns ej id'n i objekt
             using var response = await _httpClient.DeleteAsync("api/User/" + _loggedInUser.CurrentUser.Id);
             response.EnsureSuccessStatusCode();
         }

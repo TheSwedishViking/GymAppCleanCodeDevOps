@@ -51,7 +51,7 @@ namespace GymSwipe.ViewModels
 
             var FoundUser = await _httpClient.GetFromJsonAsync<GymUserDTO>("api/User/Get-UserDto-By-Email/" + EmailEntry);
 
-            CurrentUser = new GymUser
+            _loggedIn.CurrentUser = new GymUser //Setting the user to the singleton's gymUser
             {
                 Id = FoundUser.Id,
                 Firstname = FoundUser.Firstname,
@@ -61,8 +61,7 @@ namespace GymSwipe.ViewModels
                 WeightKg = FoundUser.WeightKg,
                 Gender = FoundUser.Gender,
             };
-            _loggedIn.CurrentUser = CurrentUser;
-
+            _loggedIn.CurrentUser.SetFriendCode();
             await Shell.Current.GoToAsync("..");
         }
 

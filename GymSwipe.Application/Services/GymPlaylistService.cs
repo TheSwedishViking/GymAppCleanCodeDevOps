@@ -125,7 +125,7 @@ namespace GymSwipe.ApplicationLayer.Services
             return $"{user}'s gymplaylist {await _dateHandler.SetDateAsString()}";
         }
 
-       
+
         private PlaylistExercise ConvertToDomain(ExerciseDTO dTO, int order)
         {
             //Minimal needed to point towards correct entities without EF issues
@@ -138,15 +138,15 @@ namespace GymSwipe.ApplicationLayer.Services
         }
         public async Task<PlaylistExerciseDTO> GetFirstExercise(List<PlaylistExerciseDTO> excercise)
         {
-            return  excercise.OrderBy(e=>e.PlaylistOrder).FirstOrDefault();
+            return excercise.OrderBy(e => e.PlaylistOrder).FirstOrDefault();
         }
 
         public async Task UpdatePlaylistInfo(GymPlaylistDTO playlist)
         {
             var existsAlready = await _playlistRepo.GetPlaylist(playlist.Id);
-            if(existsAlready == null)
+            if (existsAlready == null)
             {
-               //New info? Add? Think over
+                //New info? Add? Think over
             }
             var domain = DomainMapPlaylist(playlist);
             await _playlistRepo.UpdatePlaylist(domain);
@@ -178,7 +178,7 @@ namespace GymSwipe.ApplicationLayer.Services
         }
         public async Task<TimeSpan> SetTime(Stopwatch stopwatch)
         {
-            return  TimeSpan.FromMinutes(stopwatch.Elapsed.TotalMinutes);
+            return TimeSpan.FromMinutes(stopwatch.Elapsed.TotalMinutes);
         }
         public Task<DateTime> SetDate()
         {
@@ -187,7 +187,7 @@ namespace GymSwipe.ApplicationLayer.Services
 
         public async Task<int> IncrimentTimesPlayed(int timesPlayed)
         {
-            return timesPlayed+=1;
+            return timesPlayed += 1;
         }
     }
 }

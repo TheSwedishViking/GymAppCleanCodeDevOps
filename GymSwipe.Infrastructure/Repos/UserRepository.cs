@@ -39,10 +39,9 @@ namespace GymSwipe.Infrastructure.Repos
         public async Task<GymUserDTO?> GetUserById(int id)
         {
             GymUser foundUser = _db.Users.FirstOrDefault(u => u.Id == id);
-            Console.WriteLine();
+
             if (foundUser != null)
             {
-
                 return new GymUserDTO
                 {
                     Id = foundUser.Id,
@@ -58,7 +57,7 @@ namespace GymSwipe.Infrastructure.Repos
             return null;
         }
 
-        public async Task<bool> GetUserByEmail(string email) // bad naming But a hazzle to change
+        public async Task<bool> UserEmailIsTaken(string email) // bad naming But a hazzle to change
         {
             GymUser foundUser = _db.Users.FirstOrDefault(u => u.Email == email);
             Console.WriteLine();
