@@ -8,6 +8,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces.ClientInterfaces
     public interface ITrainingAreasClient
     {
         Task<List<TargetAreaDTO>> GetTargetAreaDTOsAsync();
-        Task<List<TargetAreaDTO>> GetTargetAreaDTOById(int id);
+        Task<TargetAreaDTO> GetTargetAreaDTOById(int id);
     }
 }

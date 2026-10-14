@@ -15,10 +15,11 @@ namespace GymSwipe.ApplicationLayer.Services.ClientServices
             _http = http;
         }
 
-        public async Task<List<TargetAreaDTO>> GetTargetAreaDTOById(int id)
+        public async Task<TargetAreaDTO> GetTargetAreaDTOById(int id)
         {
-            var respone = await _http.GetFromJsonAsync<List<TargetAreaDTO>>($"api/TrainingArea/{id}");
-            throw new NotImplementedException();
+            var respone = await _http.GetFromJsonAsync<TargetAreaDTO>($"api/TrainingArea/get-area-by-id/{id}");
+
+            return respone;
         }
 
         public async Task<List<TargetAreaDTO>> GetTargetAreaDTOsAsync()

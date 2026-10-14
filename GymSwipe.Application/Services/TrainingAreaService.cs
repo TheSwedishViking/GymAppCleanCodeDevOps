@@ -7,9 +7,18 @@ namespace GymSwipe.ApplicationLayer.Services
     public class TrainingAreaService : ITraningAreaService
     {
         private readonly ITraningAreaRepo _repo;
-        public TrainingAreaService(ITraningAreaRepo traningAreaRepo)
+        private readonly IMapDomainService _mapDomainService;
+        private readonly IMapDTOService _mapDTOService;
+        public TrainingAreaService(
+            ITraningAreaRepo traningAreaRepo,
+            IMapDTOService mapDTOService,
+            IMapDomainService mapDomainService
+            
+            )
         {
             _repo = traningAreaRepo;
+            _mapDomainService = mapDomainService;
+            _mapDTOService = mapDTOService;
         }
 
         public async Task<bool> AddNewArea(TargetAreaDTO targetAreaDTO)
@@ -22,19 +31,25 @@ namespace GymSwipe.ApplicationLayer.Services
             return result;
         }
 
-        public async Task<List<TargetAreaDTO>> ConvertToDTOsFromDomainAsync(List<ExerciseTargetArea> areas)
+        public async Task<TargetAreaDTO> GetExerciseTargetAreasByIdAsync(int id)
         {
-
-            var dtos = (await Task.WhenAll(areas.Select(e => ConvertToDTO(e)))).ToList();
-
-            return dtos;
+            var area = await _repo.GetAreaById(id);
+            if(area == null)
+            {
+                return null;
+            }
+            var dto = await _mapDTOService.MapTargetAreaDTO(area);
+            return dto;
         }
 
         public async Task<List<TargetAreaDTO>> GetExerciseTargetsAsync()
         {
             var areas = await _repo.GetExerciseTargetAreasAsync();
-
-            var dtos = await ConvertToDTOsFromDomainAsync(areas);
+            if(areas == null || areas.Count == 0)
+            {
+                return null;
+            }
+            var dtos = (await Task.WhenAll(areas.Select(_mapDTOService.MapTargetAreaDTO))).ToList();
 
             return dtos;
 
@@ -47,7 +62,8 @@ namespace GymSwipe.ApplicationLayer.Services
             {
                 return null;
             }
-            return await ConvertToDTO(ex);
+            var dto = await _mapDTOService.MapTargetAreaDTO(ex);
+            return dto;
         }
 
         public async Task<string> GetTargetAreaImage(int id)
@@ -55,13 +71,6 @@ namespace GymSwipe.ApplicationLayer.Services
             return await _repo.GetTargetAreaImage(id);
         }
 
-        private async Task<TargetAreaDTO> ConvertToDTO(ExerciseTargetArea ex)
-        {
-            return new TargetAreaDTO
-            {
-                Id = ex.Id,
-                Name = ex.ExerciseCategoryName,
-            };
-        }
+       
     }
 }

@@ -8,8 +8,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task<ExerciseTargetArea> GetExerciseTargetAreaByName(string name);
         Task<bool> AddTargetArea(ExerciseTargetArea area);
         Task RemoveTargetArea(int id);
-        Task UpdateTargetArea(ExerciseTargetArea area);
         Task<string> GetTargetAreaImage(int id);
-        Task GetAreaById(int id);
+        Task<ExerciseTargetArea> GetAreaById(int id);
     }
 }

@@ -24,5 +24,19 @@ namespace GymSwipe.API.Controllers
             }
             return Ok(tras);
         }
+        [HttpGet("get-area-by-id/{id}")]
+        public async Task<ActionResult<List<TargetAreaDTO>>> GetTrainingAreaDTOsByIdAsync(int id)
+        {
+            if(id == 0 || id < 0)
+            {
+                return BadRequest();
+            }
+            var tras = await _trainingAreaService.GetExerciseTargetAreasByIdAsync(id);
+            if (tras == null)
+            {
+                return NotFound("No areas found; Possible null or db empty");
+            }
+            return Ok(tras);
+        }
     }
 }

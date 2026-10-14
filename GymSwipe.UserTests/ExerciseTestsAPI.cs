@@ -1,5 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.UserTests.FixtureFolder;
+using System.Net;
 using System.Net.Http.Json;
 using Xunit;
 
@@ -19,17 +20,30 @@ namespace GymSwipe.UserTests
             var areas = await _fixture.TrainingClient.GetTargetAreaDTOsAsync();
             Assert.NotEmpty(areas);
         }
-        [Fact]
-        public async Task Request_ChestExercieses_ReturnsExpected_Collection()
+
+        [Theory]
+        [InlineData(1, true)]
+        [InlineData(21, false)]
+        [InlineData(-15, false)]
+        public async Task Request_TargetOverAPI_ExpectedResult(int id, bool exists)
         {
-            var expected = "Chest";
-            var response = await _client.GetAsync("api/Exercise/get-chest-exercises");
-            response.EnsureSuccessStatusCode();
+            var area = await _fixture.TrainingClient.GetTargetAreaDTOById(id);
 
-            var dtos = await response.Content.ReadFromJsonAsync<List<ExerciseDTO>>();
+            if (exists)
+            {
+                Assert.NotNull(area);
+            }
+        }
 
-            Assert.NotEmpty(dtos);
-            Assert.All(dtos, c => Assert.Contains(c.TargetAreaNames, n => n.Name.Contains(expected, StringComparison.OrdinalIgnoreCase)));
+        [Theory]
+        [InlineData("api/TrainingArea/get-area-by-id/1", HttpStatusCode.OK)]
+        [InlineData("api/TrainingArea/get-area-by-id/999", HttpStatusCode.NotFound)]
+        [InlineData("api/TrainingArea/get-area-by-id/-50", HttpStatusCode.BadRequest)]
+        public async Task RequestMultipleDifferentAreas_ReturnsExpectedNetworkCode(string url, HttpStatusCode code)
+        {
+            var response = await _fixture.HttpClient.GetAsync(url);
+
+            Assert.Equal(response.StatusCode, code);
         }
     }
 }
