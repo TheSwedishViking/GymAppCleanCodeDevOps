@@ -4,11 +4,21 @@ using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using Moq;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace GymSwipe.UserTests
 {
     public class CardSwipeFacadeTests
     {
+
+        private readonly ITestOutputHelper _output;
+
+        public CardSwipeFacadeTests(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
+
         [Fact]
         public async Task TestCardSwipeFacadeInitialization()
         {
@@ -17,26 +27,34 @@ namespace GymSwipe.UserTests
             var mockPlaylistService = new Mock<IGymPlaylistService>();
             var mockTrainingAreaService = new Mock<ITraningAreaService>();
 
-            var exercises = new List<ExerciseDTO>
+            var exercises = new List<ExerciseDTO> //4
             {
                 new()
                 {
                     Id = 1,
-                    Name = "Test Exercise",
+                    Name = "Card One",
                     VideoSourceLink = string.Empty
                 },
                 new()
                 {
                     Id = 2,
-                    Name = "Test Exercise 2",
+                    Name = "Card Two",
                     VideoSourceLink = string.Empty
                 },
                  new()
                 {
                     Id = 3,
-                    Name = "Test Exercise 3",
+                    Name = "Card Three",
                     VideoSourceLink = string.Empty
-                }
+                },
+                 new()
+                {
+                    Id = 4,
+                    Name = "Card Four",
+                    VideoSourceLink = string.Empty
+                 }
+
+
             };
 
             mockExerciseService
@@ -53,18 +71,37 @@ namespace GymSwipe.UserTests
                 mockTrainingAreaService.Object,
                 new LoggedInUser());
 
+
+
             // Act
             await facade.LoadExercisesAsync();
+            _output.WriteLine($"Available: {facade.AvailableExercises.Count} cards.");
 
             var approvedCard = await facade.DrawNewExerciseCard();
-            var approvedExercise = await facade.ApproveCard(approvedCard);
-            facade.AddedExercises.Add(approvedExercise);
-            await facade.DrawNewExerciseCard();
-            await facade.DiscardCard();
+            var cardAfterApproval = await facade.ApproveCard(approvedCard);
+            _output.WriteLine($"Approved: {approvedCard.Name}");
+
+            // Discard the card returned by ApproveCard; DiscardCard returns the next card.
+            _output.WriteLine($"Discarded: {cardAfterApproval.Name}");
+            var cardAfterFirstDiscard = await facade.DiscardCard();
+
+            _output.WriteLine($"Discarded: {cardAfterFirstDiscard.Name}");
+            var finalCard = await facade.DiscardCard();
+
+            // The deck is empty, but finalCard still needs a decision.
+            Assert.True(facade.HasDrawnAllCards());
+            _output.WriteLine($"Final card awaiting decision: {finalCard.Name}");
+
+            var nextCard = await facade.ApproveCard(finalCard);
+            _output.WriteLine($"Approved final card: {finalCard.Name}");
 
             // Assert
-            Assert.Equal(facade.AddedExercises[0], approvedCard);
+            Assert.Equal(2, facade.AddedExercises.Count);
+            Assert.Same(approvedCard, facade.AddedExercises[0]);
+            Assert.Same(finalCard, facade.AddedExercises[1]);
+            Assert.Null(nextCard);
             Assert.True(facade.HasDrawnAllCards());
         }
     }
 }
+//facade.GetApproptiateImageForExercise(approvedCard.Id); //work in progress, not tested yet
