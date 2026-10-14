@@ -1,4 +1,4 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.Interfaces.Repositories;
 using GymSwipe.Domain.Models;
 using GymSwipe.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;

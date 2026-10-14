@@ -1,6 +1,9 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Mappers;
+using GymSwipe.ApplicationLayer.Interfaces.Repositories;
+using GymSwipe.ApplicationLayer.Interfaces.TimeDateFormat;
 using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.ApplicationLayer.Services.Services;
 using GymSwipe.Domain.Models;
 using Moq;
 using Xunit;

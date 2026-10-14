@@ -1,0 +1,17 @@
+﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.Domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GymSwipe.ApplicationLayer.Interfaces.Repositories
+{
+    public interface IExerciseRepository
+    {
+        Task<Exercise> GetExerciseById(int id);
+        Task<List<Exercise>> GetExercisesByCategoryAsync(int categoryId);
+        Task<Exercise> GetExerciseByName(string name);
+        Task<List<Exercise>> GetAllExercisesAsync();
+        Task<bool> AddExercise(Exercise domain);
+    }
+}

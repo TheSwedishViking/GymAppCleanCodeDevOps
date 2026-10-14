@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Facades;
-using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Display;
+using GymSwipe.ApplicationLayer.Interfaces.Facades;
 using GymSwipe.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -21,18 +22,20 @@ namespace GymSwipe.ViewModels.Admin
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private IAdminAddExerciseFacade _adminAddExerciseFacade;
+        private readonly IDisplayInfoHelper _displayInfoHelper;
 
+        private IAdminAddExerciseFacade _adminAddExerciseFacade;
         public ICommand RegisterNewExerciseCommand { get; }
         public ICommand AddTargetAreaCommand { get; }
         public ICommand RemoveTargetAreaCommand { get; }
 
-        public AdminRegisterNewExerciseViewModel(IAdminAddExerciseFacade adminAddExerciseFacade)
+        public AdminRegisterNewExerciseViewModel(IAdminAddExerciseFacade adminAddExerciseFacade, IDisplayInfoHelper displayInfoHelper)
         {
             _adminAddExerciseFacade = adminAddExerciseFacade;
             AddTargetAreaCommand = new Command<TargetAreaDTO>(async area => await AddAreaToExercise(area));
             RemoveTargetAreaCommand = new Command<TargetAreaDTO>(async area => await RemoveAreaToExercise(area));
             RegisterNewExerciseCommand = new Command(async () => await TryRegisterNewExercise());
+            _displayInfoHelper = displayInfoHelper;
         }
         public async Task AddAreaToExercise(TargetAreaDTO target)
         {
@@ -60,21 +63,23 @@ namespace GymSwipe.ViewModels.Admin
 
         private async Task TryRegisterNewExercise()
         {
-            if (Selected.Count == 0)
-            {
-                return;
-            }
             try
             {
+                //Map objects
                 NewExercise.TargetAreaNames = Selected.Select(e => e).ToList();
-                Console.WriteLine(NewExercise);
-                await _adminAddExerciseFacade.AddExercise(NewExercise);
+                var erros = await _adminAddExerciseFacade.AddExercise(NewExercise);
+                if(erros.Count > 0)
+                {
+                    await _displayInfoHelper.DisplayErrorAlert(erros);
+                    return;
+                   
+                }
                 await Task.Yield();
                 await RefreshListOfTargetAreas();
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlertAsync("Notice", ex.Message, "OK");
+                await _displayInfoHelper.DisplayStandardAlert(ex.Message);
             }
         }
 

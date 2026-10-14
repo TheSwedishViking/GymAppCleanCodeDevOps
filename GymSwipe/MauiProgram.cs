@@ -1,12 +1,24 @@
 ﻿using GymSwipe.ApplicationLayer.Facades;
-using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Interfaces.ClientInterfaces;
-using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.ApplicationLayer.Interfaces.Controls;
+using GymSwipe.ApplicationLayer.Interfaces.Display;
+using GymSwipe.ApplicationLayer.Interfaces.Facades;
+using GymSwipe.ApplicationLayer.Interfaces.Mappers;
+using GymSwipe.ApplicationLayer.Interfaces.Repositories;
+using GymSwipe.ApplicationLayer.Interfaces.Services;
+using GymSwipe.ApplicationLayer.Interfaces.TimeDateFormat;
+using GymSwipe.ApplicationLayer.Interfaces.Validators;
 using GymSwipe.ApplicationLayer.Services.ClientServices;
+using GymSwipe.ApplicationLayer.Services.Controls;
+using GymSwipe.ApplicationLayer.Services.Mappers;
+using GymSwipe.ApplicationLayer.Services.Services;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
+using GymSwipe.ApplicationLayer.Services.TimeDateFormat;
+using GymSwipe.ApplicationLayer.Services.Validators;
 using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
 using GymSwipe.Infrastructure.Repos;
+using GymSwipe.UI_Helper;
 using GymSwipe.ViewModels;
 using GymSwipe.ViewModels.Admin;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +56,8 @@ namespace GymSwipe
             //*******CLIENT SERVICES*******
             builder.Services.AddScoped<ITrainingAreasClient, TrainingAreaClient>();
 
+            //*******UI**********
+            builder.Services.AddScoped<IDisplayInfoHelper, DisplayInfoHelper>();
 
             //*******SERVICES*******
             builder.Services.AddScoped<IUserService, UserService>();
@@ -53,6 +67,7 @@ namespace GymSwipe
             builder.Services.AddScoped<IDateHandler, DateHandler>();
             builder.Services.AddScoped<ITimeSetter, TimeSetter>();
             builder.Services.AddScoped<IRecordsValidator, RecordsValidator>();
+            builder.Services.AddScoped<IAdminCreatorValidator, AdminCreatorValidator>();
             builder.Services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
             builder.Services.AddScoped<ICalorieCountingService, CalorieCountingService>();
             builder.Services.AddScoped<IPlaylistControls, PlaylistControls>();

@@ -1,5 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Services;
 using GymSwipe.ApplicationLayer.Services;
 using GymSwipe.Domain.Enums;
 using GymSwipe.Infrastructure.Repos;
@@ -13,18 +13,18 @@ using Xunit;
 
 namespace GymSwipe.UserTests
 {
-    public class ExerciseTestsLocalClassFixture : IClassFixture<ExerciseFixture>
+    public class ExerciseTestsLocalClassFixture : IClassFixture<StandardLocalInMemoryFixture>
     {
-        private readonly ExerciseFixture _fixture;
+        private readonly StandardLocalInMemoryFixture _fixture;
         private readonly IServiceScope _scope;
         private readonly IExerciseService _sut;
-        public ExerciseTestsLocalClassFixture(ExerciseFixture fixture)
+        public ExerciseTestsLocalClassFixture(StandardLocalInMemoryFixture fixture)
         {
             _fixture = fixture;
            _scope = _fixture.ServiceProvider.CreateScope();
            _sut = _scope.ServiceProvider.GetRequiredService<IExerciseService>();
         }
-
+      
         public void Dispose() => _scope.Dispose();
         [Fact]
         public async Task TryAndGetStaticExcerises_ReturnsExpectedTestaData_FormatDTO_ToConvertToFrontendModels()
@@ -34,6 +34,13 @@ namespace GymSwipe.UserTests
 
             //Assert
             Assert.NotEmpty(exs);
+        }
+        [Fact]
+        public async Task IfTheresNoMatchingId_ToAnExercise_ThrowException()
+        {
+            var ex = await Assert.ThrowsAsync<KeyNotFoundException>( () => _sut.GetExerciseById(12312313)) ;
+
+            Assert.Contains("not", ex.Message);
         }
         [Fact]
         public async Task GetExercises_ThatTargetsTheChest_WithAProvidedId_ReturnsExpectedExercises()
@@ -47,44 +54,15 @@ namespace GymSwipe.UserTests
         }
 
         [Fact]
-        public async Task GetExercises_WithAEnum_ProvidesExpectedExercies_AccordingToEnumName()
-        {
-            var chests = await _sut.GetExerciseByEnum(AreaEnum.Chest);
-
-            Assert.NotEmpty(chests);
-        }
-        [Fact]
-        public async Task Requesting_ExerciesWithAInvalid_Id_LikeZero_Or_Enum_AreaEnum_Inavlid_ReturnsEmpty()
+        public async Task InvalidId_ReturnsExpected_Empty()
         {
             var empty = await _sut.GetExercisesByCategoryIdAsync(0);
 
             Assert.Empty(empty);
 
-            var enumEmpty = await _sut.GetExerciseByEnum(AreaEnum.Invalid);
-
-            Assert.Empty(enumEmpty);
-        }
-        [Theory]
-        [InlineData(AreaEnum.Shoulders, 4)]
-        [InlineData(AreaEnum.Chest, 1)]
-        [InlineData(AreaEnum.Biceps, 2)]
-        [InlineData(AreaEnum.Triceps, 3)]
-        [InlineData(AreaEnum.FrontThighs, 6)]
-        public async Task ValidateAndMakeSure_TheEnums_AndDbRegisteredCategories_ShareTheSameValues_ReturnsTrue_OnValid(AreaEnum area, int registedInDbId)
-        {
-            var enumResult = await _sut.GetExerciseByEnum(area);
-            var idResult = await _sut.GetExercisesByCategoryIdAsync(registedInDbId);
-
-            Assert.Equal(enumResult.Count(), idResult.Count());
-
-            Assert.All(enumResult, e =>
-            {
-                var match = Assert.Single(idResult, i => i.Id == e.Id);
-                Assert.Equal(e.Name, match.Name);
-            });
         }
         [Fact]
-        public async Task CreateExampleExercise_IfThereAlreadyIsOne_ReturnsExpected_FalseBoolean_IndicatesFailureToSave_NewExerciseThat_AlreadyExists_NoDuplicates()
+        public async Task DontAllow_DuplicateExercies_StringComparison_ExpectedFalse()
         {
             var exercise = new ExerciseDTO
             {
@@ -137,12 +115,13 @@ namespace GymSwipe.UserTests
         }
         [Theory]
         [InlineData("backflip")]
-       public async Task GetExerciseByName_NonExistingExercise_ThrowsException(string invalid)
+        [InlineData("sdaasdssdads")]
+        public async Task GetExerciseByName_NonExistingExercise_ReturnsNull(string invalid)
         {
             //Expected result is an execption
-            var ex = await Assert.ThrowsAsync<Exception>( () => _sut.GetExerciseByName(invalid));
+            var ex = await _sut.GetExerciseByName(invalid);
 
-            Assert.Equal("No exercise found by that name", ex.Message);
+            Assert.Null(ex);
         }
 
 

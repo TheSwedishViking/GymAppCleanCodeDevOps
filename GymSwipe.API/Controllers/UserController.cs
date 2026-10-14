@@ -1,5 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymSwipe.API.Controllers

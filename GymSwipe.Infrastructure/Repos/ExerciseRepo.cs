@@ -1,4 +1,4 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.Interfaces.Repositories;
 using GymSwipe.Domain.Models;
 using GymSwipe.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -17,10 +17,7 @@ namespace GymSwipe.Infrastructure.Repos
         {
             var ex =await _db.Exercises.
                 Include(e=>e.TargetAreas).FirstOrDefaultAsync(e=>e.Id==id);
-            if(ex == null)
-            {
-                throw new Exception("Did not find exercise by that Id");
-            }
+           
             return ex;
         }
 

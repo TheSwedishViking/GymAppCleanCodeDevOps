@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using GymSwipe.UserTests.FixtureFolder;
+using Xunit;
 
 namespace GymSwipe.UserTests
 {

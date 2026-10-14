@@ -1,5 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Display;
+using GymSwipe.ApplicationLayer.Interfaces.Facades;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,13 +16,13 @@ namespace GymSwipe.ViewModels.Admin
         public ObservableCollection<TargetAreaDTO> Current { get; } = new ObservableCollection<TargetAreaDTO>();
         public ICommand GetAreasCommand { get; }
         public ICommand AddNewTargetAreaCommand { get; }
-
         private readonly IAdminAddTrainingAreaFacade _adminAddTrainingAreaFacade;
-        public AdminRegisterNewTrainingAreaViewModel(IAdminAddTrainingAreaFacade adminAddTrainingAreaFacade)
+        private readonly IDisplayInfoHelper _playInfoHelper;
+        public AdminRegisterNewTrainingAreaViewModel(IAdminAddTrainingAreaFacade adminAddTrainingAreaFacade, IDisplayInfoHelper playInfoHelper)
         {
             _adminAddTrainingAreaFacade = adminAddTrainingAreaFacade;
             AddNewTargetAreaCommand = new Command(async () => await TryAddNewExerciseTargetArea());
-
+            _playInfoHelper = playInfoHelper;
         }
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -29,13 +30,20 @@ namespace GymSwipe.ViewModels.Admin
         {
             try
             {
-                await _adminAddTrainingAreaFacade.AddTargetArea(NewTargetArea);
+                var errors = await _adminAddTrainingAreaFacade.AddTargetArea(NewTargetArea);
+                if(errors.Count > 0)
+                {
+                    await _playInfoHelper.DisplayErrorAlert(errors);
+                    return;
+                }
                 await Task.Yield();
                 await RefreshList();
+                return;
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlertAsync("Notice", ex.Message, "OK");
+                await _playInfoHelper.DisplayStandardAlert(ex.Message);
+
             }
         }
         public async Task GetAreas()

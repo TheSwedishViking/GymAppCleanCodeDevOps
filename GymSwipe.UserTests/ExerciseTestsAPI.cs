@@ -31,6 +31,7 @@ namespace GymSwipe.UserTests
 
             Assert.NotNull(area);
         }
+
         [Theory]
         [InlineData(0, HttpStatusCode.BadRequest)]
         [InlineData(251, HttpStatusCode.NotFound)]

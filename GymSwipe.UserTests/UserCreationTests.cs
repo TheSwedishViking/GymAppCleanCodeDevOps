@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
-using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.ApplicationLayer.Services.Validators;
+using GymSwipe.UserTests.FixtureFolder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
@@ -27,8 +28,6 @@ namespace GymSwipe.UserTests
             _validatorService = _scope.ServiceProvider.GetRequiredService<UserInputValidatorService>();
             _propertiesValidator = _scope.ServiceProvider.GetRequiredService<UserInputPropertiesValidator>();
         }
-
-
         [Fact]
         public async Task CreateUser()
         {
@@ -44,7 +43,6 @@ namespace GymSwipe.UserTests
 
             var response = await _client.PostAsJsonAsync("api/User", request);
 
-
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
             _output.WriteLine($"Location: {response.Headers.Location}");
@@ -58,6 +56,8 @@ namespace GymSwipe.UserTests
             Assert.Equal(request.Firstname, createdUser.Firstname);
             Assert.Equal(request.Surname, createdUser.Surname);
             Assert.Equal(request.HeightCm, createdUser.HeightCm);
+            //Validate that friendcode has been created
+            Assert.True(!string.IsNullOrEmpty(createdUser.FriendCode));
         }
 
 

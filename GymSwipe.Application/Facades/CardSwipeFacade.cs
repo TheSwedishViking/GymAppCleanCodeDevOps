@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Interfaces.ClientInterfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Facades;
+using GymSwipe.ApplicationLayer.Interfaces.Services;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 
 namespace GymSwipe.ApplicationLayer.Facades
@@ -49,7 +50,7 @@ namespace GymSwipe.ApplicationLayer.Facades
                 AvailableExercises = await _exerciseService.GetAllExercisesAsync();
             }
             var tars = await _trainingAreasClient.GetTargetAreaDTOsAsync();
-            TargetAreas = await _traningAreaService.GetExerciseTargetsAsync();
+            TargetAreas = tars;
         }
 
 
