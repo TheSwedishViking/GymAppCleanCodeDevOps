@@ -38,5 +38,20 @@ namespace GymSwipe.API.Controllers
             }
             return Ok(tras);
         }
+        [HttpGet("get-image/{id}")]
+        public async Task<ActionResult<string>> GetAreaImage(int id)
+        {
+            if (id == 0 || id < 0)
+            {
+                return BadRequest();
+            }
+            var image = await _trainingAreaService.GetTargetAreaImage(id);
+            if(image == null)
+            {
+                return NotFound();
+            }
+            //Returns a standard "Unknown" image when there's no predefined image
+            return Ok(image);
+        }
     }
 }

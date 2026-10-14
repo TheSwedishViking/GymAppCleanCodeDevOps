@@ -31,5 +31,16 @@ namespace GymSwipe.ApplicationLayer.Services.ClientServices
             }
             return response;
         }
+
+        public async Task<string> GetTargetAreaImage(int id)
+        {
+            var response = await _http.GetAsync($"api/TrainingArea/get-image/{id}");
+            response.EnsureSuccessStatusCode();
+            if (response == null)
+            {
+                throw new Exception("Response empty or null!");
+            }
+            return await response.Content.ReadAsStringAsync();
+        }
     }
 }
