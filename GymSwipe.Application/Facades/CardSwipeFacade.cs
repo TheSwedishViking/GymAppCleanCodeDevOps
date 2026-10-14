@@ -29,7 +29,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         //We can pass a Id to load for example chest exercises
         //Not implemented, UI related, TODO!
-        public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; }
+        public bool HasDrawnAllCards() { return AvailableExercises.Count() == 0; } // true false om tom
         public async Task LoadExercisesAsync()
         {
             await LoadExercisesById(null);
@@ -46,15 +46,23 @@ namespace GymSwipe.ApplicationLayer.Facades
             }
             TargetAreas = await _traningAreaService.GetExerciseTargetsAsync();
         }
-        //Saves a playlist to user, needs user to set name of playlist => Firstname + playlist + date
-        public async Task SavePlayList()
+
+
+        //If there's no more cards, return null (something else later, a cardresult?)
+        public async Task<ExerciseDTO> DrawNewExerciseCard() //Start
         {
-            //If there's anything relevant to save
-            if (AddedExercises != null && AddedExercises.Count > 0)
+            if (HasDrawnAllCards())
             {
-                await _playlistService.SavePlaylistToUser(AddedExercises, _user.CurrentUser);
+                return null;
             }
+            //Draw a random valid card
+
+            var exercise = AvailableExercises[Random.Shared.Next(AvailableExercises.Count)];
+            AvailableExercises.Remove(exercise);
+            return exercise;
         }
+
+
         //Swipe right, add, next card
         public async Task<ExerciseDTO> ApproveCard(ExerciseDTO exercise)
         {
@@ -66,18 +74,11 @@ namespace GymSwipe.ApplicationLayer.Facades
         {
             return await DrawNewExerciseCard();
         }
-        //If there's no more cards, return null (something else later, a cardresult?)
-        public async Task<ExerciseDTO> DrawNewExerciseCard()
-        {
-            if (HasDrawnAllCards())
-            {
-                return null;
-            }
-            //Draw a random valid card
-            var exercise = AvailableExercises[Random.Shared.Next(AvailableExercises.Count)];
-            AvailableExercises.Remove(exercise);
-            return exercise;
-        }
+
+
+
+
+
 
         //Print info on the page
         public async Task<string> DeckInfo()
@@ -96,5 +97,17 @@ namespace GymSwipe.ApplicationLayer.Facades
 
             return img + "_card.jpg";
         }
+
+
+        //Saves a playlist to user, needs user to set name of playlist => Firstname + playlist + date
+        public async Task SavePlayList()
+        {
+            //If there's anything relevant to save
+            if (AddedExercises != null && AddedExercises.Count > 0)
+            {
+                await _playlistService.SavePlaylistToUser(AddedExercises, _user.CurrentUser);
+            }
+        }
+
     }
 }
