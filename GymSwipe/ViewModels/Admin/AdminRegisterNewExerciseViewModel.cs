@@ -62,22 +62,19 @@ namespace GymSwipe.ViewModels.Admin
 
         private async Task TryRegisterNewExercise()
         {
-            if (Selected.Count == 0)
-            {
-                return;
-            }
             try
             {
                 //Map objects
                 NewExercise.TargetAreaNames = Selected.Select(e => e).ToList();
                 var erros = await _adminAddExerciseFacade.AddExercise(NewExercise);
-                if(erros.Count == 0)
+                if(erros.Count > 0)
                 {
                     await _displayInfoHelper.DisplayErrorAlert(erros);
-                    await Task.Yield();
-                    await RefreshListOfTargetAreas();
+                    return;
+                   
                 }
-             
+                await Task.Yield();
+                await RefreshListOfTargetAreas();
             }
             catch (Exception ex)
             {

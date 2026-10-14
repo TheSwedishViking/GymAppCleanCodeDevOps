@@ -32,7 +32,7 @@ namespace GymSwipe.ViewModels.Admin
                 var errors = await _adminAddTrainingAreaFacade.AddTargetArea(NewTargetArea);
                 if(errors.Count > 0)
                 {
-                   await _playInfoHelper.DisplayErrorAlert(errors);
+                    await _playInfoHelper.DisplayErrorAlert(errors);
                     return;
                 }
                 await Task.Yield();
