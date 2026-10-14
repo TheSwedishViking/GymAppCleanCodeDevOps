@@ -9,5 +9,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces.ClientInterfaces
     {
         Task<List<TargetAreaDTO>> GetTargetAreaDTOsAsync();
         Task<TargetAreaDTO> GetTargetAreaDTOById(int id);
+        Task<string> GetTargetAreaImage(int id);
     }
 }

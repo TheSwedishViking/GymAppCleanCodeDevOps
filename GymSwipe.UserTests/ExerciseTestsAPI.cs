@@ -52,5 +52,15 @@ namespace GymSwipe.UserTests
 
             Assert.Equal(response.StatusCode, code);
         }
+        [Theory]
+        [InlineData(1, "chest")]
+        [InlineData(2, "back")]
+        [InlineData(251, "unknown")]
+        public async Task GetImage_Of_TrainingArea_ByProvidingAnId_ReturnsExpectedArea_Or_StandardUnknown(int id, string expectedCard)
+        {
+            var card = await _fixture.TrainingClient.GetTargetAreaImage(id);
+
+            Assert.Equal(card, expectedCard);
+        }
     }
 }
