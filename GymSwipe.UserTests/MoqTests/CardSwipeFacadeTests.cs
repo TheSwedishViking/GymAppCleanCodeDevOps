@@ -29,30 +29,38 @@ namespace GymSwipe.UserTests
             var mockTrainingAreaService = new Mock<ITraningAreaService>();
             var mockTrainingAreaClient = new Mock<ITrainingAreasClient>();
 
+            var targetAreas = new List<TargetAreaDTO>
+            {
+                new TargetAreaDTO { Id = 1, Name = "Chest" },
+                new TargetAreaDTO { Id = 2, Name = "Back" },
+                new TargetAreaDTO { Id = 3, Name = "Legs" },
+                new TargetAreaDTO { Id = 4, Name = "Arms" },
+            };
+
             var exercises = new List<ExerciseDTO> //4
             {
                 new()
                 {
                     Id = 1,
-                    Name = "Card One",
+                    Name = "Bench Press",
                     VideoSourceLink = string.Empty
                 },
                 new()
                 {
                     Id = 2,
-                    Name = "Card Two",
+                    Name = "Pullups ",
                     VideoSourceLink = string.Empty
                 },
                  new()
                 {
                     Id = 3,
-                    Name = "Card Three",
+                    Name = "Squats",
                     VideoSourceLink = string.Empty
                 },
                  new()
                 {
                     Id = 4,
-                    Name = "Card Four",
+                    Name = "Hammer Curls",
                     VideoSourceLink = string.Empty
                  }
 
@@ -63,9 +71,13 @@ namespace GymSwipe.UserTests
                 .Setup(service => service.GetAllExercisesAsync())
                 .ReturnsAsync(exercises);
 
+
             mockTrainingAreaService
                 .Setup(service => service.GetExerciseTargetsAsync())
-                .ReturnsAsync(new List<TargetAreaDTO>());
+                .ReturnsAsync(targetAreas);
+
+            //Looks trough TargetAreaList for specific id, returns targetAreaName    //cant input id directly due to exercise being random order
+            mockTrainingAreaService.Setup(getImg => getImg.GetTargetAreaImage(It.IsAny<int>())).ReturnsAsync(targetAreas[It.IsAny<int>()].Name);
 
             var facade = new CardSwipeFacade(
                 mockExerciseService.Object,
@@ -76,34 +88,40 @@ namespace GymSwipe.UserTests
 
 
 
+
             // Act
             await facade.LoadExercisesAsync();
             _output.WriteLine($"Available: {facade.AvailableExercises.Count} cards.");
 
             var approvedCard = await facade.DrawNewExerciseCard();
-            var cardAfterApproval = await facade.ApproveCard(approvedCard);
+            await facade.ApproveCard(approvedCard);
             _output.WriteLine($"Approved: {approvedCard.Name}");
 
-            _output.WriteLine($"Discarded: {cardAfterApproval.Name}");
-            var cardAfterFirstDiscard = await facade.DiscardCard();
+            await facade.DiscardCard();
 
-            _output.WriteLine($"Discarded: {cardAfterFirstDiscard.Name}");
-            var finalCard = await facade.DiscardCard();
 
-            
+            var finalCard = await facade.DiscardCard();  //returns card drawn to aprove
+
+
             Assert.True(facade.HasDrawnAllCards());
-            _output.WriteLine($"Final card awaiting decision: {finalCard.Name}");
+            _output.WriteLine($"Cards Left in deck: {facade.AvailableExercises.Count}");
+            _output.WriteLine($"Final card in hand: " + finalCard.Name);
 
-            var nextCard = await facade.ApproveCard(finalCard);
+            var nextCard = await facade.ApproveCard(finalCard); //returns null, no more cards
+            var image = await facade.GetApproptiateImageForExercise(finalCard.Id); //work in progress, not tested yet
+
+
+            _output.WriteLine($"the final card will display an image of {image}");
+
             _output.WriteLine($"Approved final card: {finalCard.Name}");
 
             // Assert
             Assert.Equal(2, facade.AddedExercises.Count);
             Assert.Same(approvedCard, facade.AddedExercises[0]);
             Assert.Same(finalCard, facade.AddedExercises[1]);
+            Assert.Contains("card", image);
             Assert.Null(nextCard);
-            Assert.True(facade.HasDrawnAllCards());
+
         }
     }
 }
-//facade.GetApproptiateImageForExercise(approvedCard.Id); //work in progress, not tested yet
