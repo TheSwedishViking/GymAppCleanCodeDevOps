@@ -42,7 +42,6 @@ namespace GymSwipe.UserTests
             Assert.Equal(code, area.StatusCode);
         }
 
-
         [Theory]
         [InlineData("api/TrainingArea/get-area-by-id/1", HttpStatusCode.OK)]
         [InlineData("api/TrainingArea/get-area-by-id/999", HttpStatusCode.NotFound)]
