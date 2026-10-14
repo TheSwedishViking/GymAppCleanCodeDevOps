@@ -16,7 +16,6 @@ namespace GymSwipe.UserTests.FixtureFolder
 {
     public class StandardLocalInMemoryFixture : IAsyncLifetime
     {
-
         public ServiceProvider ServiceProvider { get; private set; }
         public StandardLocalInMemoryFixture()
         {

@@ -55,6 +55,8 @@ namespace GymSwipe.UserTests
             Assert.Equal(request.Firstname, createdUser.Firstname);
             Assert.Equal(request.Surname, createdUser.Surname);
             Assert.Equal(request.HeightCm, createdUser.HeightCm);
+            //Validate that friendcode has been created
+            Assert.True(!string.IsNullOrEmpty(createdUser.FriendCode));
         }
 
 

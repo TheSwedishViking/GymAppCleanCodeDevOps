@@ -16,9 +16,6 @@ namespace GymSwipe.UserTests
         {
             _output = output;
         }
-
-
-
         [Fact]
         public async Task TestCardSwipeFacadeInitialization()
         {

@@ -25,9 +25,6 @@ namespace GymSwipe.UserTests
                 services.RemoveAll<DbContextOptions<GymAppDbContext>>();
                 services.RemoveAll<IDbContextOptionsConfiguration<GymAppDbContext>>();
                 services.RemoveAll<GymAppDbContext>();
-
-
-
                 services.AddDbContext<GymAppDbContext>(options =>
                     options.UseInMemoryDatabase("GymSwipeTestDb"));
             });

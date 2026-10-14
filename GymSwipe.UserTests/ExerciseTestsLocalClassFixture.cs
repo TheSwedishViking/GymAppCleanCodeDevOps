@@ -29,7 +29,6 @@ namespace GymSwipe.UserTests
         [Fact]
         public async Task TryAndGetStaticExcerises_ReturnsExpectedTestaData_FormatDTO_ToConvertToFrontendModels()
         {
-         
             //Act
             var exs = await _sut.GetAllExercisesAsync();
 
@@ -117,7 +116,6 @@ namespace GymSwipe.UserTests
         [Theory]
         [InlineData("backflip")]
         [InlineData("sdaasdssdads")]
-
         public async Task GetExerciseByName_NonExistingExercise_ReturnsNull(string invalid)
         {
             //Expected result is an execption

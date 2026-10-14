@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace GymSwipe.UserTests
+namespace GymSwipe.UserTests.Unit
 {
     public class CaloricTests: IClassFixture<StandardLocalInMemoryFixture>
     {
