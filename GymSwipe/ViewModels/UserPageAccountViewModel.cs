@@ -92,6 +92,7 @@ namespace GymSwipe.ViewModels
         {
             if (CurrentUser == null)
             {
+                await Shell.Current.DisplayAlertAsync("Not logged in", "You're not logged in! Go log in or register", "Alright...");
                 await Shell.Current.Navigation.PopToRootAsync();
                 return;
             }

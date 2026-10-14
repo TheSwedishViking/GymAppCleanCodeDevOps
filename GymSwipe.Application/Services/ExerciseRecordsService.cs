@@ -24,5 +24,6 @@ namespace GymSwipe.ApplicationLayer.Services
             await _repo.SaveRecords(domains);
         }
        
+
     }
 }

@@ -33,6 +33,7 @@ namespace GymSwipe.UserTests.FixtureFolder
             services.AddScoped<IGymPlaylistService, GymPlaylistService>();
             services.AddScoped<IDateHandler, DateHandler>();
             services.AddScoped<ITimeSetter, TimeSetter>();
+            services.AddScoped<IRecordsValidator, RecordsValidator>();
             services.AddScoped<IPlaylistControls, PlaylistControls>();
             services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
             services.AddScoped<ICalorieCountingService, CalorieCountingService>();

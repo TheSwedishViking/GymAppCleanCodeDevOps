@@ -14,7 +14,7 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task<PlaylistExerciseDTO> GetNextExercise(PlaylistExerciseDTO current);
         Task<List<ExerciseRecordDTO>> GetActiveRecords();
         Task SaveRecords(List<ExerciseRecordDTO> records);
-        Task AddRecord(ExerciseRecordDTO currentRecord);
+        Task<List<string>> AddRecord(ExerciseRecordDTO currentRecord);
         Task<PlaylistExerciseDTO> GetPreviousExercise(PlaylistExerciseDTO ex);
         Task<PlaylistExerciseDTO> GetFirstExercise(ObservableCollection<PlaylistExerciseDTO> excercises);
     }

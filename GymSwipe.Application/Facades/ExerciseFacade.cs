@@ -33,11 +33,6 @@ namespace GymSwipe.ApplicationLayer.Facades
             return exs ?? new ExerciseDTO();
         }
 
-        public Task<List<ExerciseDTO>> GetExerciseListByCategoryAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<ExerciseDTO>> GetRandomExercisesAsync()
         {
             var exs = await  _exerciseService.GetRandomExercisesAsync();

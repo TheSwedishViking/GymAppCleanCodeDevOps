@@ -71,13 +71,6 @@ namespace GymSwipe.Infrastructure.Repos
             await _db.SaveChangesAsync();
         }
 
-        public async Task UpdateTargetArea(ExerciseTargetArea area)
-        {
-            var thisArea = _db.ExercisesTargetAreas.FirstOrDefault(e => e.Id == area.Id);
-            if (thisArea == null)
-            {
-                return;
-            }
-        }
+      
     }
 }

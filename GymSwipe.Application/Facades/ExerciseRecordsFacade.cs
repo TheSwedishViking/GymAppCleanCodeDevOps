@@ -12,7 +12,7 @@ namespace GymSwipe.ApplicationLayer.Facades
     public class ExerciseRecordsFacade:IExerciseRecordsFacade
     {
         private readonly IExerciseRecordsService _exerciseRecordsService;
-        private readonly IGymPlaylistService _playlistService;
+        private readonly IRecordsValidator _recordsValidator;
         private readonly IPlaylistControls _playlistControls;
         private readonly IDateHandler _dateHandler;
         private PlaylistExerciseDTO _currentExercise;
@@ -24,27 +24,37 @@ namespace GymSwipe.ApplicationLayer.Facades
             IExerciseRecordsService exerciseRecordsService,
             IGymPlaylistService gymPlaylistService,
             IPlaylistControls playlistControls,
+            IRecordsValidator recordsValidator,
             IDateHandler dateHandler,
             LoggedInUser loggedInUser,
             WorkoutSession workoutSession )
         {
             _exerciseRecordsService = exerciseRecordsService;
-            _playlistService = gymPlaylistService;
+            _recordsValidator = recordsValidator;
             _playlistControls = playlistControls;
             _dateHandler = dateHandler;
             _session = workoutSession;
             _user = loggedInUser;
         }
 
-        public async Task AddRecord(ExerciseRecordDTO currentRecord)
+        public async Task<List<string>> AddRecord(ExerciseRecordDTO currentRecord)
         {
+            var errors = new List<string>();
             if (currentRecord == null)
             {
-                throw new ArgumentNullException(nameof(currentRecord));
+                errors.Add("Argument null");
+                return errors;
+            }
+            errors =  _recordsValidator.Validate(currentRecord);
+            if(errors.Count > 0)
+            {
+                errors.Add("Can't record exercise record, validate input");
+                return errors;
             }
             currentRecord.UserId = _user.CurrentUser.Id;
             currentRecord.DateRecorded = _dateHandler.SetDateAsDateTime();
             _addedRecords.Add(currentRecord);
+            return errors;
         }
 
         public async Task<bool> GetActiveStatus()

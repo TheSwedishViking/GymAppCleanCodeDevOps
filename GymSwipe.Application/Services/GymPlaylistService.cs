@@ -73,7 +73,8 @@ namespace GymSwipe.ApplicationLayer.Services
             var playlists = await _playlistRepo.GetPlaylistsByUserId(userId);
             if(playlists == null)
             {
-                throw new Exception("No playlists found");
+                //User might have no playlists
+                return null;
             }
             var dtos = (await Task.WhenAll(playlists.Select(_mapDTOService.MapPlaylistDTO))).ToList();
             return dtos;

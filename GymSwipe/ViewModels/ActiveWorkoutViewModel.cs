@@ -81,7 +81,6 @@ namespace GymSwipe.ViewModels
 
             StartPlaylistCommand = new Command(async () => await StartPlaylist());
             NextExerciseCommand = new Command(async () => await NextExercise());
-            PausePlaylistCommand = new Command(async () => await PausePlaylist());
             PreviousExerciseCommand = new Command(async () => await PreviousExercise());
 
         }
@@ -104,28 +103,22 @@ namespace GymSwipe.ViewModels
             CardImageSource = await _workoutFacade.GetApproptiateImageForExercise(CurrentExercise.ExerciseId);
 
         }
-        public async Task PausePlaylist()
-        {
-            throw new NotImplementedException("Not implmented");
-        }
         public async Task PreviousExercise()
         {
             CurrentExercise = await _workoutFacade.GetPreviousExercise(CurrentExercise);
             CardImageSource = await _workoutFacade.GetApproptiateImageForExercise(CurrentExercise.ExerciseId);
         }
-
         public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
         public async Task InitalizeAsync()
         {
             //
             if (_loggedInUser.CurrentUser == null)
             {
                 //Pop up warning later
-                await Task.Delay(1000);
+                await Task.Yield();
                 await Shell.Current.GoToAsync(nameof(Pages.UserRegistrationPage));
                 return;
             }

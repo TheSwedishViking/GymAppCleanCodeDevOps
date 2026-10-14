@@ -13,9 +13,6 @@ namespace GymSwipe.ApplicationLayer.Services
             return TimeSpan.FromMinutes(stopwatch.Elapsed.TotalMinutes);
         }
 
-        public TimeSpan SetTimeMinutes(TimeSpan timeSpan)
-        {
-            return timeSpan.TotalMinutes;
-        }
+      
     }
 }

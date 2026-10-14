@@ -40,10 +40,10 @@ namespace GymSwipe.ViewModels
         public async Task TryRegisterNewUser()
         {
 
-
             bool existingEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/Unique-Email/" + EmailEntry);
             if (existingEmail)
             {
+                await Shell.Current.DisplayAlertAsync("Not found", "Email not found, register a new account below...", "OK");
                 StatusCheck = EmailEntry + " not found! Register a new one";
                 return;
             }

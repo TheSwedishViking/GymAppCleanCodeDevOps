@@ -15,8 +15,6 @@ namespace GymSwipe.ViewModels
 
         private readonly UserInputValidatorService _validator = new();
         private readonly UserInputPropertiesValidator _validatorProps = new();
-
-
         public GymUser CurrentUser { get; set; } = new GymUser();
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -51,6 +49,7 @@ namespace GymSwipe.ViewModels
             if (first is null)
             {
                 StatusCheck = "Invalid first name. Use 2-20 letters.";
+                DisplayAlertMessage(StatusCheck);
                 return;
             }
             CurrentUser.Firstname = first;
@@ -58,6 +57,7 @@ namespace GymSwipe.ViewModels
             if (last is null)
             {
                 StatusCheck = "Invalid surname. Use 2-20 letters.";
+                DisplayAlertMessage(StatusCheck);
                 return;
             }
             CurrentUser.Surname = last;
@@ -65,6 +65,7 @@ namespace GymSwipe.ViewModels
             if (CurrentUser.Email.IsNullOrEmpty())
             {
                 StatusCheck = "Email cant be empty!";
+                DisplayAlertMessage(StatusCheck);
                 return;
             }
             var correctEmail = _validator.UserEmailIsValid(CurrentUser.Email);
@@ -72,25 +73,28 @@ namespace GymSwipe.ViewModels
             if (correctEmail.IsValid == false)
             {
                 StatusCheck = correctEmail.Email; //response message
-
+                DisplayAlertMessage(StatusCheck);
                 return;
             }
             bool uniqueEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/Unique-Email/" + correctEmail.Email);
             if (uniqueEmail == false)
             {
                 StatusCheck = correctEmail.Email + " Email is taken!";
+                DisplayAlertMessage(StatusCheck);
                 return;
             }
             var validHeight = await _validatorProps.ValidateUserHeight(CurrentUser.HeightCm);
             if (validHeight.Success == false)
             {
                 StatusCheck = validHeight.Message;
+                DisplayAlertMessage(StatusCheck);
                 return;
             }
             var validWeight = await _validatorProps.ValidateUserWeight(CurrentUser.WeightKg);
             if (validWeight.Success == false)
             {
                 StatusCheck = validWeight.Message;
+                DisplayAlertMessage(StatusCheck);
                 return;
             }
 
@@ -104,14 +108,26 @@ namespace GymSwipe.ViewModels
                 Gender = CurrentUser.Gender
             };
 
-            using var response = await _httpClient.PostAsJsonAsync("api/User", request);
-            response.EnsureSuccessStatusCode();
-            var user = await response.Content.ReadFromJsonAsync<GymUserDTO>(); //Set singleton id
-            CurrentUser.Id = user.Id;
-            _loggedIn.CurrentUser = CurrentUser;
-            _loggedIn.CurrentUser.SetFriendCode();
+            try
+            {
+                using var response = await _httpClient.PostAsJsonAsync("api/User", request);
+                response.EnsureSuccessStatusCode();
+                var user = await response.Content.ReadFromJsonAsync<GymUserDTO>(); //Set singleton id
+                CurrentUser.Id = user.Id;
+                _loggedIn.CurrentUser = CurrentUser;
+                _loggedIn.CurrentUser.SetFriendCode();
+            }
+            catch (Exception ex)
+            {
+                DisplayAlertMessage(ex.Message);
+            }
+
 
             await Shell.Current.GoToAsync("..");
+        }
+        private async void DisplayAlertMessage(string message)
+        {
+            await Shell.Current.DisplayAlertAsync("Notice", message, "OK");
         }
 
         public void OnPropertyChanged(string prop)

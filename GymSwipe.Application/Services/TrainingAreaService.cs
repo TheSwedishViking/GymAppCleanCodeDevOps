@@ -11,7 +11,6 @@ namespace GymSwipe.ApplicationLayer.Services
         public TrainingAreaService(
             ITraningAreaRepo traningAreaRepo,
             IMapDTOService mapDTOService
-            
             )
         {
             _repo = traningAreaRepo;

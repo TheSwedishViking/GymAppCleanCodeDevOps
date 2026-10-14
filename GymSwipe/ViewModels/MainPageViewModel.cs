@@ -29,10 +29,6 @@ namespace GymSwipe.ViewModels
             Session = loggedInUser;
             CurrentUser = Session.CurrentUser;
         }
-        public void UpdateLabelGreetUser()
-        {
-
-        }
         public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
