@@ -1,5 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Services;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
 using System.Collections.ObjectModel;

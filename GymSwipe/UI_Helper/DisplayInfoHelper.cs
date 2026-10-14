@@ -1,4 +1,4 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.Interfaces.Display;
 using System;
 using System.Collections.Generic;
 using System.Text;

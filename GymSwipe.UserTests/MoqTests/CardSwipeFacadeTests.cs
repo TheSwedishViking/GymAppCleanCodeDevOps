@@ -1,13 +1,13 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Facades;
-using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Interfaces.ClientInterfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Services;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using Moq;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GymSwipe.UserTests
+namespace GymSwipe.UserTests.MoqTests
 {
     public class CardSwipeFacadeTests
     {

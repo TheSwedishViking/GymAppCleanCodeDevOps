@@ -1,5 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Repositories;
 using GymSwipe.Domain.Models;
 using GymSwipe.Infrastructure.Data;
 

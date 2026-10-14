@@ -1,5 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Services;
 using GymSwipe.ApplicationLayer.Services;
 using GymSwipe.Domain.Enums;
 using GymSwipe.Infrastructure.Repos;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace GymSwipe.UserTests.Collectins
+namespace GymSwipe.UserTests.Collections
 {
     [CollectionDefinition("api")]
     public class APICollectionTests:ICollectionFixture<APIExerciseFixture>

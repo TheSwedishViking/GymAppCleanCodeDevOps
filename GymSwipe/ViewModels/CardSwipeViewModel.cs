@@ -1,5 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Display;
+using GymSwipe.ApplicationLayer.Interfaces.Facades;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;

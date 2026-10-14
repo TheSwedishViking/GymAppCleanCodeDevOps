@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
-using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.ApplicationLayer.Services.Validators;
+using GymSwipe.UserTests.FixtureFolder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;

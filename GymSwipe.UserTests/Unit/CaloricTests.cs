@@ -1,4 +1,4 @@
-﻿using GymSwipe.ApplicationLayer.Interfaces;
+﻿using GymSwipe.ApplicationLayer.Interfaces.Services;
 using GymSwipe.UserTests.FixtureFolder;
 using Microsoft.Extensions.DependencyInjection;
 using System;

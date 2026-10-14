@@ -1,4 +1,4 @@
-﻿using GymSwipe.ApplicationLayer.Services;
+﻿using GymSwipe.ApplicationLayer.Services.Validators;
 using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace GymSwipe.UserTests
+namespace GymSwipe.UserTests.FixtureFolder
 {
-    public class UserApiFixture : WebApplicationFactory<GymSwipe.API.Program>
+    public class UserApiFixture : WebApplicationFactory<API.Program>
     {
         private bool _init = false;
         public ServiceProvider ServiceProvider { get; private set; }

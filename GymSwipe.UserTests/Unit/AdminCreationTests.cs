@@ -1,5 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Facades;
 using GymSwipe.UserTests.FixtureFolder;
 using Microsoft.Extensions.DependencyInjection;
 using System;

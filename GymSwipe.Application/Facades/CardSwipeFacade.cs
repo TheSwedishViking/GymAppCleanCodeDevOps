@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Interfaces.ClientInterfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Facades;
+using GymSwipe.ApplicationLayer.Interfaces.Services;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 
 namespace GymSwipe.ApplicationLayer.Facades

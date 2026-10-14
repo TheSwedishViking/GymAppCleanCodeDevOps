@@ -1,5 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.Facades;
+using GymSwipe.ApplicationLayer.Interfaces.Services;
+using GymSwipe.ApplicationLayer.Interfaces.Validators;
 using GymSwipe.Domain.Models;
 using System;
 using System.Collections.Generic;

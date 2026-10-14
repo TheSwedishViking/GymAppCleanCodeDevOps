@@ -1,8 +1,8 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
-using GymSwipe.ApplicationLayer.Interfaces;
-using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.ApplicationLayer.Interfaces.Display;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
+using GymSwipe.ApplicationLayer.Services.Validators;
 using GymSwipe.Domain.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel;
