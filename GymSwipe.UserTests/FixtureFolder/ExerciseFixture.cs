@@ -19,23 +19,9 @@ namespace GymSwipe.UserTests.FixtureFolder
         public ServiceProvider ServiceProvider { get; private set; }
         public ExerciseFixture()
         {
-            var config = new ConfigurationBuilder().AddUserSecrets<ExerciseFixture>(optional: true).Build();
-
             var services = new ServiceCollection();
 
-            var connString = "";
-
-            //Use in memory
-            if (string.IsNullOrEmpty(connString))
-            {
                 services.AddDbContext<GymAppDbContext>(db => db.UseInMemoryDatabase("GymAppTestDb"));
-            }
-            //Local machine; use server
-            else
-            {
-                services.AddDbContext<GymAppDbContext>(d => d.UseSqlServer(connString));
-
-            }
             //*******CLIENT SERVICES*******
             services.AddHttpClient<ITrainingAreasClient, TrainingAreaClient>(c =>
                 c.BaseAddress = new Uri("http://localhost/"));
@@ -46,6 +32,8 @@ namespace GymSwipe.UserTests.FixtureFolder
             services.AddScoped<IExerciseService, ExerciseService>();
             services.AddScoped<IGymPlaylistService, GymPlaylistService>();
             services.AddScoped<IDateHandler, DateHandler>();
+            services.AddScoped<ITimeSetter, TimeSetter>();
+            services.AddScoped<IPlaylistControls, PlaylistControls>();
             services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
             services.AddScoped<ICalorieCountingService, CalorieCountingService>();
 

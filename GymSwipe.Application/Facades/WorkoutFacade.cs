@@ -10,11 +10,13 @@ namespace GymSwipe.ApplicationLayer.Facades
     {
         private readonly IUserService _userService;
         private readonly IGymPlaylistService _playlistService;
+        private readonly IPlaylistControls _playlistControls;
         private readonly ICalorieCountingService _calorieCountingService;
+        private readonly ITimeSetter _timeSetter;
+        private readonly ITraningAreaService _traningAreaService;
+
         private readonly LoggedInUser _loggedInUser;
         private readonly WorkoutSession _workoutSession;
-        private readonly ITraningAreaService _traningAreaService;
-        private GymUser _user;
         private GymPlaylistDTO _playlist;
         private PlaylistExerciseDTO _currentExercise;
         private Stopwatch stopwatch;
@@ -22,16 +24,20 @@ namespace GymSwipe.ApplicationLayer.Facades
             IExerciseService exerciseService,
             IUserService userService,
             ICalorieCountingService calorieCountingService,
+            ITimeSetter timeSetter,
+            IPlaylistControls playlistControls,
             IGymPlaylistService gymPlaylistService,
             ITraningAreaService traningAreaService,
             LoggedInUser loggedInUser,
             WorkoutSession session)
         {
             _playlistService = gymPlaylistService;
+            _playlistControls = playlistControls; 
             _calorieCountingService = calorieCountingService;
             _traningAreaService = traningAreaService;
             _userService = userService;
             _loggedInUser = loggedInUser;
+            _timeSetter = timeSetter;
             _workoutSession = session;
             stopwatch = new Stopwatch();
 
@@ -65,18 +71,17 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         public async Task<PlaylistExerciseDTO> GetNextExercise(PlaylistExerciseDTO current)
         {
-            _currentExercise = await _playlistService.GetNextExercise(current, _playlist.Excercise);
+            _currentExercise = await _playlistControls.GetNextExercise(current, _playlist.Excercise);
             if (_currentExercise == current)
             {
                 return null;
             }
 
-
             return _currentExercise;
         }
         public async Task<PlaylistExerciseDTO> GetPreviousExercise(PlaylistExerciseDTO current)
         {
-            _currentExercise = await _playlistService.GetPreviousExercise(current, _playlist.Excercise);
+            _currentExercise = await _playlistControls.GetPreviousExercise(current, _playlist.Excercise);
             if (_currentExercise == null)
             {
                 throw new Exception("Null exercise");
@@ -88,54 +93,31 @@ namespace GymSwipe.ApplicationLayer.Facades
         {
             stopwatch.Stop();
         }
-        public async Task RecordUserWorkout()
-        {
-            //See over models to handle; 
-            //A playlist as completed
-            //A record of performed sets
-
-        }
-        public async Task<bool> QuitWorkout()
-        {
-            _workoutSession.Clear();
-            return true;
-        }
-
+    
         public async Task<GymPlaylistDTO> GetPlaylistById(int id)
         {
-            try
+
+            var playlist = await _playlistService.GetPlaylist(id);
+            if (playlist == null)
             {
-                var playlist = await _playlistService.GetPlaylist(id);
-                if (playlist == null)
-                {
-                    throw new ArgumentNullException("No playlist found, but we have a provided Id?");
-                }
-                _playlist = playlist;
-                return _playlist;
+                throw new KeyNotFoundException($"No playlist found, with provided Id: {id}");
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return new GymPlaylistDTO();
+            _playlist = playlist;
+            return _playlist;
         }
 
         public async Task CompleteWorkout()
         {
             stopwatch.Stop();
 
-            var elapsedTime = stopwatch.Elapsed;
+            var elapsedTime = _timeSetter.SetTime(stopwatch);
 
-            var calories = await _calorieCountingService.CalculateCalories(
+            var calories =  _calorieCountingService.CalculateCalories(
                 _playlist.LatestElapsedTime
                 ,_loggedInUser.CurrentUser.WeightKg,
                 null);
 
              await _playlistService.RecordedCompletedWorkout(_playlist.Id, elapsedTime, calories);
-        }
-        public void RecordPlaylistCompletion(TimeSpan elapsed, DateTime now, double calories)
-        {
-
         }
         public async Task<string> GetApproptiateImageForExercise(int exerciseId)
         {

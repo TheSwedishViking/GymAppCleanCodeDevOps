@@ -25,11 +25,11 @@ namespace GymSwipe.ApplicationLayer.Services
 
         public async Task<List<ExerciseDTO>?> GetExerciseByEnum(AreaEnum area)
         {
-            var exas = await GetExerciseByIdAsync((int)(area));
+            var exas = await GetExercisesByCategoryIdAsync((int)(area));
             return exas;
         }
 
-        public async Task<List<ExerciseDTO>> GetExerciseByIdAsync(int id)
+        public async Task<List<ExerciseDTO>> GetExercisesByCategoryIdAsync(int id)
         {
             var categoryExercises = await _repo.GetExercisesByCategoryAsync(id);
             var dtos = (await Task.WhenAll(categoryExercises.Select(_mapDTOService.MapExerciseDTO))).ToList();
@@ -67,6 +67,13 @@ namespace GymSwipe.ApplicationLayer.Services
             }
             var domain = await _mapDomainService.MapExerciseDomain(newExercise);
             return await _repo.AddExercise(domain);
+        }
+
+        public async Task<ExerciseDTO?> GetExerciseById(int id)
+        {
+            var domain = await _repo.GetExerciseById(id);
+            var dto = await _mapDTOService.MapExerciseDTO(domain);
+            return dto;
         }
     }
 }

@@ -49,8 +49,10 @@ namespace GymSwipe.API
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
             builder.Services.AddScoped<IGymPlaylistService, GymPlaylistService>();
             builder.Services.AddScoped<IDateHandler, DateHandler>();
+            builder.Services.AddScoped<ITimeSetter, TimeSetter>();
             builder.Services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
             builder.Services.AddScoped<ICalorieCountingService, CalorieCountingService>();
+            builder.Services.AddScoped<IPlaylistControls, PlaylistControls>();
 
             //********MAPPING SERVICES************
             builder.Services.AddScoped<IMapDomainService, MapDomainService>();

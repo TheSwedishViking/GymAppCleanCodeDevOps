@@ -38,14 +38,7 @@ namespace GymSwipe.Infrastructure.Repos
 
             if(playlist == null)
             {
-                //Nothing for today, yesterdays instead? Random other? Create random? Food for though, thought for food
-                var all = _db.GymPlaylists.
-                    Where(p => p.UserId == userId)
-                    .Include(p => p.Exercises.OrderBy(pr => pr.PlaylistOrder))
-                    .ThenInclude(pl => pl.Exercise).ToArray();
-
-                //return a random for now
-                return all[Random.Shared.Next(all.Length)];
+                return null;
             }
 
             return playlist;

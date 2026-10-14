@@ -26,11 +26,7 @@ namespace GymSwipe.ApplicationLayer.Services
                 LatestElapsedTime = existsAlready.LatestElapsedTime,
                 Excercise = dtoExercises
             };
-            
         }
-
-       
-
         public async Task<ExerciseDTO> MapExerciseDTO(Exercise exercise)
         {
             var targetAreas =  (await Task.WhenAll(exercise.TargetAreas.Select(MapTargetAreaDTO))).ToList();

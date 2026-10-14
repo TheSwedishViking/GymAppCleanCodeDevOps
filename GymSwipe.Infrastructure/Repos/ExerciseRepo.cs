@@ -15,14 +15,14 @@ namespace GymSwipe.Infrastructure.Repos
 
         public async Task<Exercise> GetExerciseById(int id)
         {
-            var ex = _db.Exercises.FirstOrDefault(e=>e.Id == id);
+            var ex =await _db.Exercises.
+                Include(e=>e.TargetAreas).FirstOrDefaultAsync(e=>e.Id==id);
             if(ex == null)
             {
                 throw new Exception("Did not find exercise by that Id");
             }
             return ex;
         }
-
 
         public async Task<bool> AddExercise(Exercise domain)
         {

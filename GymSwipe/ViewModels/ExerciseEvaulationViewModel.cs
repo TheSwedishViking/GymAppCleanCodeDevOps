@@ -93,7 +93,7 @@ namespace GymSwipe.ViewModels
             CurrentExercise = await _exerciseRecordsFacade.GetNextExercise(ex);
             if(CurrentExercise == null)
             {
-                 bool result=    await _exerciseRecordsFacade.SaveRecords(await _exerciseRecordsFacade.GetActiveRecords());
+                await _exerciseRecordsFacade.SaveRecords(await _exerciseRecordsFacade.GetActiveRecords());
                 await Task.Yield();
                 await Shell.Current.Navigation.PopToRootAsync();
                 return;

@@ -2,7 +2,6 @@
 {
     public class UserInputPropertiesValidator
     {
-
         public async Task<(bool Success, string Message)> ValidateUserWeight(double weight)
         {
             if (weight == null || weight <= 49 || weight >= 251)

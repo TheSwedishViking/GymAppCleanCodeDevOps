@@ -6,8 +6,8 @@ namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface IDateHandler
     {
-        Task<string> SetDateAsString();
-        Task<DateTime> SetDateAsDateTime();
-        Task<DateOnly> SetDateAsDateOnly();
+        string SetDateAsString();
+        DateTime SetDateAsDateTime();
+        DateOnly SetDateAsDateOnly();
     }
 }

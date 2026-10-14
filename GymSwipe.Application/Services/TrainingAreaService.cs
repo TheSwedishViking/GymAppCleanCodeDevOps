@@ -7,17 +7,14 @@ namespace GymSwipe.ApplicationLayer.Services
     public class TrainingAreaService : ITraningAreaService
     {
         private readonly ITraningAreaRepo _repo;
-        private readonly IMapDomainService _mapDomainService;
         private readonly IMapDTOService _mapDTOService;
         public TrainingAreaService(
             ITraningAreaRepo traningAreaRepo,
-            IMapDTOService mapDTOService,
-            IMapDomainService mapDomainService
+            IMapDTOService mapDTOService
             
             )
         {
             _repo = traningAreaRepo;
-            _mapDomainService = mapDomainService;
             _mapDTOService = mapDTOService;
         }
 

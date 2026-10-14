@@ -16,24 +16,24 @@ namespace GymSwipe.ApplicationLayer.Facades
         }
         public async Task AddTargetArea(TargetAreaDTO targetAreaDTO)
         {
-            if(targetAreaDTO == null)
-            {
-                throw new ArgumentNullException("New target area invalid");
-            }
+            //Real basic, somehow null, throw
+            ArgumentNullException.ThrowIfNull(targetAreaDTO);
 
             var existing = await _traningAreaService.GetTargetAreaByName(targetAreaDTO.Name);
-            if(existing == null)
+            if(existing != null)
             {
-                await _traningAreaService.AddNewArea(targetAreaDTO);
+                throw new InvalidOperationException($"Target area '{targetAreaDTO.Name}' already exists.");
             }
-            else
-            {
-                throw new Exception("Already exists");
-            }
+            await _traningAreaService.AddNewArea(targetAreaDTO);
         }
 
         public async Task<List<TargetAreaDTO>> GetTargetAreaDTOsAsync()
         {
+            var targets = await _traningAreaService.GetExerciseTargetsAsync();
+            if(targets == null)
+            {
+                throw new ArgumentNullException("Retireved no target areas!");
+            }
             return await _traningAreaService.GetExerciseTargetsAsync();
         }
     }
