@@ -1,7 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
-using GymSwipe.Domain.Models;
 using System.Diagnostics;
 
 namespace GymSwipe.ApplicationLayer.Facades
@@ -17,9 +16,9 @@ namespace GymSwipe.ApplicationLayer.Facades
 
         private readonly LoggedInUser _loggedInUser;
         private readonly WorkoutSession _workoutSession;
-        private GymPlaylistDTO _playlist;
+        public GymPlaylistDTO _playlist;
         private PlaylistExerciseDTO _currentExercise;
-        private Stopwatch stopwatch;
+        public Stopwatch stopwatch;
         public WorkoutFacade(
             IExerciseService exerciseService,
             IUserService userService,
@@ -32,7 +31,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             WorkoutSession session)
         {
             _playlistService = gymPlaylistService;
-            _playlistControls = playlistControls; 
+            _playlistControls = playlistControls;
             _calorieCountingService = calorieCountingService;
             _traningAreaService = traningAreaService;
             _userService = userService;
@@ -42,6 +41,8 @@ namespace GymSwipe.ApplicationLayer.Facades
             stopwatch = new Stopwatch();
 
         }
+
+
         public async Task<GymPlaylistDTO> GetPlaylistByUserId(int userId)
         {
             var userValid = await _userService.GetUserById(userId);
@@ -60,6 +61,10 @@ namespace GymSwipe.ApplicationLayer.Facades
             _workoutSession.Start(_playlist);
             return _playlist;
         }
+
+
+
+
 
         public async Task<PlaylistExerciseDTO> StartWorkout()
         {
@@ -93,7 +98,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         {
             stopwatch.Stop();
         }
-    
+
         public async Task<GymPlaylistDTO> GetPlaylistById(int id)
         {
 
@@ -112,12 +117,12 @@ namespace GymSwipe.ApplicationLayer.Facades
 
             var elapsedTime = _timeSetter.SetTime(stopwatch);
 
-            var calories =  _calorieCountingService.CalculateCalories(
+            var calories = _calorieCountingService.CalculateCalories(
                 _playlist.LatestElapsedTime
-                ,_loggedInUser.CurrentUser.WeightKg,
+                , _loggedInUser.CurrentUser.WeightKg,
                 null);
 
-             await _playlistService.RecordedCompletedWorkout(_playlist.Id, elapsedTime, calories);
+            await _playlistService.RecordedCompletedWorkout(_playlist.Id, elapsedTime, calories);
         }
         public async Task<string> GetApproptiateImageForExercise(int exerciseId)
         {
