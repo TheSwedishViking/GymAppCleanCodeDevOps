@@ -9,23 +9,15 @@ namespace GymSwipe.ApplicationLayer.Services
 {
     public class MapDomainService : IMapDomainService
     {
-        private IExerciseRecordsRepository _exerciseRecordsRepository;
-        private ITraningAreaRepo _traningAreaRepo;
-        private IUserRepository _userRepository;
         private IExerciseRepository _exerciseRepository;
         private IGymPlaylistRepository _gymPlaylistRepository;
         public MapDomainService(
             IExerciseRepository exerciseRepository, 
-            ITraningAreaRepo traningAreaRepo, 
-            IUserRepository userRepository, 
-            IGymPlaylistRepository gymPlaylistRepository,
-            IExerciseRecordsRepository exerciseRecordsRepository)
+            IGymPlaylistRepository gymPlaylistRepository
+            )
         {
-            _exerciseRecordsRepository = exerciseRecordsRepository;
             _exerciseRepository = exerciseRepository;
             _gymPlaylistRepository = gymPlaylistRepository;
-            _traningAreaRepo = traningAreaRepo;
-            _userRepository = userRepository;
 
         }
         public async Task<Exercise> MapExerciseDomain(ExerciseDTO exercise)
@@ -74,28 +66,44 @@ namespace GymSwipe.ApplicationLayer.Services
 
         public async Task<GymPlaylist> MapPlaylistDomain(GymPlaylistDTO gymPlaylist)
         {
-            var exercises = (await Task.WhenAll(gymPlaylist.Excercise.Select(MapPlaylistExerciseDomain))).ToList();
+            var exercises = new List<PlaylistExercise>();
+            foreach (var e in gymPlaylist.Excercise)
+            {
+                exercises.Add(await MapPlaylistExerciseDomain(e, gymPlaylist.Id));
+            }
             return new GymPlaylist
             {
                 Id = gymPlaylist.Id,
                 Name = gymPlaylist.Name,
                 UserId = gymPlaylist.UserId,
-                Exercises = exercises
+                Exercises = exercises,
+                CaloriesBurnedFromLatestWorkout = gymPlaylist.CaloriesBurnedFromLatestWorkout,
+                LastPlayed = gymPlaylist.LastPlayed,
+                LatestElapsedTime = gymPlaylist.LatestElapsedTime,
+                HasBeenPlayedBefore=true,
             };
         }
 
-        public async Task<PlaylistExercise> MapPlaylistExerciseDomain(PlaylistExerciseDTO playlistExercise)
+        public async Task<PlaylistExercise> MapPlaylistExerciseDomain(PlaylistExerciseDTO playlistExercise, int playlistId)
         {
             var exercise = await _exerciseRepository.GetExerciseById(playlistExercise.ExerciseId);
-            var playlist = await _gymPlaylistRepository.GetPlaylist(playlistExercise.PlaylistId);
+            var playlist = await _gymPlaylistRepository.GetPlaylist(playlistId);
             return new PlaylistExercise
             {
                 Id = exercise.Id,
                 Exercise = exercise,
                 ExerciseId = exercise.Id,
-                PlaylistId = playlist.Id,
+                PlaylistId = playlistId,
                 Playlist = playlist,
                 PlaylistOrder = playlistExercise.PlaylistOrder,
+            };
+        }
+
+        public async Task<PlaylistExercise> MapPlaylistExerciseFromExercise(Exercise exercise)
+        {
+            return new PlaylistExercise
+            {
+                ExerciseId = exercise.Id,
             };
         }
 

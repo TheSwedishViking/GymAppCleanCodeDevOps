@@ -19,9 +19,6 @@ namespace GymSwipe.Infrastructure.Repos
                 .ThenInclude(pe => pe.Exercise)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
-
-
-
         public async Task<List<GymPlaylist>> GetPlaylistsByUserId(int userId)
         {
             return await _db.GymPlaylists
@@ -60,16 +57,16 @@ namespace GymSwipe.Infrastructure.Repos
             await _db.SaveChangesAsync();
         }
 
-        public async Task UpdatePlaylist(GymPlaylist playlistService)
+        public async Task UpdatePlaylist(GymPlaylist playlist)
         {
-            var existing = await _db.GymPlaylists.FirstOrDefaultAsync(p=>p.Id == playlistService.Id);
+            var existing = await _db.GymPlaylists.FirstOrDefaultAsync(p=>p.Id == playlist.Id);
             if (existing == null) return;
 
-            existing.HasBeenPlayedBefore = playlistService.HasBeenPlayedBefore;
-            existing.CaloriesBurnedFromLatestWorkout = playlistService.CaloriesBurnedFromLatestWorkout;
-            existing.LastPlayed = playlistService.LastPlayed;
-            existing.LatestElapsedTime = playlistService.LatestElapsedTime;
-
+            existing.HasBeenPlayedBefore = playlist.HasBeenPlayedBefore;
+            existing.CaloriesBurnedFromLatestWorkout = playlist.CaloriesBurnedFromLatestWorkout;
+            existing.LastPlayed = playlist.LastPlayed;
+            existing.LatestElapsedTime = playlist.LatestElapsedTime;
+            existing.TimesPlayed = playlist.TimesPlayed;
             await _db.SaveChangesAsync();
         }
     }

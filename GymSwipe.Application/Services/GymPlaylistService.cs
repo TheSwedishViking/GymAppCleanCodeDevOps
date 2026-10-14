@@ -8,19 +8,31 @@ namespace GymSwipe.ApplicationLayer.Services
     public class GymPlaylistService : IGymPlaylistService
     {
         private readonly IGymPlaylistRepository _playlistRepo;
+        private readonly IMapDomainService _mapDomainService;
+        private readonly IMapDTOService _mapDTOService;
         private readonly IDateHandler _dateHandler;
         public GymPlaylistService(
             IGymPlaylistRepository playlistRepo,
+            IMapDTOService mapDTOService,
+            IMapDomainService mapDomainService,
             IDateHandler dateHandler)
         {
             _playlistRepo = playlistRepo;
             _dateHandler = dateHandler;
+            _mapDomainService = mapDomainService;
+            _mapDTOService = mapDTOService;
         }
 
         public async Task<GymPlaylistDTO> GetPlaylist(int id)
         {
             var playlist = await _playlistRepo.GetPlaylist(id);
-            return playlist == null ? null : MapPlaylist(playlist);
+            if(playlist == null)
+            {
+                throw new Exception("No playlist found");
+            }
+            var dto = await _mapDTOService.MapPlaylistDTO(playlist);
+
+            return dto;
         }
         public async Task<PlaylistExerciseDTO> GetNextExercise(PlaylistExerciseDTO current, List<PlaylistExerciseDTO> excercises)
         {
@@ -56,125 +68,61 @@ namespace GymSwipe.ApplicationLayer.Services
         public async Task<List<GymPlaylistDTO>> GetPlaylistDTOsByUserId(int userId)
         {
             var playlists = await _playlistRepo.GetPlaylistsByUserId(userId);
-            return playlists.Select(MapPlaylist).ToList();
-        }
-
-        private static GymPlaylistDTO MapPlaylist(GymPlaylist playlist)
-        {
-            return new GymPlaylistDTO
+            if(playlists == null)
             {
-                Id = playlist.Id,
-                Name = playlist.Name,
-                DateCreated = playlist.DateCreated,
-                UserId = playlist.UserId,
-                Excercise = playlist.Exercises.Select(MapExercise).ToList()
-            };
+                throw new Exception("No playlists found");
+            }
+            var dtos = (await Task.WhenAll(playlists.Select(_mapDTOService.MapPlaylistDTO))).ToList();
+            return dtos;
         }
-        public static PlaylistExerciseDTO MapExercise(PlaylistExercise exercise)
-        {
-            return new PlaylistExerciseDTO
-            {
-                ExerciseId = exercise.ExerciseId,
-                Name = exercise.Exercise.Name,
-                VideoSourceLink = exercise.Exercise.VideoSourceLink ?? string.Empty,
-                PlaylistOrder = exercise.PlaylistOrder
-            };
-        }
-
+        //Save playlist with bare essentials, EF figures relations out with Ids
         public async Task SavePlaylistToUser(List<ExerciseDTO> addedExercises, GymUser currentUser)
         {
             GymPlaylist newPlaylist = new GymPlaylist();
 
             for (int i = 0; i < addedExercises.Count; i++)
             {
-                newPlaylist.Exercises.Add(ConvertToDomain(addedExercises[i], i));
+                var ex = await _mapDomainService.MapExerciseDomain(addedExercises[i]);
+                var playEx = await _mapDomainService.MapPlaylistExerciseFromExercise(ex);
+                playEx.PlaylistOrder = i;
+                newPlaylist.Exercises.Add(playEx);
             }
             newPlaylist.Name = await SetNameOfPlaylist(currentUser.Firstname);
             newPlaylist.UserId = currentUser.Id;
             newPlaylist.DateCreated = await _dateHandler.SetDateAsDateOnly();
-
             await _playlistRepo.SavePlayList(newPlaylist);
         }
-
 
         public async Task<GymPlaylistDTO> GetTodaysPlaylist(int userId)
         {
             var domain = await _playlistRepo.GetTodaysPlaylistByUserId(userId, await _dateHandler.SetDateAsDateOnly());
-            var dto = MapPlaylist(domain);
+            var dto = await _mapDTOService.MapPlaylistDTO(domain);
             return dto;
         }
 
-        public async Task SavePlayListToUser(List<ExerciseDTO> addedExercises, GymUser currentUser)
-        {
-            GymPlaylist newPlaylist = new GymPlaylist();
-
-            for (int i = 0; i < addedExercises.Count; i++)
-            {
-                newPlaylist.Exercises.Add(ConvertToDomain(addedExercises[i], i));
-            }
-            newPlaylist.Name = await SetNameOfPlaylist(currentUser.Firstname);
-            newPlaylist.UserId = currentUser.Id;
-            newPlaylist.DateCreated = await _dateHandler.SetDateAsDateOnly();
-
-            await _playlistRepo.SavePlayList(newPlaylist);
-        }
-
-
+       
         public async Task<string> SetNameOfPlaylist(string user)
         {
             return $"{user}'s gymplaylist {await _dateHandler.SetDateAsString()}";
         }
 
-
-        private PlaylistExercise ConvertToDomain(ExerciseDTO dTO, int order)
-        {
-            //Minimal needed to point towards correct entities without EF issues
-            return new PlaylistExercise
-            {
-                ExerciseId = dTO.Id,
-                PlaylistOrder = order,
-            };
-
-        }
+       
         public async Task<PlaylistExerciseDTO> GetFirstExercise(List<PlaylistExerciseDTO> excercise)
         {
             return excercise.OrderBy(e => e.PlaylistOrder).FirstOrDefault();
         }
 
-        public async Task UpdatePlaylistInfo(GymPlaylistDTO playlist)
+        //Use the already found domain as base to update
+        public async Task UpdatePlaylistInfo(GymPlaylistDTO dto)
         {
-            var existsAlready = await _playlistRepo.GetPlaylist(playlist.Id);
-            if (existsAlready == null)
-            {
-                //New info? Add? Think over
-            }
-            var domain = DomainMapPlaylist(playlist);
-            await _playlistRepo.UpdatePlaylist(domain);
-        }
-
-        private static GymPlaylist DomainMapPlaylist(GymPlaylistDTO playlist)
-        {
-            return new GymPlaylist
-            {
-                Id = playlist.Id,
-                Name = playlist.Name,
-                UserId = playlist.UserId,
-                HasBeenPlayedBefore = true,
-                CaloriesBurnedFromLatestWorkout = playlist.CaloriesBurnedFromLatestWorkout,
-                DateCreated = playlist.DateCreated,
-                TimesPlayed = playlist.TimesPlayed,
-                LastPlayed = playlist.LastPlayed,
-                LatestElapsedTime = playlist.LatestElapsedTime,
-                //Exercises = playlist.Excercise.Select(DomainMapPlaylistExercise).ToList(),
-            };
-        }
-        private static PlaylistExercise DomainMapPlaylistExercise(PlaylistExerciseDTO dto)
-        {
-            return new PlaylistExercise
-            {
-                ExerciseId = dto.ExerciseId,
-                PlaylistOrder = dto.PlaylistOrder,
-            };
+            var playlist = await _playlistRepo.GetPlaylist(dto.Id) ?? throw new InvalidOperationException("Can't find stored playlist");
+        
+            playlist.TimesPlayed = dto.TimesPlayed;
+            playlist.CaloriesBurnedFromLatestWorkout = dto.CaloriesBurnedFromLatestWorkout;
+            playlist.LatestElapsedTime = dto.LatestElapsedTime;
+            playlist.LastPlayed = dto.LastPlayed;
+            
+            await _playlistRepo.UpdatePlaylist(playlist);
         }
         public async Task<TimeSpan> SetTime(Stopwatch stopwatch)
         {
@@ -185,9 +133,25 @@ namespace GymSwipe.ApplicationLayer.Services
             return _dateHandler.SetDateAsDateTime();
         }
 
-        public async Task<int> IncrimentTimesPlayed(int timesPlayed)
+        public async Task<int> IncrimentTimesPlayed(int id)
         {
-            return timesPlayed += 1;
+            var playlist = await _playlistRepo.GetPlaylist(id);
+            if (playlist == null) throw new InvalidOperationException("Playlist not found");
+
+            playlist.TimesPlayed++;
+            return playlist.TimesPlayed;
+        }
+
+        public async Task RecordedCompletedWorkout(int id, TimeSpan elapsedTime, double calories)
+        {
+            var playlist = await _playlistRepo.GetPlaylist(id)  ?? throw new InvalidOperationException("Can't find stored playlist");
+
+            playlist.LatestElapsedTime = elapsedTime;
+            playlist.LastPlayed = DateTime.Now;
+            playlist.TimesPlayed++;
+            playlist.CaloriesBurnedFromLatestWorkout = calories;
+
+            await _playlistRepo.UpdatePlaylist(playlist);
         }
     }
 }

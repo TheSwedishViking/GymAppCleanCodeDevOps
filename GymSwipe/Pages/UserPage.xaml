@@ -4,164 +4,128 @@
              x:Class="GymSwipe.Pages.UserPage"
              x:Name="Page"
              Title="UserPage">
-    <VerticalStackLayout>
-        <Label 
+    <ScrollView>
+        <VerticalStackLayout>
+            <!---For user-->
+            <Label 
             Text="{Binding CurrentUser.Firstname, StringFormat='Hello {0} !'}" 
             FontSize="Large"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Label
+            <Label
             Text ="{Binding CurrentUser.Surname ,StringFormat='Surname :  {0} !'}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Label
+            <Label
             Text ="{Binding CurrentUser.HeightCm , StringFormat=' {0} : cm'}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Label
+            <Label
             Text ="{Binding CurrentUser.WeightKg , StringFormat=' {0}   : KG'}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Label
-            Text ="{Binding CurrentUser.Gender , StringFormat='Male ?  :  {0}'}"
+            <Label
+            Text ="{Binding CurrentUser.Gender , StringFormat='Is male?  :  {0}'}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Label
+            <Label
             Text ="{Binding CurrentUser.FriendCode , StringFormat='FriendCode:    {0}'}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+            <Label
+            x:Name="lblGreeted"
+            Text ="{Binding GreetingUser}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+            <!--Toolbar section-->
 
-        
-
-        <Button
-            Text="{Binding ButtonText}"
-            Command="{Binding GreetUserCommand}"
-            />
-
-        <Label
-                x:Name="lblGreeted"
-                Text ="{Binding GreetingUser}"
-                FontSize="30"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center" />
-
-
-
-        <Grid ColumnDefinitions="Auto,Auto, Auto"
-                ColumnSpacing="10"
-                Padding="500,10"
-                BackgroundColor="Grey">        
-            
-            <Label 
-            Text = "{Binding CurrentUser.Firstname, StringFormat='{0}s Playlists '}"
-            FontSize="Large"
-            TextColor="White" Grid.Column="0"
-            />
-            <Button Text="Show Previous Three" WidthRequest="250" BackgroundColor="Green" Command="{Binding PreviousPageCommand}" 
-            FontSize="20" BorderColor="Red" BorderWidth="2" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
-
-            <Button Text="Show next three" WidthRequest="200" BackgroundColor="Purple" Command="{Binding NextPageCommand}"
-                FontSize="20" BorderColor="Red" BorderWidth="2" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
-  
-        </Grid>
+                <HorizontalStackLayout Spacing="10" Padding="10,0" BackgroundColor="LightSeaGreen">
+                <Label Text="{Binding CurrentUser.Firstname, StringFormat='{0}s Playlists '}"
+                       FontSize="Large" TextColor="White" VerticalOptions="Center"/>
+                <Button Text="Show Previous Three" WidthRequest="250"
+                        BackgroundColor="Green" Command="{Binding PreviousPageCommand}"
+                        FontSize="20" BorderColor="Red" BorderWidth="2"
+                        FontAttributes="Bold" TextColor="White"/>
+                <Button Text="Show next three" WidthRequest="200"
+                        BackgroundColor="Purple" Command="{Binding NextPageCommand}"
+                        FontSize="20" BorderColor="Red" BorderWidth="2"
+                        FontAttributes="Bold" TextColor="White"/>
+            </HorizontalStackLayout>
+            <!--Playlist section-->
             <HorizontalStackLayout
                 BindableLayout.ItemsSource="{Binding CurrentThreePlaylists}">
-
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
-
                         <VerticalStackLayout
-                    WidthRequest="550"
-                    Padding="10"
-                    BackgroundColor="Black">
-
-                            <Grid
-                        ColumnDefinitions="auto,Auto"
-                        RowDefinitions="Auto,Auto"
-                        BackgroundColor="Green"
-                        Padding="8">
-
+                             WidthRequest="550"
+                            Padding="10"
+                         >
+                            
+                            <VerticalStackLayout Spacing="4" BackgroundColor="DarkSeaGreen">
                                 <Label
-                                    Grid.ColumnSpan="2"
-                                    Text="{Binding Name}"
+                                   Text ="{Binding Name }"
                                     FontAttributes="Bold"
                                     FontSize="Medium"
-                                    TextColor="Purple"
-                                    BackgroundColor="Black"/>
-
-                                <Label
-                                    Grid.Column="0" Grid.Row="1" 
-                                    Text="{Binding DateCreated}"
-                                    Padding="5"
-                                    HorizontalTextAlignment="Center"
-                                    Background="BlanchedAlmond"
-                                    FontFamily="Arial"
-                                    FontAttributes="Bold"
-                                    TextColor="Purple"
-                                    FontSize="22"/> 
-
+                                     TextColor="White"
+                                    BackgroundColor="MediumVioletRed"/>
                                 <Button Text="Play ▶️" 
-                                        Grid.Column="1" Grid.Row="1" 
-                                      Command="{Binding BindingContext.PlayPlaylistCommand, Source={x:Reference Page}}"
-                                        CommandParameter="{Binding .}"
-                                        
-                                        />
-
-
-                            </Grid>
-
-
+                                        CornerRadius="0"
+                               Command="{Binding BindingContext.PlayPlaylistCommand, Source={x:Reference Page}}"
+                                 CommandParameter="{Binding .}"
+                                 /> 
+                          <HorizontalStackLayout Spacing="10">
+                                    <VerticalStackLayout Spacing="4">
+                                        <VerticalStackLayout.Resources>
+                                            <Style x:Key="PlaylistInfoLabel" TargetType="Label">
+                                                <Setter Property="Padding" Value="5,2"/>
+                                                <Setter Property="HorizontalOptions" Value="Start"/>
+                                                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+                                                <Setter Property="FontFamily" Value="Calibri"/>
+                                                <Setter Property="FontAttributes" Value="Bold"/>
+                                                <Setter Property="TextColor" Value="Purple"/>
+                                                <Setter Property="FontSize" Value="18"/>
+                                            </Style>
+                                        </VerticalStackLayout.Resources>
+                                        <Label Style="{StaticResource PlaylistInfoLabel}"
+                                             Text="{Binding DateCreated, StringFormat='Created: {0}'}"/>
+                                        <Label Style="{StaticResource PlaylistInfoLabel}"
+                                              Text="{Binding LastPlayed, StringFormat='Last played: {0}'}"/>
+                                        <Label Style="{StaticResource PlaylistInfoLabel}"
+                                               Text="{Binding CaloriesBurnedFromLatestWorkout, StringFormat='Calories burnt from last time: {0}'}"/>
+                                        <Label Style="{StaticResource PlaylistInfoLabel}"
+                                                 Text="{Binding TimesPlayed, StringFormat='Times played: {0}'}"/>
+                                        <Label Style="{StaticResource PlaylistInfoLabel}"
+                                                  Text="{Binding LatestElapsedTime, StringFormat='Last recorded time: {0}'}"/>
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                            <!--Exercise rows-->
                             <VerticalStackLayout
                                 BindableLayout.ItemsSource="{Binding Excercise}"
                                 Spacing="4"
-                                Margin="2"> 
-
+                                Margin="2">
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
                                         <Grid
-                                            ColumnDefinitions="Auto,Auto,2*,Auto"
+                                            ColumnDefinitions="Auto,Auto"
                                             ColumnSpacing="10"
                                             Padding="10,0"
-                                            BackgroundColor="Grey"> 
-                                                <Label
+                                            BackgroundColor="MediumVioletRed">
+                                            <Label
                                                     Grid.Column="0"
                                                 Text="{Binding PlaylistOrder}"/>
-
-                                                <Label
+                                            <Label
                                                     Grid.Column="1"
                                                     Text="{Binding Name}"
-                                                FontAttributes="Bold"/>
-
-                                            <FlexLayout
-                                                        Grid.Column="2"
-                                                        BindableLayout.ItemsSource="{Binding TargetAreas}" Wrap="Wrap">                
-                                                <BindableLayout.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <Label Text="{Binding Name}" Margin="0,0,4,0"/>
-                                                        </DataTemplate>
-                                                 </BindableLayout.ItemTemplate>
-
-                                            </FlexLayout>
-
-                                
+                                                    FontAttributes="Bold"/>
                                         </Grid>
-
-                                        
                                     </DataTemplate>
-                                    
-                                    
                                 </BindableLayout.ItemTemplate>
-
                             </VerticalStackLayout>
-                            
-
                         </VerticalStackLayout>
-
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
-
-    </HorizontalStackLayout>
-
-
-    </VerticalStackLayout>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

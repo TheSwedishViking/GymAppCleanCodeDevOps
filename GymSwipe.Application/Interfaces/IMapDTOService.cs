@@ -14,5 +14,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task<GymUserDTO> MapGymUserDTO(GymUser gymUser);
         Task<TargetAreaDTO> MapTargetAreaDTO(ExerciseTargetArea  exerciseTargetArea);
         Task<ExerciseRecordDTO> MapExerciseRecordDTO(ExerciseRecord exerciseRecord);
+        Task<GymPlaylistDTO> CopyDomainFieldsPlaylistDTO(GymPlaylist existsAlready);
     }
 }
