@@ -22,18 +22,26 @@ namespace GymSwipe.UserTests
         }
 
         [Theory]
-        [InlineData(1, true)]
-        [InlineData(21, false)]
-        [InlineData(-15, false)]
-        public async Task Request_TargetOverAPI_ExpectedResult(int id, bool exists)
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public async Task Request_TargetOverAPI_AllValid(int id )
         {
             var area = await _fixture.TrainingClient.GetTargetAreaDTOById(id);
 
-            if (exists)
-            {
-                Assert.NotNull(area);
-            }
+            Assert.NotNull(area);
         }
+        [Theory]
+        [InlineData(0, HttpStatusCode.BadRequest)]
+        [InlineData(251, HttpStatusCode.NotFound)]
+        [InlineData(-5555, HttpStatusCode.BadRequest)]
+        public async Task Get_TargetAreaDTO_InvalidId_OrMissing_ThrowsExpectedStatusCodes(int id, HttpStatusCode code)
+        {
+            var area = await Assert.ThrowsAsync<HttpRequestException>(() => _fixture.TrainingClient.GetTargetAreaDTOById(id));
+
+            Assert.Equal(code, area.StatusCode);
+        }
+
 
         [Theory]
         [InlineData("api/TrainingArea/get-area-by-id/1", HttpStatusCode.OK)]
