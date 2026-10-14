@@ -81,14 +81,13 @@ namespace GymSwipe.UserTests
             var cardAfterApproval = await facade.ApproveCard(approvedCard);
             _output.WriteLine($"Approved: {approvedCard.Name}");
 
-            // Discard the card returned by ApproveCard; DiscardCard returns the next card.
             _output.WriteLine($"Discarded: {cardAfterApproval.Name}");
             var cardAfterFirstDiscard = await facade.DiscardCard();
 
             _output.WriteLine($"Discarded: {cardAfterFirstDiscard.Name}");
             var finalCard = await facade.DiscardCard();
 
-            // The deck is empty, but finalCard still needs a decision.
+            
             Assert.True(facade.HasDrawnAllCards());
             _output.WriteLine($"Final card awaiting decision: {finalCard.Name}");
 
