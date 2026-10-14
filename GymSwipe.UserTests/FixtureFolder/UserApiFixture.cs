@@ -30,8 +30,6 @@ namespace GymSwipe.UserTests
 
                 services.AddDbContext<GymAppDbContext>(options =>
                     options.UseInMemoryDatabase("GymSwipeTestDb"));
-
-
             });
 
         }

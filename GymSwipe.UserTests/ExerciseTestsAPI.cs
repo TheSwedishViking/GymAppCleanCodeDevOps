@@ -1,26 +1,23 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.UserTests.FixtureFolder;
 using System.Net.Http.Json;
 using Xunit;
 
 namespace GymSwipe.UserTests
 {
-    public class ExerciseTestsAPI : IClassFixture<UserApiFixture>
+    [Collection("api")]
+    public class ExerciseTestsAPI 
     {
-        private readonly HttpClient _client;
-        public ExerciseTestsAPI(UserApiFixture fixture)
+        private readonly APIExerciseFixture _fixture;
+        public ExerciseTestsAPI(APIExerciseFixture aPIExerciseFixture)
         {
-            _client = fixture.GetClient();
+            _fixture = aPIExerciseFixture;
         }
-
         [Fact]
         public async Task RequestAllExercies_ValidateThatCollectionIsNotEmpty_ReturnsExpected_LoadsOfExercises()
         {
-            var response = await _client.GetAsync("api/Exercise/get-all-exercises");
-            response.EnsureSuccessStatusCode();
-
-            var dtos = await response.Content.ReadFromJsonAsync<List<ExerciseDTO>>();
-
-            Assert.NotEmpty(dtos);
+            var areas = await _fixture.TrainingClient.GetTargetAreaDTOsAsync();
+            Assert.NotEmpty(areas);
         }
         [Fact]
         public async Task Request_ChestExercieses_ReturnsExpected_Collection()

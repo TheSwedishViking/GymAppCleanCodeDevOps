@@ -10,6 +10,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
         Task RemoveTargetArea(int id);
         Task UpdateTargetArea(ExerciseTargetArea area);
         Task<string> GetTargetAreaImage(int id);
-
+        Task GetAreaById(int id);
     }
 }
