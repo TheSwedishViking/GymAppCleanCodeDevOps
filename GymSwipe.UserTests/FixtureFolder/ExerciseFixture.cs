@@ -1,6 +1,8 @@
 ﻿using GymSwipe.ApplicationLayer.Facades;
 using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.ClientInterfaces;
 using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.ApplicationLayer.Services.ClientServices;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
@@ -34,7 +36,9 @@ namespace GymSwipe.UserTests.FixtureFolder
                 services.AddDbContext<GymAppDbContext>(d => d.UseSqlServer(connString));
 
             }
-
+            //*******CLIENT SERVICES*******
+            services.AddHttpClient<ITrainingAreasClient, TrainingAreaClient>(c =>
+                c.BaseAddress = new Uri("http://localhost/"));
             //*******SERVICES*******
             services.AddScoped<IDatabaseInitalizer, DatabaseInitalizer>();
             services.AddScoped<IUserService, UserService>();

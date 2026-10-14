@@ -20,6 +20,16 @@ namespace GymSwipe.Infrastructure.Repos
             return true;
         }
 
+        public async Task<ExerciseTargetArea> GetAreaById(int id)
+        {
+            var area =  _db.ExercisesTargetAreas.FirstOrDefault(a=>a.Id == id);
+            if(area == null)
+            {
+                return null;
+            }
+            return area;
+        }
+
         public async Task<ExerciseTargetArea> GetExerciseTargetAreaByName(string name)
         {
             return await _db.ExercisesTargetAreas.FirstOrDefaultAsync(e => e.ExerciseCategoryName == name);
@@ -50,11 +60,6 @@ namespace GymSwipe.Infrastructure.Repos
         }
 
 
-
-
-
-
-
         public async Task RemoveTargetArea(int id)
         {
             var area = _db.ExercisesTargetAreas.FirstOrDefault(e => e.Id == id);
@@ -73,7 +78,6 @@ namespace GymSwipe.Infrastructure.Repos
             {
                 return;
             }
-            throw new NotImplementedException();
         }
     }
 }

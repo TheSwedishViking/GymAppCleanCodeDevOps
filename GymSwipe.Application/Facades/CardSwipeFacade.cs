@@ -1,5 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.ClientInterfaces;
+using GymSwipe.ApplicationLayer.Services.ClientServices;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 
 namespace GymSwipe.ApplicationLayer.Facades
@@ -14,17 +16,20 @@ namespace GymSwipe.ApplicationLayer.Facades
         private readonly IExerciseService _exerciseService;
         private readonly IGymPlaylistService _playlistService;
         private readonly ITraningAreaService _traningAreaService;
+        private readonly ITrainingAreasClient _trainingAreasClient;
         private readonly LoggedInUser _user;
         public CardSwipeFacade(
             IExerciseService exerciseService,
             IGymPlaylistService playlistExecericseService,
             ITraningAreaService traningAreaService,
+            ITrainingAreasClient trainingAreasClient,
             LoggedInUser user
             )
         {
             _exerciseService = exerciseService;
             _playlistService = playlistExecericseService;
             _traningAreaService = traningAreaService;
+            _trainingAreasClient = trainingAreasClient;
             _user = user;
         }
         //We can pass a Id to load for example chest exercises
@@ -44,6 +49,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             {
                 AvailableExercises = await _exerciseService.GetAllExercisesAsync();
             }
+            var tars = await _trainingAreasClient.GetTargetAreaDTOsAsync();
             TargetAreas = await _traningAreaService.GetExerciseTargetsAsync();
         }
 

@@ -1,6 +1,8 @@
 ﻿using GymSwipe.ApplicationLayer.Facades;
 using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.ClientInterfaces;
 using GymSwipe.ApplicationLayer.Services;
+using GymSwipe.ApplicationLayer.Services.ClientServices;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
@@ -38,6 +40,10 @@ namespace GymSwipe
                 opts.UseSqlServer(connstring);
             });
             builder.Services.AddScoped<IDatabaseInitalizer, DatabaseInitalizer>();
+
+            //*******CLIENT SERVICES*******
+            builder.Services.AddScoped<ITrainingAreasClient, TrainingAreaClient>();
+
 
             //*******SERVICES*******
             builder.Services.AddScoped<IUserService, UserService>();
