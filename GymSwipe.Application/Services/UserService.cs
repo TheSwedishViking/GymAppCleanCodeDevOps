@@ -53,10 +53,10 @@ namespace GymSwipe.ApplicationLayer.Services
             await _repo.DeleteUserById(id);
 
         }
-
-
         public async Task<GymUserDTO>? TryAndCreateUserThroughRequestModelAsync(RequestCreateGymUserDTO request)
         {
+            ArgumentNullException.ThrowIfNull(request, nameof(request));
+
             GymUserDTO dto = new()
             {
                 Firstname = request.Firstname,
@@ -66,13 +66,12 @@ namespace GymSwipe.ApplicationLayer.Services
                 Email = request.Email,
                 Gender = request.Gender
             };
+            //User returns an id and friendcode, use on DTO
             var user = await _repo.AddUser(dto);
 
             dto.Id = user.Id;
             dto.FriendCode = user.FriendCode;
-            //ytterligare logik kan ske här, dto är inte garanterad att sparas i databasen
             return dto;
-
         }
 
 

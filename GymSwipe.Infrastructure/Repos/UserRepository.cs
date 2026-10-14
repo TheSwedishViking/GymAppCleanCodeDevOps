@@ -16,8 +16,6 @@ namespace GymSwipe.Infrastructure.Repos
 
         public async Task<GymUser> AddUser(GymUserDTO dto)
         {
-
-
             GymUser user = new GymUser
             {
 

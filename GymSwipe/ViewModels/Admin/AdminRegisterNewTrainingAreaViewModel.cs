@@ -27,13 +27,27 @@ namespace GymSwipe.ViewModels.Admin
 
         public async Task TryAddNewExerciseTargetArea()
         {
-            await _adminAddTrainingAreaFacade.AddTargetArea(NewTargetArea);
+            try
+            {
+                await _adminAddTrainingAreaFacade.AddTargetArea(NewTargetArea);
+                await Task.Yield();
+                await RefreshList();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Notice", ex.Message, "OK");
+            }
         }
         public async Task GetAreas()
         {
+            await RefreshList();
+         
+        }
+        public async Task RefreshList()
+        {
             Current.Clear();
             var areas = await _adminAddTrainingAreaFacade.GetTargetAreaDTOsAsync();
-            foreach(var a in areas)
+            foreach (var a in areas)
             {
                 Current.Add(a);
             }

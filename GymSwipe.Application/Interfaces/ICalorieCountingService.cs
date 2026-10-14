@@ -7,7 +7,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface ICalorieCountingService
     {
-        Task<double> CalculateCalories(TimeSpan time, double weightKg, double? metFactor);
-        double GetMETFactor();
+        double CalculateCalories(TimeSpan time, double weightKg, double? metFactor);
     }
 }

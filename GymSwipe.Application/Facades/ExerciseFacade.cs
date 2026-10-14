@@ -9,11 +9,9 @@ namespace GymSwipe.ApplicationLayer.Facades
     public class ExerciseFacade : IExerciseFacade
     {
         private readonly IExerciseService _exerciseService;
-        private readonly IUserService _userService;
-        public ExerciseFacade( IExerciseService exerciseService, IUserService userService   )
+        public ExerciseFacade( IExerciseService exerciseService )
         {
             _exerciseService = exerciseService;
-            _userService = userService;
         }
 
         public async Task<List<ExerciseDTO>> GetAllExercisesAsync()
@@ -25,18 +23,14 @@ namespace GymSwipe.ApplicationLayer.Facades
 
         public async Task<List<ExerciseDTO>> GetChestExerciesAsync(int id)
         {
-            var chests = await _exerciseService.GetExerciseByIdAsync(id);
+            var chests = await _exerciseService.GetExercisesByCategoryIdAsync(id);
             return chests ?? new List<ExerciseDTO>();
         }
 
-        public Task<ExerciseDTO> GetExerciseAsyncById(int id)
+        public async Task<ExerciseDTO> GetExerciseAsyncById(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<ExerciseDTO>> GetExerciseListByCategoryAsync(int id)
-        {
-            throw new NotImplementedException();
+            var exs = await _exerciseService.GetExerciseById(id);
+            return exs ?? new ExerciseDTO();
         }
 
         public async Task<List<ExerciseDTO>> GetRandomExercisesAsync()

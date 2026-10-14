@@ -10,7 +10,6 @@ namespace GymSwipe.ViewModels
     {
         public ObservableCollection<string> AddedCards { get; } = new ObservableCollection<string>();
         public ObservableCollection<ExerciseDTO> AddedExercises { get; } = new ObservableCollection<ExerciseDTO>();
-        private string _currentCard;
         private string _cardDeckInfo;
         public string CardDeckInfo
         {
@@ -92,9 +91,18 @@ namespace GymSwipe.ViewModels
             if (_isSaving == false)
             {
                 _isSaving = true;
-                await _cardFacade.SavePlayList();
-                await Task.Delay(3000);
-                await Shell.Current.GoToAsync(nameof(Pages.UserPage));
+                try
+                {
+                    await _cardFacade.SavePlayList();
+                    await Task.Yield();
+                    await Shell.Current.DisplayAlertAsync("Saved 💾", "Saved playlist", "Ok");
+                    await Shell.Current.GoToAsync(nameof(Pages.UserPage));
+                }
+                catch (Exception ex)
+                {
+                    await Shell.Current.DisplayAlertAsync("Errror", ex.Message, "Ok");
+                }
+
             }
         }
        
@@ -156,6 +164,7 @@ namespace GymSwipe.ViewModels
                 IsDeckFinished = true;
                 CardImageSource = null;
                 CardDeckInfo = "All cards have been drawn! Leave!";
+                await Shell.Current.DisplayAlertAsync("Done", CardDeckInfo, "Ok");
                 return;
             }
             await UpdateCard();

@@ -12,7 +12,8 @@ namespace GymSwipe.ApplicationLayer.Facades
     public class ExerciseRecordsFacade:IExerciseRecordsFacade
     {
         private readonly IExerciseRecordsService _exerciseRecordsService;
-        private readonly IGymPlaylistService _playlistService;
+        private readonly IRecordsValidator _recordsValidator;
+        private readonly IPlaylistControls _playlistControls;
         private readonly IDateHandler _dateHandler;
         private PlaylistExerciseDTO _currentExercise;
         private WorkoutSession _session;
@@ -22,26 +23,38 @@ namespace GymSwipe.ApplicationLayer.Facades
         public ExerciseRecordsFacade(
             IExerciseRecordsService exerciseRecordsService,
             IGymPlaylistService gymPlaylistService,
+            IPlaylistControls playlistControls,
+            IRecordsValidator recordsValidator,
             IDateHandler dateHandler,
             LoggedInUser loggedInUser,
             WorkoutSession workoutSession )
         {
             _exerciseRecordsService = exerciseRecordsService;
-            _playlistService = gymPlaylistService;
+            _recordsValidator = recordsValidator;
+            _playlistControls = playlistControls;
             _dateHandler = dateHandler;
             _session = workoutSession;
             _user = loggedInUser;
         }
 
-        public async Task AddRecord(ExerciseRecordDTO currentRecord)
+        public async Task<List<string>> AddRecord(ExerciseRecordDTO currentRecord)
         {
+            var errors = new List<string>();
             if (currentRecord == null)
             {
-                throw new ArgumentNullException(nameof(currentRecord));
+                errors.Add("Argument null");
+                return errors;
+            }
+            errors =  _recordsValidator.Validate(currentRecord);
+            if(errors.Count > 0)
+            {
+                errors.Add("Can't record exercise record, validate input");
+                return errors;
             }
             currentRecord.UserId = _user.CurrentUser.Id;
-            currentRecord.DateRecorded = await _dateHandler.SetDateAsDateTime();
+            currentRecord.DateRecorded = _dateHandler.SetDateAsDateTime();
             _addedRecords.Add(currentRecord);
+            return errors;
         }
 
         public async Task<bool> GetActiveStatus()
@@ -51,21 +64,22 @@ namespace GymSwipe.ApplicationLayer.Facades
 
         public async Task<PlaylistExerciseDTO> GetFirstExercise(ObservableCollection<PlaylistExerciseDTO> excercises)
         {
-            _currentExercise = await _playlistService.GetFirstExercise(_session.CurrentPlaylist.Excercise);
+            _currentExercise = await _playlistControls.GetFirstExercise(_session.CurrentPlaylist.Excercise);
             return _currentExercise;
         }
 
         public async Task<PlaylistExerciseDTO> GetNextExercise(PlaylistExerciseDTO current)
         {
-            _currentExercise = await _playlistService.GetNextExercise(current, _session.CurrentPlaylist.Excercise);
+            _currentExercise = await _playlistControls.GetNextExercise(current, _session.CurrentPlaylist.Excercise);
             if(current == _currentExercise)
             {
+
             }
             return _currentExercise;
         }
         public async Task<PlaylistExerciseDTO> GetPreviousExercise(PlaylistExerciseDTO ex)
         {
-            _currentExercise = await _playlistService.GetNextExercise(ex, _session.CurrentPlaylist.Excercise);
+            _currentExercise = await _playlistControls.GetNextExercise(ex, _session.CurrentPlaylist.Excercise);
             if (ex == _currentExercise)
             {
                 return null;
@@ -86,22 +100,19 @@ namespace GymSwipe.ApplicationLayer.Facades
             return  _addedRecords;
         }
 
-        public async Task<bool> SaveRecords(List<ExerciseRecordDTO> records)
+        public async Task SaveRecords(List<ExerciseRecordDTO> records)
         {
             if(records.Count() > 0)
             {
                 try
                 {
                     await _exerciseRecordsService.SaveRecordsFromCurrentPlaylist(records);
-                    return true;
                 }
                 catch(Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    return false;
                 }
             }
-            return false;
         }
 
        

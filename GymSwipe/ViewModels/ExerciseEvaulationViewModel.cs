@@ -56,9 +56,26 @@ namespace GymSwipe.ViewModels
         }
         public async Task RegisterRecord(ExerciseRecordDTO record)
         {
-            await _exerciseRecordsFacade.AddRecord(record);
-            await ResetRecordBinding();
-            await NextExercise(CurrentExercise);
+            try
+            {
+                var possibleErrors = await _exerciseRecordsFacade.AddRecord(record);
+                if(possibleErrors.Count > 0)
+                {
+                    string completeMsg = string.Join("\n", possibleErrors);
+                    await Shell.Current.DisplayAlertAsync("Validation error", completeMsg, "OK");
+                }
+                else
+                {
+                    await ResetRecordBinding();
+                    await NextExercise(CurrentExercise);
+                }
+             
+            }
+            catch(Exception ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Notice", ex.Message, "OK");
+            }
+        
         }
         public async Task PreviousRecord()
         {
@@ -68,11 +85,14 @@ namespace GymSwipe.ViewModels
         {
             if(_playListId == null)
             {
-                throw new Exception("No id?");
+                await Shell.Current.DisplayAlertAsync("Notice", "Page was loaded with no playlist reference. Returning", "OK");
+                await Shell.Current.Navigation.PopToRootAsync();
             }
             if (!await _exerciseRecordsFacade.GetActiveStatus())
             {
-                throw new Exception("Nothing to evaluate? How'd we get here?");
+                await Shell.Current.DisplayAlertAsync("Notice", "No playlist in session, can't evaluate. Returning", "OK");
+                await Shell.Current.Navigation.PopToRootAsync();
+
             }
             await LoadExercises();
         }
@@ -81,11 +101,6 @@ namespace GymSwipe.ViewModels
             Excercises.Clear();
             Excercises = new ObservableCollection<PlaylistExerciseDTO>(await _exerciseRecordsFacade.GetPlaylistExercises());
             CurrentExercise = await _exerciseRecordsFacade.GetFirstExercise(Excercises);
-            //CurrentExercise = await _exerciseRecordsFacade.GetNextExercise(CurrentExercise);
-            if(CurrentExercise == null)
-            {
-                Console.WriteLine("Done!");
-            }
         }
         public async Task NextExercise(PlaylistExerciseDTO ex)
         {
@@ -93,7 +108,7 @@ namespace GymSwipe.ViewModels
             CurrentExercise = await _exerciseRecordsFacade.GetNextExercise(ex);
             if(CurrentExercise == null)
             {
-                 bool result=    await _exerciseRecordsFacade.SaveRecords(await _exerciseRecordsFacade.GetActiveRecords());
+                await _exerciseRecordsFacade.SaveRecords(await _exerciseRecordsFacade.GetActiveRecords());
                 await Task.Yield();
                 await Shell.Current.Navigation.PopToRootAsync();
                 return;

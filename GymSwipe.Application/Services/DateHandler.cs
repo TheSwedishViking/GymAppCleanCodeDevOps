@@ -7,22 +7,22 @@ namespace GymSwipe.ApplicationLayer.Services
 {
     public class DateHandler : IDateHandler
     {
-        public async Task<string> SetDate()
+        public string SetDate()
         {
             return DateTime.Now.ToString();
         }
 
-        public async Task<DateOnly> SetDateAsDateOnly()
+        public DateOnly SetDateAsDateOnly()
         {
             return DateOnly.FromDateTime(DateTime.Now);
         }
 
-        public async Task<DateTime> SetDateAsDateTime()
+        public DateTime SetDateAsDateTime()
         {
             return DateTime.Now;
         }
 
-        public async Task<string> SetDateAsString()
+        public string SetDateAsString()
         {
             return DateTime.Now.ToString();
         }

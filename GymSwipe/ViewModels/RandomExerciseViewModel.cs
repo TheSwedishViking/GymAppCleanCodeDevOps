@@ -65,7 +65,7 @@ namespace GymSwipe.ViewModels
                 ExerciseDTOs.Add(chest);
             }
         }
-        //Redneck way of clearing and adding to a observable collcetion
+        //Simple add to obersable list
         public async Task GetObserverableCollectionOfExcerises()
         {
             await ClearList();

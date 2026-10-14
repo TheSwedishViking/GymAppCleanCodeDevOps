@@ -39,7 +39,7 @@ namespace GymSwipe.UserTests
         public async Task GetExercises_ThatTargetsTheChest_WithAProvidedId_ReturnsExpectedExercises()
         {
             var expected = "Chest";
-            var chests = await _sut.GetExerciseByIdAsync(1);
+            var chests = await _sut.GetExercisesByCategoryIdAsync(1);
 
             Assert.NotEmpty(chests);
             //Check if every exercies has any targetarea name that contains chest
@@ -56,7 +56,7 @@ namespace GymSwipe.UserTests
         [Fact]
         public async Task Requesting_ExerciesWithAInvalid_Id_LikeZero_Or_Enum_AreaEnum_Inavlid_ReturnsEmpty()
         {
-            var empty = await _sut.GetExerciseByIdAsync(0);
+            var empty = await _sut.GetExercisesByCategoryIdAsync(0);
 
             Assert.Empty(empty);
 
@@ -73,7 +73,7 @@ namespace GymSwipe.UserTests
         public async Task ValidateAndMakeSure_TheEnums_AndDbRegisteredCategories_ShareTheSameValues_ReturnsTrue_OnValid(AreaEnum area, int registedInDbId)
         {
             var enumResult = await _sut.GetExerciseByEnum(area);
-            var idResult = await _sut.GetExerciseByIdAsync(registedInDbId);
+            var idResult = await _sut.GetExercisesByCategoryIdAsync(registedInDbId);
 
             Assert.Equal(enumResult.Count(), idResult.Count());
 

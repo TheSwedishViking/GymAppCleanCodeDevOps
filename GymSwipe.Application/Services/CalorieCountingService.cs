@@ -9,23 +9,17 @@ namespace GymSwipe.ApplicationLayer.Services
     public class CalorieCountingService : ICalorieCountingService
     {
         public const double ModerateMetExerciseFactor = 5.0;
-        public double MetFactor => GetMETFactor();
-        public async Task<double> CalculateCalories(TimeSpan time, double weightKg, double? metFactor = ModerateMetExerciseFactor)
+        public double CalculateCalories(TimeSpan time, double weightKg, double? metFactor = ModerateMetExerciseFactor)
         {
             //Based on this https://www.calculator.net/calories-burned-calculator.html?activity=2&activity2=Rowing%2C+Stationary%3A+moderate&chour=&cmin=30&cweight=82&cweightunit=k&ctype=1&x=Calculate
+            //If > 0 has value, otherwise moderate
+            double met = metFactor is > 0 ? metFactor.Value : ModerateMetExerciseFactor;
 
-            if(metFactor == 0 || metFactor < 0||!metFactor.HasValue)
-            {
-                metFactor = MetFactor;
-            }
-            double calories = time.TotalMinutes * metFactor.Value * weightKg;
+            // kcal/min = MET * 3.5 * weightKg / 200
+            double calories = time.TotalMinutes * 3.5 * weightKg / 200;
 
             return calories;
         }
 
-        public double GetMETFactor()
-        {
-            return (ModerateMetExerciseFactor * 3.5)/200;
-        }
     }
 }

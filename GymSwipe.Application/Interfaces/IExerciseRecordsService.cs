@@ -8,7 +8,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
 {
     public interface IExerciseRecordsService
     {
-        Task<ExerciseRecord> GetAExerciseRecordsAsync(int exerciseId, int userId);
         Task SaveRecordsFromCurrentPlaylist(List<ExerciseRecordDTO> records);
     }
 }

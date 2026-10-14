@@ -42,7 +42,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         {
             if (possibleId.HasValue)
             {
-                AvailableExercises = await _exerciseService.GetExerciseByIdAsync(possibleId.Value);
+                AvailableExercises = await _exerciseService.GetExercisesByCategoryIdAsync(possibleId.Value);
             }
             else
             {
@@ -80,11 +80,6 @@ namespace GymSwipe.ApplicationLayer.Facades
             return await DrawNewExerciseCard();
         }
 
-
-
-
-
-
         //Print info on the page
         public async Task<string> DeckInfo()
         {
@@ -102,7 +97,6 @@ namespace GymSwipe.ApplicationLayer.Facades
 
             return img + "_card.jpg";
         }
-
 
         //Saves a playlist to user, needs user to set name of playlist => Firstname + playlist + date
         public async Task SavePlayList()

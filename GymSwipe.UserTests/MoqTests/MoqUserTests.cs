@@ -42,6 +42,7 @@ namespace GymSwipe.UserTests.MoqTests
             var dateMock = new Mock<IDateHandler>();
             var mapDomainMock = new Mock<IMapDomainService>();
             var mapDTOMock = new Mock<IMapDTOService>();
+            var timeMock = new Mock<ITimeSetter>();
             repoGym.Setup(p => p.GetPlaylist(1)).ReturnsAsync(playlist);
 
 
@@ -61,7 +62,7 @@ namespace GymSwipe.UserTests.MoqTests
                 }
             };
 
-            var service = new GymPlaylistService(repoGym.Object, mapDTOMock.Object, mapDomainMock.Object, dateMock.Object);
+            var service = new GymPlaylistService(repoGym.Object, mapDTOMock.Object, mapDomainMock.Object, timeMock.Object, dateMock.Object);
 
 
             // Arrange mock

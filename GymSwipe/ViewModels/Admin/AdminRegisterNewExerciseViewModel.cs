@@ -17,7 +17,7 @@ namespace GymSwipe.ViewModels.Admin
 
         public TargetAreaDTO TargetAreaTapped { get; set; }
         public ObservableCollection<TargetAreaDTO> Available { get; } = new ObservableCollection<TargetAreaDTO>();
-        public ObservableCollection<TargetAreaDTO> Selected { get;  } = new ObservableCollection<TargetAreaDTO>();
+        public ObservableCollection<TargetAreaDTO> Selected { get; } = new ObservableCollection<TargetAreaDTO>();
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -27,7 +27,7 @@ namespace GymSwipe.ViewModels.Admin
         public ICommand AddTargetAreaCommand { get; }
         public ICommand RemoveTargetAreaCommand { get; }
 
-        public AdminRegisterNewExerciseViewModel(IAdminAddExerciseFacade adminAddExerciseFacade )
+        public AdminRegisterNewExerciseViewModel(IAdminAddExerciseFacade adminAddExerciseFacade)
         {
             _adminAddExerciseFacade = adminAddExerciseFacade;
             AddTargetAreaCommand = new Command<TargetAreaDTO>(async area => await AddAreaToExercise(area));
@@ -46,8 +46,13 @@ namespace GymSwipe.ViewModels.Admin
         }
         public async Task OnLoadPageGetExerciseAreas()
         {
+            await RefreshListOfTargetAreas();
+
+        }
+        public async Task RefreshListOfTargetAreas()
+        {
             var available = await _adminAddExerciseFacade.GetExerciseTargetsAsync();
-            foreach(var  target in available)
+            foreach (var target in available)
             {
                 Available.Add(target);
             }
@@ -55,13 +60,22 @@ namespace GymSwipe.ViewModels.Admin
 
         private async Task TryRegisterNewExercise()
         {
-            if(Selected.Count == 0)
+            if (Selected.Count == 0)
             {
                 return;
             }
-            NewExercise.TargetAreaNames = Selected.Select(e=>e).ToList();
-            Console.WriteLine(NewExercise);
-            await _adminAddExerciseFacade.AddExercise(NewExercise);
+            try
+            {
+                NewExercise.TargetAreaNames = Selected.Select(e => e).ToList();
+                Console.WriteLine(NewExercise);
+                await _adminAddExerciseFacade.AddExercise(NewExercise);
+                await Task.Yield();
+                await RefreshListOfTargetAreas();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Notice", ex.Message, "OK");
+            }
         }
 
         public void OnPropertyChanged(string propertyName)
