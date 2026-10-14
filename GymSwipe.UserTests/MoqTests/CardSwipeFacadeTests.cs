@@ -1,6 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Facades;
 using GymSwipe.ApplicationLayer.Interfaces;
+using GymSwipe.ApplicationLayer.Interfaces.ClientInterfaces;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using Moq;
 using Xunit;
@@ -16,6 +17,7 @@ namespace GymSwipe.UserTests
             var mockExerciseService = new Mock<IExerciseService>();
             var mockPlaylistService = new Mock<IGymPlaylistService>();
             var mockTrainingAreaService = new Mock<ITraningAreaService>();
+            var mockTrainingAreaClient = new Mock<ITrainingAreasClient>();
 
             var exercises = new List<ExerciseDTO>
             {
@@ -51,6 +53,7 @@ namespace GymSwipe.UserTests
                 mockExerciseService.Object,
                 mockPlaylistService.Object,
                 mockTrainingAreaService.Object,
+                mockTrainingAreaClient.Object,
                 new LoggedInUser());
 
             // Act
