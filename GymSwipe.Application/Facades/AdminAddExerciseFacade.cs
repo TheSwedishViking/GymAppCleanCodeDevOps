@@ -11,29 +11,39 @@ namespace GymSwipe.ApplicationLayer.Facades
     {
         private readonly IExerciseService _exerciseService;
         private readonly ITraningAreaService _traningAreaService;
-        public AdminAddExerciseFacade(IExerciseService exerciseService, ITraningAreaService traningAreaService)
+        private readonly IAdminCreatorValidator _adminCreatorValidator;
+        public AdminAddExerciseFacade(IExerciseService exerciseService, ITraningAreaService traningAreaService, IAdminCreatorValidator adminCreatorValidator)
         {
             _exerciseService = exerciseService;
             _traningAreaService = traningAreaService;
+            _adminCreatorValidator = adminCreatorValidator;
         }
-        public async Task<bool> AddExercise(ExerciseDTO newExercise)
+        public async Task<List<string>> AddExercise(ExerciseDTO newExercise)
         {
+            List<string> possibleErros = new List<string>();
             //Validate
             if(newExercise == null)
             {
-                throw new Exception("Empty exercise, can''t register"); 
+                possibleErros.Add("Error with reading exercise; validate fields");
+                return possibleErros;
             }
 
+            possibleErros = await _adminCreatorValidator.ValidateNewExercise(newExercise);
+            if (possibleErros.Count > 0)
+            {
+                return possibleErros;
+            }
             var checkExisting = await _exerciseService.GetExerciseByName(newExercise.Name);
             if(checkExisting == null)
             {
                 await _exerciseService.SaveExercise(newExercise);
-                return true;
             }
             else
             {
-                return false;
+                possibleErros.Add("Already exists");
             }
+            return possibleErros;
+          
         }
 
         public async Task<List<TargetAreaDTO>> GetExerciseTargetsAsync()

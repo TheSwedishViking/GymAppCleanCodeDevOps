@@ -1,5 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
@@ -35,11 +36,14 @@ namespace GymSwipe.ViewModels
 
         private LoggedInUser _loggedIn;
         private HttpClient _httpClient;
-        public UserRegisterViewModel(LoggedInUser loggedInUser, HttpClient httpClient)
+        private readonly IDisplayInfoHelper _displayInfoHelper;
+
+        public UserRegisterViewModel(LoggedInUser loggedInUser, HttpClient httpClient, IDisplayInfoHelper displayInfoHelper)
         {
             RegisterUserCommand = new Command(async () => await TryRegisterNewUser());
             _loggedIn = loggedInUser;
             _httpClient = httpClient;
+            _displayInfoHelper = displayInfoHelper;
         }
 
         public async Task TryRegisterNewUser()
@@ -49,7 +53,7 @@ namespace GymSwipe.ViewModels
             if (first is null)
             {
                 StatusCheck = "Invalid first name. Use 2-20 letters.";
-                DisplayAlertMessage(StatusCheck);
+                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
                 return;
             }
             CurrentUser.Firstname = first;
@@ -57,7 +61,7 @@ namespace GymSwipe.ViewModels
             if (last is null)
             {
                 StatusCheck = "Invalid surname. Use 2-20 letters.";
-                DisplayAlertMessage(StatusCheck);
+                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
                 return;
             }
             CurrentUser.Surname = last;
@@ -65,7 +69,7 @@ namespace GymSwipe.ViewModels
             if (CurrentUser.Email.IsNullOrEmpty())
             {
                 StatusCheck = "Email cant be empty!";
-                DisplayAlertMessage(StatusCheck);
+                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
                 return;
             }
             var correctEmail = _validator.UserEmailIsValid(CurrentUser.Email);
@@ -73,28 +77,28 @@ namespace GymSwipe.ViewModels
             if (correctEmail.IsValid == false)
             {
                 StatusCheck = correctEmail.Email; //response message
-                DisplayAlertMessage(StatusCheck);
+                await _displayInfoHelper.DisplayStandardAlert("Email not valid");
                 return;
             }
             bool uniqueEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/Unique-Email/" + correctEmail.Email);
             if (uniqueEmail == false)
             {
                 StatusCheck = correctEmail.Email + " Email is taken!";
-                DisplayAlertMessage(StatusCheck);
+                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
                 return;
             }
             var validHeight = await _validatorProps.ValidateUserHeight(CurrentUser.HeightCm);
             if (validHeight.Success == false)
             {
                 StatusCheck = validHeight.Message;
-                DisplayAlertMessage(StatusCheck);
+                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
                 return;
             }
             var validWeight = await _validatorProps.ValidateUserWeight(CurrentUser.WeightKg);
             if (validWeight.Success == false)
             {
                 StatusCheck = validWeight.Message;
-                DisplayAlertMessage(StatusCheck);
+                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
                 return;
             }
 
@@ -119,17 +123,11 @@ namespace GymSwipe.ViewModels
             }
             catch (Exception ex)
             {
-                DisplayAlertMessage(ex.Message);
+                await _displayInfoHelper.DisplayStandardAlert(ex.Message);
             }
-
 
             await Shell.Current.GoToAsync("..");
         }
-        private async void DisplayAlertMessage(string message)
-        {
-            await Shell.Current.DisplayAlertAsync("Notice", message, "OK");
-        }
-
         public void OnPropertyChanged(string prop)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));

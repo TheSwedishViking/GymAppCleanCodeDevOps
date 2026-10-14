@@ -7,6 +7,7 @@ using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain;
 using GymSwipe.Infrastructure.Data;
 using GymSwipe.Infrastructure.Repos;
+using GymSwipe.UI_Helper;
 using GymSwipe.ViewModels;
 using GymSwipe.ViewModels.Admin;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,8 @@ namespace GymSwipe
             //*******CLIENT SERVICES*******
             builder.Services.AddScoped<ITrainingAreasClient, TrainingAreaClient>();
 
+            //*******UI**********
+            builder.Services.AddScoped<IDisplayInfoHelper, DisplayInfoHelper>();
 
             //*******SERVICES*******
             builder.Services.AddScoped<IUserService, UserService>();
@@ -53,6 +56,7 @@ namespace GymSwipe
             builder.Services.AddScoped<IDateHandler, DateHandler>();
             builder.Services.AddScoped<ITimeSetter, TimeSetter>();
             builder.Services.AddScoped<IRecordsValidator, RecordsValidator>();
+            builder.Services.AddScoped<IAdminCreatorValidator, AdminCreatorValidator>();
             builder.Services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
             builder.Services.AddScoped<ICalorieCountingService, CalorieCountingService>();
             builder.Services.AddScoped<IPlaylistControls, PlaylistControls>();

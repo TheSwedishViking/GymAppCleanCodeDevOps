@@ -10,21 +10,29 @@ namespace GymSwipe.ApplicationLayer.Facades
     public class AdminAddTraningAreaFacade : IAdminAddTrainingAreaFacade
     {
         private readonly ITraningAreaService _traningAreaService;
-        public AdminAddTraningAreaFacade(ITraningAreaService traningAreaService)
+        private readonly IAdminCreatorValidator _adminCreatorValidator;
+        public AdminAddTraningAreaFacade(ITraningAreaService traningAreaService, IAdminCreatorValidator adminCreatorValidator)
         {
             _traningAreaService = traningAreaService;
+            _adminCreatorValidator = adminCreatorValidator;
         }
-        public async Task AddTargetArea(TargetAreaDTO targetAreaDTO)
+        public async Task<List<string>> AddTargetArea(TargetAreaDTO targetAreaDTO)
         {
-            //Real basic, somehow null, throw
-            ArgumentNullException.ThrowIfNull(targetAreaDTO);
+            List<string> errors = new List<string>();
 
             var existing = await _traningAreaService.GetTargetAreaByName(targetAreaDTO.Name);
             if(existing != null)
             {
-                throw new InvalidOperationException($"Target area '{targetAreaDTO.Name}' already exists.");
+                errors.Add("Exercise already exists!");
+                return errors;
+            }
+            errors = await _adminCreatorValidator.ValidateNewTargetArea(targetAreaDTO);
+            if(errors.Count > 0)
+            {
+                return errors;
             }
             await _traningAreaService.AddNewArea(targetAreaDTO);
+            return errors;
         }
 
         public async Task<List<TargetAreaDTO>> GetTargetAreaDTOsAsync()

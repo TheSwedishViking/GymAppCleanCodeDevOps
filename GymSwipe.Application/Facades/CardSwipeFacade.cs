@@ -49,7 +49,7 @@ namespace GymSwipe.ApplicationLayer.Facades
                 AvailableExercises = await _exerciseService.GetAllExercisesAsync();
             }
             var tars = await _trainingAreasClient.GetTargetAreaDTOsAsync();
-            TargetAreas = await _traningAreaService.GetExerciseTargetsAsync();
+            TargetAreas = tars;
         }
 
 

@@ -17,10 +17,7 @@ namespace GymSwipe.Infrastructure.Repos
         {
             var ex =await _db.Exercises.
                 Include(e=>e.TargetAreas).FirstOrDefaultAsync(e=>e.Id==id);
-            if(ex == null)
-            {
-                throw new Exception("Did not find exercise by that Id");
-            }
+           
             return ex;
         }
 

@@ -11,13 +11,12 @@ namespace GymSwipe.UserTests
 {
     public class CardSwipeFacadeTests
     {
-
         private readonly ITestOutputHelper _output;
-
         public CardSwipeFacadeTests(ITestOutputHelper output)
         {
             _output = output;
         }
+
 
 
         [Fact]

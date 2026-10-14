@@ -72,12 +72,15 @@ namespace GymSwipe.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private readonly ICardSwipeFacade _cardFacade;
+        private readonly IDisplayInfoHelper _displayInfoHelper;
+
         private bool _isSaving = false;
-        public CardSwipeViewModel(ICardSwipeFacade cardSwipeFacade)
+        public CardSwipeViewModel(ICardSwipeFacade cardSwipeFacade, IDisplayInfoHelper displayInfoHelper)
         {
             DiscardX -= SwipeLimitForRegistration;
             ApproveX += SwipeLimitForRegistration;
             _cardFacade = cardSwipeFacade;
+            _displayInfoHelper=displayInfoHelper;
             SavePlaylistCommand = new Command(async () => await SavePlaylist());
         }
         public async Task InitalizeAsync()
@@ -95,12 +98,12 @@ namespace GymSwipe.ViewModels
                 {
                     await _cardFacade.SavePlayList();
                     await Task.Yield();
-                    await Shell.Current.DisplayAlertAsync("Saved 💾", "Saved playlist", "Ok");
+                    await _displayInfoHelper.DisplayStandardAlert("Saved playlist");
                     await Shell.Current.GoToAsync(nameof(Pages.UserPage));
                 }
                 catch (Exception ex)
                 {
-                    await Shell.Current.DisplayAlertAsync("Errror", ex.Message, "Ok");
+                    await _displayInfoHelper.DisplayStandardAlert($"Error: {ex.Message} ");
                 }
 
             }

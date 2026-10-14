@@ -56,12 +56,10 @@ namespace GymSwipe.ViewModels
             }
         }
         private readonly LoggedInUser _loggedInUser;
-        private readonly HttpClient _httpClient;
         private readonly IGymPlaylistService _gymPlaylistService;
-        public UserPageAccountViewModel(LoggedInUser loggedInUser, HttpClient httpClient, IGymPlaylistService gymPlaylistService)
+        public UserPageAccountViewModel(LoggedInUser loggedInUser, IGymPlaylistService gymPlaylistService)
         {
             _loggedInUser = loggedInUser;
-            _httpClient = httpClient;
 
             _gymPlaylistService = gymPlaylistService;
             NextPageCommand = new Command(() => ChangePage(1)); //Calls method with argument

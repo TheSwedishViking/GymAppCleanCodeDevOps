@@ -12,7 +12,6 @@ namespace GymSwipe.ViewModels
     public class ActiveWorkoutViewModel : INotifyPropertyChanged, IQueryAttributable
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-
         private readonly IWorkoutFacade _workoutFacade;
         private readonly LoggedInUser _loggedInUser;
         private int? _playListId; //The playlist ID passed from the previous page, if any
@@ -69,15 +68,16 @@ namespace GymSwipe.ViewModels
             }
         }
 
-        public bool UserIsEvaulatingGymplaylistExercise { get; set; }
         public ICommand StartPlaylistCommand { get; }
         public ICommand NextExerciseCommand { get; }
         public ICommand PausePlaylistCommand { get; }
         public ICommand PreviousExerciseCommand { get; }
-        public ActiveWorkoutViewModel(IWorkoutFacade workoutFacade, LoggedInUser loggedInUser)
+        private IDisplayInfoHelper _displayInfoHelper;
+        public ActiveWorkoutViewModel(IWorkoutFacade workoutFacade, IDisplayInfoHelper displayInfoHelper , LoggedInUser loggedInUser)
         {
             _workoutFacade = workoutFacade;
             _loggedInUser = loggedInUser;
+            _displayInfoHelper = displayInfoHelper;
 
             StartPlaylistCommand = new Command(async () => await StartPlaylist());
             NextExerciseCommand = new Command(async () => await NextExercise());
@@ -117,9 +117,9 @@ namespace GymSwipe.ViewModels
             //
             if (_loggedInUser.CurrentUser == null)
             {
-                //Pop up warning later
                 await Task.Yield();
-                await Shell.Current.GoToAsync(nameof(Pages.UserRegistrationPage));
+                await _displayInfoHelper.DisplayStandardAlert("You have to be logged in to workout! 💪");
+                await Shell.Current.Navigation.PopToRootAsync();
                 return;
             }
             if (_playListId is int id)
@@ -130,7 +130,6 @@ namespace GymSwipe.ViewModels
             {
                 GymPlaylist = await _workoutFacade.GetPlaylistByUserId(_loggedInUser.CurrentUser.Id);
             }
-            Console.WriteLine(GymPlaylist);
         }
 
 

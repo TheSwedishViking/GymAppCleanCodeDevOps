@@ -1,6 +1,8 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
+using GymSwipe.UI_Helper;
 using System.ComponentModel;
 using System.Net.Http.Json;
 using System.Windows.Input;
@@ -30,9 +32,11 @@ namespace GymSwipe.ViewModels
         }
 
         private HttpClient _httpClient;
-        public UserPageSignInViewModel(HttpClient httpClient, LoggedInUser loggedInUser)
+        private readonly IDisplayInfoHelper _displayInfoHelper;
+        public UserPageSignInViewModel(HttpClient httpClient, LoggedInUser loggedInUser, IDisplayInfoHelper displayInfoHelper)
         {
             SignInCommand = new Command(async () => await TryRegisterNewUser());
+            _displayInfoHelper = displayInfoHelper;
             _httpClient = httpClient;
             _loggedIn = loggedInUser;
         }
@@ -43,8 +47,9 @@ namespace GymSwipe.ViewModels
             bool existingEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/Unique-Email/" + EmailEntry);
             if (existingEmail)
             {
-                await Shell.Current.DisplayAlertAsync("Not found", "Email not found, register a new account below...", "OK");
                 StatusCheck = EmailEntry + " not found! Register a new one";
+                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
+
                 return;
             }
             StatusCheck = EmailEntry + "Found User";

@@ -16,7 +16,7 @@ namespace GymSwipe.ApplicationLayer.Services
             double met = metFactor is > 0 ? metFactor.Value : ModerateMetExerciseFactor;
 
             // kcal/min = MET * 3.5 * weightKg / 200
-            double calories = time.TotalMinutes * 3.5 * weightKg / 200;
+            double calories = time.TotalMinutes * met * 3.5 * weightKg / 200;
 
             return calories;
         }

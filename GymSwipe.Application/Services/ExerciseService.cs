@@ -42,7 +42,8 @@ namespace GymSwipe.ApplicationLayer.Services
             var ex = await _repo.GetExerciseByName(name);
             if (ex == null)
             {
-                throw new Exception("No exercise found by that name");
+
+                return null;
             }
             var dto = await _mapDTOService.MapExerciseDTO(ex);
             return dto;
@@ -72,6 +73,10 @@ namespace GymSwipe.ApplicationLayer.Services
         public async Task<ExerciseDTO?> GetExerciseById(int id)
         {
             var domain = await _repo.GetExerciseById(id);
+            if(domain == null)
+            {
+                throw new KeyNotFoundException("Exercise not found");
+            }
             var dto = await _mapDTOService.MapExerciseDTO(domain);
             return dto;
         }

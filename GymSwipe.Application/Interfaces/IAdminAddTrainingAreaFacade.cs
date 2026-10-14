@@ -8,6 +8,6 @@ namespace GymSwipe.ApplicationLayer.Interfaces
     public interface IAdminAddTrainingAreaFacade
     {
         Task<List<TargetAreaDTO>> GetTargetAreaDTOsAsync();
-        Task AddTargetArea(TargetAreaDTO targetAreaDTO);
+        Task<List<string>> AddTargetArea(TargetAreaDTO targetAreaDTO);
     }
 }

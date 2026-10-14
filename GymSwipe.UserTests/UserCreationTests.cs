@@ -27,8 +27,6 @@ namespace GymSwipe.UserTests
             _validatorService = _scope.ServiceProvider.GetRequiredService<UserInputValidatorService>();
             _propertiesValidator = _scope.ServiceProvider.GetRequiredService<UserInputPropertiesValidator>();
         }
-
-
         [Fact]
         public async Task CreateUser()
         {
@@ -43,7 +41,6 @@ namespace GymSwipe.UserTests
 
 
             var response = await _client.PostAsJsonAsync("api/User", request);
-
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 

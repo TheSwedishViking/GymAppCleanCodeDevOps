@@ -14,10 +14,11 @@ using Xunit;
 
 namespace GymSwipe.UserTests.FixtureFolder
 {
-    public class ExerciseFixture : IAsyncLifetime
+    public class StandardLocalInMemoryFixture : IAsyncLifetime
     {
+
         public ServiceProvider ServiceProvider { get; private set; }
-        public ExerciseFixture()
+        public StandardLocalInMemoryFixture()
         {
             var services = new ServiceCollection();
 
@@ -33,6 +34,7 @@ namespace GymSwipe.UserTests.FixtureFolder
             services.AddScoped<IGymPlaylistService, GymPlaylistService>();
             services.AddScoped<IDateHandler, DateHandler>();
             services.AddScoped<ITimeSetter, TimeSetter>();
+            services.AddScoped<IAdminCreatorValidator, AdminCreatorValidator>();
             services.AddScoped<IRecordsValidator, RecordsValidator>();
             services.AddScoped<IPlaylistControls, PlaylistControls>();
             services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
