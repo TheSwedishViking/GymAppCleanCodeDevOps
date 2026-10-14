@@ -3,7 +3,6 @@ using GymSwipe.ApplicationLayer.Interfaces;
 using GymSwipe.ApplicationLayer.Interfaces.ClientInterfaces;
 using GymSwipe.ApplicationLayer.Services.ClientServices;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
-using GymSwipe.Domain.Models;
 
 namespace GymSwipe.ApplicationLayer.Facades
 {
@@ -103,6 +102,5 @@ namespace GymSwipe.ApplicationLayer.Facades
 
             return img + "_card.jpg";
         }
-
     }
 }
