@@ -60,6 +60,28 @@ namespace GymSwipe.ApplicationLayer.Facades
             return correctFormat.Email;
         }
 
+        public async Task<GymUserDTO> GetUserByEmail(string email)
+        {
+            var found = await _httpClient.GetFromJsonAsync<GymUserDTO>("api/User/Get-UserDto-By-Email/" + email);
+            return found;
+        }
+
+        public async Task<List<string>> ValidateEmail(string email)
+        {
+            List<string> errors = new List<string>();
+            bool existingEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/Unique-Email/" + email);
+            if (existingEmail)
+            {
+                errors.Add($"An account with {email} not found! Register a new one");
+            }
+            var found = await _httpClient.GetFromJsonAsync<GymUserDTO>("api/User/Get-UserDto-By-Email/" + email);
+            if (found == null)
+            {
+              errors.Add("User not found");
+            }
+            return errors;
+        }
+
         public async Task<List<string>> ValidateUser(RequestCreateGymUserDTO createGymUserDTO)
         {
             List<string> errors = new List<string>();

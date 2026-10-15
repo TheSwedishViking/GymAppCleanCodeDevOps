@@ -28,10 +28,14 @@ namespace GymSwipe.ApplicationLayer.Services.Services
 
         public async Task<GymPlaylistDTO> GetPlaylist(int id)
         {
+            if(id <= 0)
+            {
+                throw new ArgumentOutOfRangeException("Invalid Id");
+            }
             var playlist = await _playlistRepo.GetPlaylist(id);
             if(playlist == null)
             {
-                throw new Exception("No playlist found");
+                throw new KeyNotFoundException("No playlist found");
             }
             var dto = await _mapDTOService.MapPlaylistDTO(playlist);
 

@@ -26,6 +26,20 @@ namespace GymSwipe.UserTests
         }
 
         [Fact]
+        public async Task ThrowArgumentOutOfRangeException_WhenCanNotFindPlaylist()
+        {
+            var invalidPlaylistId = -500;
+
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await _gymplaylistService.GetPlaylist(invalidPlaylistId));
+        }
+        public async Task ThrowKeypairNotFound_WhenThereIsNoPlaylistWithProvedId()
+        {
+            var playlistThatDosentExisst = 555;
+
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await _gymplaylistService.GetPlaylist(555));
+        }
+
+        [Fact]
         public async Task SaveExercisesToUser_CreatesAPlaylist_ReturnCreated()
         {
             var exs = await _exerciseService.GetRandomExercisesAsync();

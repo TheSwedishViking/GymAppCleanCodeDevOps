@@ -1,5 +1,7 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces.Display;
+using GymSwipe.ApplicationLayer.Interfaces.Facades;
+using GymSwipe.ApplicationLayer.Interfaces.Mappers;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
 using GymSwipe.UI_Helper;
@@ -16,9 +18,10 @@ namespace GymSwipe.ViewModels
         public GymUser CurrentUser { get; set; } = new GymUser();
         public string EmailEntry { get; set; }
         public ICommand SignInCommand { get; }
+        private IMapDomainService _mapDomainService;
         private LoggedInUser _loggedIn;
 
-
+        private readonly IUserRegisterFacade _userRegister;
         private string _statusCheck = "";
         public string StatusCheck
         {
@@ -33,9 +36,10 @@ namespace GymSwipe.ViewModels
 
         private HttpClient _httpClient;
         private readonly IDisplayInfoHelper _displayInfoHelper;
-        public UserPageSignInViewModel(HttpClient httpClient, LoggedInUser loggedInUser, IDisplayInfoHelper displayInfoHelper)
+        public UserPageSignInViewModel(HttpClient httpClient, LoggedInUser loggedInUser, IDisplayInfoHelper displayInfoHelper, IMapDomainService mapDomainService)
         {
             SignInCommand = new Command(async () => await TryLoginUser());
+            _mapDomainService = mapDomainService;
             _displayInfoHelper = displayInfoHelper;
             _httpClient = httpClient;
             _loggedIn = loggedInUser;
@@ -43,35 +47,23 @@ namespace GymSwipe.ViewModels
 
         public async Task TryLoginUser()
         {
+            List<string> errors = await _userRegister.ValidateEmail(EmailEntry);
 
-            bool existingEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/Unique-Email/" + EmailEntry);
-            if (existingEmail)
+            if(errors.Count > 0)
             {
-                StatusCheck = EmailEntry + " not found! Register a new one";
-                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
-
+                await _displayInfoHelper.DisplayErrorAlert(errors);
                 return;
             }
-            StatusCheck = EmailEntry + "Found User";
+            var correctFormated = await _userRegister.GetCorrectFormatedEmail(EmailEntry);
+            var found =await _userRegister.GetUserByEmail(correctFormated);
 
-            var found = await _httpClient.GetFromJsonAsync<GymUserDTO>("api/User/Get-UserDto-By-Email/" + EmailEntry);
-            if(found == null)
+            if(found ==  null)
             {
-                StatusCheck = "User not found";
-                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
-                return;
+                await _displayInfoHelper.DisplayStandardAlert("User not found with email");
             }
-            _loggedIn.CurrentUser = new GymUser //Setting the user to the singleton's gymUser
-            {
-                Id = found.Id,
-                Firstname = found.Firstname,
-                Surname = found.Surname,
-                Email = found.Email,
-                HeightCm = found.HeightCm,
-                WeightKg = found.WeightKg,
-                Gender = found.Gender,
-            };
-            _loggedIn.CurrentUser.SetFriendCode();
+            var domain = await _mapDomainService.MapGymUserDomain(found);
+            _loggedIn.CurrentUser = domain; //Setting the user to the singleton's gymUser
+        
             await Shell.Current.GoToAsync("..");
         }
 
