@@ -61,7 +61,6 @@ namespace GymSwipe.UserTests.FixtureFolder
             services.AddScoped<IExerciseRecordsRepository, ExerciseRecordsRepository>();
 
             //*******FACADES*******
-            services.AddScoped<IUserFacade, UserActionsFacade>();
             services.AddScoped<IExerciseFacade, ExerciseFacade>();
             services.AddScoped<IAdminAddExerciseFacade, AdminAddExerciseFacade>();
             services.AddScoped<IAdminAddTrainingAreaFacade, AdminAddTraningAreaFacade>();
