@@ -60,8 +60,6 @@ namespace GymSwipe.UserTests
             Assert.True(!string.IsNullOrEmpty(createdUser.FriendCode));
         }
 
-
-
         [InlineData("Peter", "Stormare", true)]
         [InlineData("peter", "stormare", true)]
         [InlineData("Pet    er", "Stor        mare", true)]
