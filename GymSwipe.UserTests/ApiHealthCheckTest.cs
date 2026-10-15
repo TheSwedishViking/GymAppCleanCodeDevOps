@@ -11,7 +11,7 @@ namespace GymSwipe.UserTests
         {
             _client = factory.GetClient();
         }
-
+        //Returns anything
         [Fact]
         public async Task ApiIsHealthy()
         {

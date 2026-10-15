@@ -24,7 +24,7 @@
                         ItemsLayout="VerticalList"
                         EmptyView="Nothing to show...">
             <CollectionView.Header>
-                <VerticalStackLayout BackgroundColor="Bisque">
+                <VerticalStackLayout BackgroundColor="Black">
                     <Label Text="Random Exercises" FontSize="Large"/>
                 </VerticalStackLayout>
             </CollectionView.Header>

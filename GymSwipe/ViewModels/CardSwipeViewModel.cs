@@ -45,7 +45,10 @@ namespace GymSwipe.ViewModels
         public double CardWidth { get; } = 300;
         public double DiscardX { get; }
         public double ApproveX { get; }
+        //One card unit left or right, handles actions
         public double SwipeLimitForRegistration => CardWidth * CardPositionRegistrationThreshold;
+
+        //Pure ui rotation factor
         public double CardDividend { get; } = 100;
         public double RotationFactor { get; } = 5.02;
         private ExerciseDTO _currentExercise;
@@ -109,12 +112,6 @@ namespace GymSwipe.ViewModels
 
             }
         }
-       
-        public async Task<bool> AllCardsAreDrawn()
-        {
-            return _cardFacade.HasDrawnAllCards() && CurrentExercise == null;
-        }
-
         private async Task ShowInitalCard()
         {
             CurrentExercise = await _cardFacade.DrawNewExerciseCard();
@@ -141,6 +138,7 @@ namespace GymSwipe.ViewModels
                 await ApproveCard();
             }
         }
+        //Aprove and discard returns new exercise
         public async Task ApproveCard()
         {
             if (CurrentExercise != null)

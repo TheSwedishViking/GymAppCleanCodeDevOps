@@ -71,7 +71,6 @@ namespace GymSwipe.ViewModels
 
         public ICommand StartPlaylistCommand { get; }
         public ICommand NextExerciseCommand { get; }
-        public ICommand PausePlaylistCommand { get; }
         public ICommand PreviousExerciseCommand { get; }
         private IDisplayInfoHelper _displayInfoHelper;
         public ActiveWorkoutViewModel(IWorkoutFacade workoutFacade, IDisplayInfoHelper displayInfoHelper , LoggedInUser loggedInUser)
@@ -98,6 +97,7 @@ namespace GymSwipe.ViewModels
             {
                 await _workoutFacade.CompleteWorkout();
                 await Task.Yield();
+                //Load next page with Playlist Id
                 await Shell.Current.GoToAsync(nameof(ExerciseEvaulationPage), new Dictionary<string, object> { ["PlaylistId"] = GymPlaylist.Id });
                 return;
             }

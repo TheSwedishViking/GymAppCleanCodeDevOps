@@ -4,6 +4,8 @@ using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Interfaces.Display
 {
+    //Store errors in this handy helper
+    //Print as strings
     public interface IDisplayInfoHelper
     {
         Task DisplayStandardAlert(string msg);

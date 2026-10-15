@@ -35,13 +35,13 @@ namespace GymSwipe.ViewModels
         private readonly IDisplayInfoHelper _displayInfoHelper;
         public UserPageSignInViewModel(HttpClient httpClient, LoggedInUser loggedInUser, IDisplayInfoHelper displayInfoHelper)
         {
-            SignInCommand = new Command(async () => await TryRegisterNewUser());
+            SignInCommand = new Command(async () => await TryLoginUser());
             _displayInfoHelper = displayInfoHelper;
             _httpClient = httpClient;
             _loggedIn = loggedInUser;
         }
 
-        public async Task TryRegisterNewUser()
+        public async Task TryLoginUser()
         {
 
             bool existingEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/Unique-Email/" + EmailEntry);
@@ -54,25 +54,26 @@ namespace GymSwipe.ViewModels
             }
             StatusCheck = EmailEntry + "Found User";
 
-            var FoundUser = await _httpClient.GetFromJsonAsync<GymUserDTO>("api/User/Get-UserDto-By-Email/" + EmailEntry);
-
+            var found = await _httpClient.GetFromJsonAsync<GymUserDTO>("api/User/Get-UserDto-By-Email/" + EmailEntry);
+            if(found == null)
+            {
+                StatusCheck = "User not found";
+                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
+                return;
+            }
             _loggedIn.CurrentUser = new GymUser //Setting the user to the singleton's gymUser
             {
-                Id = FoundUser.Id,
-                Firstname = FoundUser.Firstname,
-                Surname = FoundUser.Surname,
-                Email = FoundUser.Email,
-                HeightCm = FoundUser.HeightCm,
-                WeightKg = FoundUser.WeightKg,
-                Gender = FoundUser.Gender,
+                Id = found.Id,
+                Firstname = found.Firstname,
+                Surname = found.Surname,
+                Email = found.Email,
+                HeightCm = found.HeightCm,
+                WeightKg = found.WeightKg,
+                Gender = found.Gender,
             };
             _loggedIn.CurrentUser.SetFriendCode();
             await Shell.Current.GoToAsync("..");
         }
-
-
-
-
 
         public void OnPropertyChanged(string prop)
         {
