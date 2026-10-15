@@ -1,5 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.Interfaces.Facades;
+using GymSwipe.ApplicationLayer.Interfaces.Services;
 using GymSwipe.UserTests.FixtureFolder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -13,14 +14,17 @@ namespace GymSwipe.UserTests.Unit
     {
         private readonly StandardLocalInMemoryFixture _fixture;
         private readonly IServiceScope _scope;
-        private readonly IAdminAddExerciseFacade _exerciseSut;
+        private readonly IAdminAddExerciseFacade _admingExerciseSut;
         private readonly IAdminAddTrainingAreaFacade _trainingAreaSut;
+        private readonly IExerciseService _exerciseServiceSut;
         public AdminCreationTests(StandardLocalInMemoryFixture fixture)
         {
             _fixture = fixture;
             _scope = _fixture.ServiceProvider.CreateScope();
-            _exerciseSut = _scope.ServiceProvider.GetRequiredService<IAdminAddExerciseFacade>();
+            _admingExerciseSut = _scope.ServiceProvider.GetRequiredService<IAdminAddExerciseFacade>();
             _trainingAreaSut = _scope.ServiceProvider.GetRequiredService<IAdminAddTrainingAreaFacade>();
+
+            _exerciseServiceSut = _scope.ServiceProvider.GetRequiredService<IExerciseService>();
         }
 
         public void Dispose() => _scope.Dispose();
@@ -42,9 +46,36 @@ namespace GymSwipe.UserTests.Unit
                 VideoSourceLink= "https://www.youtube.com/watch?v=gGdGFtwCNBE&list=RDgGdGFtwCNBE&start_radio=1"
             };
 
-            var erros = await _exerciseSut.AddExercise(newEx);
+            var erros = await _admingExerciseSut.AddExercise(newEx);
 
             Assert.Empty(erros);
+        }
+        [Fact]
+        public async Task CreateExercise_AddAndThenGet_ReturnsValid()
+        {
+            var ex = new ExerciseDTO
+            {
+                Name = "Plank",
+                TargetAreaNames = new List<TargetAreaDTO>
+                {
+                    new TargetAreaDTO
+                    {
+                        Name ="Core"
+                    },
+                    new TargetAreaDTO
+                    {
+                        Name="Shoulders"
+                    }
+                }
+            };
+
+            var validNoErrorsReturned = await _admingExerciseSut.AddExercise(ex);
+            Assert.Empty(validNoErrorsReturned);
+
+
+            var find = await _exerciseServiceSut.GetExerciseByName("plank");
+
+            Assert.NotNull(find);
         }
         [Fact]
         public async Task ImproperExercise_MissingName_WillReturnErros()
@@ -62,7 +93,7 @@ namespace GymSwipe.UserTests.Unit
                 VideoSourceLink = "https://www.youtube.com/watch?v=gGdGFtwCNBE&list=RDgGdGFtwCNBE&start_radio=1"
             };
 
-            var erros = await _exerciseSut.AddExercise(newEx);
+            var erros = await _admingExerciseSut.AddExercise(newEx);
 
             Assert.NotEmpty(erros);
         }

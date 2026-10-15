@@ -28,8 +28,5 @@ namespace GymSwipe.UserTests
             Assert.True(response.Content.Headers.ContentLength > 0);
         }
 
-
-
-
     }
 }
