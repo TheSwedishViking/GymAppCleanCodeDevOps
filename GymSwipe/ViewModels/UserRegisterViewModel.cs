@@ -1,6 +1,8 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
 using GymSwipe.ApplicationLayer.Interfaces.Display;
+using GymSwipe.ApplicationLayer.Interfaces.Facades;
+using GymSwipe.ApplicationLayer.Interfaces.Mappers;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.ApplicationLayer.Services.Validators;
 using GymSwipe.Domain.Models;
@@ -13,10 +15,7 @@ namespace GymSwipe.ViewModels
 {
     public class UserRegisterViewModel : INotifyPropertyChanged
     {
-
-        private readonly UserInputValidatorService _validator = new();
-        private readonly UserInputPropertiesValidator _validatorProps = new();
-        public GymUser CurrentUser { get; set; } = new GymUser();
+        public RequestCreateGymUserDTO CurrentUser { get; set; } = new RequestCreateGymUserDTO();
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -36,89 +35,44 @@ namespace GymSwipe.ViewModels
 
         private LoggedInUser _loggedIn;
         private HttpClient _httpClient;
+        private readonly IUserRegisterFacade _userRegister;
         private readonly IDisplayInfoHelper _displayInfoHelper;
+        private readonly IMapDomainService _mapDomainService;
 
-        public UserRegisterViewModel(LoggedInUser loggedInUser, HttpClient httpClient, IDisplayInfoHelper displayInfoHelper)
+        public UserRegisterViewModel(LoggedInUser loggedInUser, HttpClient httpClient, IDisplayInfoHelper displayInfoHelper, IUserRegisterFacade userRegisterFacade, IMapDomainService mapDomainService)
         {
+
             RegisterUserCommand = new Command(async () => await TryRegisterNewUser());
             _loggedIn = loggedInUser;
             _httpClient = httpClient;
+            _userRegister = userRegisterFacade;
             _displayInfoHelper = displayInfoHelper;
+            _mapDomainService = mapDomainService;
         }
 
         public async Task TryRegisterNewUser()
         {
-            var first = _validator.UserNameValidator(CurrentUser.Firstname);
-            if (first is null)
+            List<string> errors = await _userRegister.ValidateUser(CurrentUser);
+            if (errors.Count > 0)
             {
-                StatusCheck = "Invalid first name. Use 2-20 letters.";
-                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
-                return;
-            }
-            CurrentUser.Firstname = first;
-            var last = _validator.UserNameValidator(CurrentUser.Surname);
-            if (last is null)
-            {
-                StatusCheck = "Invalid surname. Use 2-20 letters.";
-                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
-                return;
-            }
-            CurrentUser.Surname = last;
-
-            if (CurrentUser.Email.IsNullOrEmpty())
-            {
-                StatusCheck = "Email cant be empty!";
-                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
-                return;
-            }
-            var correctEmail = _validator.UserEmailIsValid(CurrentUser.Email);
-
-            if (correctEmail.IsValid == false)
-            {
-                StatusCheck = correctEmail.Email; //response message
-                await _displayInfoHelper.DisplayStandardAlert("Email not valid");
-                return;
-            }
-            bool uniqueEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/Unique-Email/" + correctEmail.Email);
-            if (uniqueEmail == false)
-            {
-                StatusCheck = correctEmail.Email + " Email is taken!";
-                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
-                return;
-            }
-            var validHeight = await _validatorProps.ValidateUserHeight(CurrentUser.HeightCm);
-            if (validHeight.Success == false)
-            {
-                StatusCheck = validHeight.Message;
-                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
-                return;
-            }
-            var validWeight = await _validatorProps.ValidateUserWeight(CurrentUser.WeightKg);
-            if (validWeight.Success == false)
-            {
-                StatusCheck = validWeight.Message;
-                await _displayInfoHelper.DisplayStandardAlert(StatusCheck);
+                await _displayInfoHelper.DisplayErrorAlert(errors);
                 return;
             }
 
-            var request = new RequestCreateGymUserDTO
+            List<string> emailErrors = await _userRegister.CheckIfEmailIsUnique(CurrentUser.Email);
+            if(emailErrors.Count > 0)
             {
-                Firstname = CurrentUser.Firstname,
-                Surname = CurrentUser.Surname,
-                Email = correctEmail.Email,
-                HeightCm = CurrentUser.HeightCm,
-                WeightKg = CurrentUser.WeightKg,
-                Gender = CurrentUser.Gender
-            };
-
+                await _displayInfoHelper.DisplayErrorAlert(emailErrors);
+                return;
+            }
+            CurrentUser.Email = await _userRegister.GetCorrectFormatedEmail(CurrentUser.Email);
+            //Everythings okay till we get down here, should've returned by now
             try
             {
-                using var response = await _httpClient.PostAsJsonAsync("api/User", request);
-                response.EnsureSuccessStatusCode();
-                var user = await response.Content.ReadFromJsonAsync<GymUserDTO>(); //Set singleton id
-                CurrentUser.Id = user.Id;
-                _loggedIn.CurrentUser = CurrentUser;
-                _loggedIn.CurrentUser.SetFriendCode();
+                var user = await _userRegister.CreateUserFromRegistration(CurrentUser);
+                var domain = await _mapDomainService.MapGymUserDomain(user);
+           
+                _loggedIn.CurrentUser = domain;
             }
             catch (Exception ex)
             {

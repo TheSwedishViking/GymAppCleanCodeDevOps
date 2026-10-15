@@ -62,7 +62,6 @@ namespace GymSwipe.ApplicationLayer.Facades
                 return null;
             }
             //Draw a random valid card
-
             var exercise = AvailableExercises[Random.Shared.Next(AvailableExercises.Count)];
             AvailableExercises.Remove(exercise);
             return exercise;

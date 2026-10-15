@@ -89,7 +89,6 @@ namespace GymSwipe.UserTests
         {
             string name = "Push up";
 
-            bool expected = true;
 
             var actual = await _sut.GetExerciseByName(name);
 

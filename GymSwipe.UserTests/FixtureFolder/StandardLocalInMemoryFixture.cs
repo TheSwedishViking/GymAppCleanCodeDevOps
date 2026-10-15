@@ -48,6 +48,8 @@ namespace GymSwipe.UserTests.FixtureFolder
             services.AddScoped<IPlaylistControls, PlaylistControls>();
             services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
             services.AddScoped<ICalorieCountingService, CalorieCountingService>();
+            services.AddScoped<IUserInputValidatorService, UserInputValidatorService>();
+            services.AddScoped<IUserInputPropertiesValidator, UserInputPropertiesValidator>();
 
             //********MAPPING SERVICES************
             services.AddScoped<IMapDomainService, MapDomainService>();
@@ -67,6 +69,7 @@ namespace GymSwipe.UserTests.FixtureFolder
             services.AddScoped<ICardSwipeFacade, CardSwipeFacade>();
             services.AddScoped<IWorkoutFacade, WorkoutFacade>();
             services.AddScoped<IExerciseRecordsFacade, ExerciseRecordsFacade>();
+            services.AddScoped<IUserRegisterFacade, UserRegisterFacade>();
 
             //****SINGLETON SESSION*****
             services.AddScoped<LoggedInUser>();

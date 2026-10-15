@@ -44,6 +44,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             stopwatch = new Stopwatch();
 
         }
+        //Valid user, check playlist, try find todays
         public async Task<GymPlaylistDTO> GetPlaylistByUserId(int userId)
         {
             var userValid = await _userService.GetUserById(userId);
@@ -57,8 +58,13 @@ namespace GymSwipe.ApplicationLayer.Facades
             {
                 throw new Exception("No playlist found; point user towards creating a playlist, alt open swipe automatically");
             }
+            var playlist = await _playlistService.GetTodaysPlaylist(userId);
+            if(playlist == null)
+            {
+                throw new KeyNotFoundException("Can't find a playlist for this day");
+            }
 
-            _playlist = await _playlistService.GetTodaysPlaylist(userId);
+            _playlist = playlist;
             _workoutSession.Start(_playlist);
             return _playlist;
         }
