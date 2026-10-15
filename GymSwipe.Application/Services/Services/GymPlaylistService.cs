@@ -14,63 +14,37 @@ namespace GymSwipe.ApplicationLayer.Services.Services
         private readonly IMapDomainService _mapDomainService;
         private readonly IMapDTOService _mapDTOService;
         private readonly IDateHandler _dateHandler;
-        private readonly ITimeSetter _timeSetter;
         public GymPlaylistService(
             IGymPlaylistRepository playlistRepo,
             IMapDTOService mapDTOService,
             IMapDomainService mapDomainService,
-            ITimeSetter timeSetter,
             IDateHandler dateHandler)
         {
             _playlistRepo = playlistRepo;
             _dateHandler = dateHandler;
             _mapDomainService = mapDomainService;
             _mapDTOService = mapDTOService;
-            _timeSetter= timeSetter;
         }
 
         public async Task<GymPlaylistDTO> GetPlaylist(int id)
         {
+            if(id <= 0)
+            {
+                throw new ArgumentOutOfRangeException("Invalid Id");
+            }
             var playlist = await _playlistRepo.GetPlaylist(id);
             if(playlist == null)
             {
-                throw new Exception("No playlist found");
+                throw new KeyNotFoundException("No playlist found");
             }
             var dto = await _mapDTOService.MapPlaylistDTO(playlist);
 
             return dto;
         }
-        public async Task<PlaylistExerciseDTO> GetNextExercise(PlaylistExerciseDTO current, List<PlaylistExerciseDTO> excercises)
-        {
-            var list = excercises.ToList();
-            var index = list.FindIndex(e => e.PlaylistOrder == current.PlaylistOrder);
-            if (index < 0)
-            {
-                return current;
-            }
-            if (index + 1 >= excercises.Count)
-            {
-                return null;
-            }
-            var newEx = list[index + 1];
-            return newEx;
-        }
-        public async Task<PlaylistExerciseDTO> GetPreviousExercise(PlaylistExerciseDTO current, List<PlaylistExerciseDTO> excercise)
-        {
-            var list = excercise.ToList();
-            var index = list.FindIndex(e => e.PlaylistOrder == current.PlaylistOrder);
-            if (index - 1 < 0)
-            {
-                return current;
-            }
-            var oldEx = list[index - 1];
-            return oldEx;
-        }
         public async Task<List<GymPlaylist>> GetPlaylistsByUserId(int userId)
         {
             return await _playlistRepo.GetPlaylistsByUserId(userId);
         }
-
         public async Task<List<GymPlaylistDTO>> GetPlaylistDTOsByUserId(int userId)
         {
             var playlists = await _playlistRepo.GetPlaylistsByUserId(userId);
@@ -112,13 +86,6 @@ namespace GymSwipe.ApplicationLayer.Services.Services
         {
             return $"{user}'s gymplaylist { _dateHandler.SetDateAsString()}";
         }
-
-       
-        public async Task<PlaylistExerciseDTO> GetFirstExercise(List<PlaylistExerciseDTO> excercise)
-        {
-            return  excercise.OrderBy(e=>e.PlaylistOrder).FirstOrDefault();
-        }
-
     
         public async Task RecordedCompletedWorkout(int id, TimeSpan elapsedTime, double calories)
         {

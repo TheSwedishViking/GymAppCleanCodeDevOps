@@ -1,4 +1,5 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
+using GymSwipe.ApplicationLayer.Interfaces.Display;
 using GymSwipe.ApplicationLayer.Interfaces.Services;
 using GymSwipe.ApplicationLayer.Services.SessionServices;
 using GymSwipe.Domain.Models;
@@ -40,7 +41,6 @@ namespace GymSwipe.ViewModels
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
         public ICommand GreetUserCommand { get; }
-        public ICommand DeleteUserCommand { get; }
         public ICommand PlayPlaylistCommand { get; }
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -57,9 +57,11 @@ namespace GymSwipe.ViewModels
         }
         private readonly LoggedInUser _loggedInUser;
         private readonly IGymPlaylistService _gymPlaylistService;
-        public UserPageAccountViewModel(LoggedInUser loggedInUser, IGymPlaylistService gymPlaylistService)
+        private readonly IDisplayInfoHelper _displayInfoHelper;
+        public UserPageAccountViewModel(LoggedInUser loggedInUser, IGymPlaylistService gymPlaylistService, IDisplayInfoHelper displayInfoHelper)
         {
             _loggedInUser = loggedInUser;
+            _displayInfoHelper = displayInfoHelper;
 
             _gymPlaylistService = gymPlaylistService;
             NextPageCommand = new Command(() => ChangePage(1)); //Calls method with argument
@@ -90,7 +92,7 @@ namespace GymSwipe.ViewModels
         {
             if (CurrentUser == null)
             {
-                await Shell.Current.DisplayAlertAsync("Not logged in", "You're not logged in! Go log in or register", "Alright...");
+                await _displayInfoHelper.DisplayStandardAlert("You're not logged in! Go log in or register");
                 await Shell.Current.Navigation.PopToRootAsync();
                 return;
             }

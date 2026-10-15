@@ -1,6 +1,8 @@
-﻿namespace GymSwipe.ApplicationLayer.Services.Validators
+﻿using GymSwipe.ApplicationLayer.Interfaces.Validators;
+
+namespace GymSwipe.ApplicationLayer.Services.Validators
 {
-    public class UserInputPropertiesValidator
+    public class UserInputPropertiesValidator : IUserInputPropertiesValidator
     {
         public async Task<(bool Success, string Message)> ValidateUserWeight(double weight)
         {

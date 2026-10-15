@@ -72,8 +72,10 @@ namespace GymSwipe
             builder.Services.AddScoped<ICalorieCountingService, CalorieCountingService>();
             builder.Services.AddScoped<IPlaylistControls, PlaylistControls>();
 
-            //********MAPPING SERVICES************
-            builder.Services.AddScoped<IMapDomainService, MapDomainService>();
+            builder.Services.AddScoped<IUserInputValidatorService, UserInputValidatorService>();
+            builder.Services.AddScoped<IUserInputPropertiesValidator, UserInputPropertiesValidator>();
+        //********MAPPING SERVICES************
+        builder.Services.AddScoped<IMapDomainService, MapDomainService>();
             builder.Services.AddScoped<IMapDTOService, MapDTOService>();
 
             //*******REPOSITORIES*******
@@ -84,14 +86,14 @@ namespace GymSwipe
             builder.Services.AddScoped<IExerciseRecordsRepository, ExerciseRecordsRepository>();
 
             //*******FACADES*******
-            builder.Services.AddScoped<IUserFacade, UserActionsFacade>();
             builder.Services.AddScoped<IExerciseFacade, ExerciseFacade>();
             builder.Services.AddScoped<IAdminAddExerciseFacade, AdminAddExerciseFacade>();
             builder.Services.AddScoped<IAdminAddTrainingAreaFacade, AdminAddTraningAreaFacade>();
             builder.Services.AddScoped<ICardSwipeFacade, CardSwipeFacade>();
             builder.Services.AddScoped<IWorkoutFacade, WorkoutFacade>();
             builder.Services.AddScoped<IExerciseRecordsFacade, ExerciseRecordsFacade>();
-            //builder.Services.AddScoped<IPlaylistFacade>();  
+            builder.Services.AddScoped<IUserRegisterFacade, UserRegisterFacade>();
+
 
             //******SINGELTON-SESSION-DATA*******
             builder.Services.AddSingleton<LoggedInUser>();

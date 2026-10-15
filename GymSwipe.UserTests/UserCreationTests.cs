@@ -1,5 +1,6 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
+using GymSwipe.ApplicationLayer.Interfaces.Validators;
 using GymSwipe.ApplicationLayer.Services.Validators;
 using GymSwipe.UserTests.FixtureFolder;
 using Microsoft.AspNetCore.Http;
@@ -16,8 +17,8 @@ namespace GymSwipe.UserTests
 
         private readonly HttpClient _client;
         private readonly ITestOutputHelper _output;
-        private readonly UserInputValidatorService _validatorService;
-        private readonly UserInputPropertiesValidator _propertiesValidator;
+        private readonly IUserInputValidatorService _validatorService;
+        private readonly IUserInputPropertiesValidator _propertiesValidator;
         private readonly IServiceScope _scope;
 
         public UserCreationTests(UserApiFixture fixture, ITestOutputHelper output)
@@ -59,8 +60,6 @@ namespace GymSwipe.UserTests
             //Validate that friendcode has been created
             Assert.True(!string.IsNullOrEmpty(createdUser.FriendCode));
         }
-
-
 
         [InlineData("Peter", "Stormare", true)]
         [InlineData("peter", "stormare", true)]

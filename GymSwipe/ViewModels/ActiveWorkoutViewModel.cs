@@ -68,10 +68,8 @@ namespace GymSwipe.ViewModels
                 OnPropertyChanged(nameof(CurrentRecords));
             }
         }
-
         public ICommand StartPlaylistCommand { get; }
         public ICommand NextExerciseCommand { get; }
-        public ICommand PausePlaylistCommand { get; }
         public ICommand PreviousExerciseCommand { get; }
         private IDisplayInfoHelper _displayInfoHelper;
         public ActiveWorkoutViewModel(IWorkoutFacade workoutFacade, IDisplayInfoHelper displayInfoHelper , LoggedInUser loggedInUser)
@@ -85,6 +83,7 @@ namespace GymSwipe.ViewModels
             PreviousExerciseCommand = new Command(async () => await PreviousExercise());
 
         }
+        //Press start, stopwatch starts, load exercise to card
         public async Task StartPlaylist()
         {
             CurrentExercise = await _workoutFacade.StartWorkout();
@@ -98,6 +97,7 @@ namespace GymSwipe.ViewModels
             {
                 await _workoutFacade.CompleteWorkout();
                 await Task.Yield();
+                //Load next page with Playlist Id
                 await Shell.Current.GoToAsync(nameof(ExerciseEvaulationPage), new Dictionary<string, object> { ["PlaylistId"] = GymPlaylist.Id });
                 return;
             }

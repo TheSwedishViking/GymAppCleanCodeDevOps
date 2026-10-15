@@ -119,6 +119,9 @@ namespace GymSwipe.ApplicationLayer.Facades
             }
         }
 
-       
+        public async Task StopEvaluation()
+        {
+             _session.Clear();
+        }
     }
 }

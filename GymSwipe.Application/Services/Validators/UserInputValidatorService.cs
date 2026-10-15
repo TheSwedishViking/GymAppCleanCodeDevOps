@@ -1,8 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using GymSwipe.ApplicationLayer.Interfaces.Validators;
+using System.Text.RegularExpressions;
 
 namespace GymSwipe.ApplicationLayer.Services.Validators
 {
-    public class UserInputValidatorService
+    public class UserInputValidatorService : IUserInputValidatorService
     {
         public string? UserNameValidator(string? name)
         {
@@ -31,11 +32,10 @@ namespace GymSwipe.ApplicationLayer.Services.Validators
             return Capitalize(lowerName);
         }
 
-        public static string Capitalize(string lowerName)
+        public  string Capitalize(string lowerName)
         {
             return char.ToUpper(lowerName[0]) + lowerName.Substring(1);
         }
-
 
         public (bool IsValid, string? Email) UserEmailIsValid(string? email)
         {

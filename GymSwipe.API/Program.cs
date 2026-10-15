@@ -63,6 +63,8 @@ namespace GymSwipe.API
             builder.Services.AddScoped<IExerciseRecordsService, ExerciseRecordsService>();
             builder.Services.AddScoped<ICalorieCountingService, CalorieCountingService>();
             builder.Services.AddScoped<IPlaylistControls, PlaylistControls>();
+            builder.Services.AddScoped<IUserInputValidatorService, UserInputValidatorService>();
+            builder.Services.AddScoped<IUserInputPropertiesValidator, UserInputPropertiesValidator>();
 
             //********MAPPING SERVICES************
             builder.Services.AddScoped<IMapDomainService, MapDomainService>();

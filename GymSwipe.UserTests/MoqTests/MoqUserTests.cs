@@ -65,7 +65,7 @@ namespace GymSwipe.UserTests.MoqTests
                 }
             };
 
-            var service = new GymPlaylistService(repoGym.Object, mapDTOMock.Object, mapDomainMock.Object, timeMock.Object, dateMock.Object);
+            var service = new GymPlaylistService(repoGym.Object, mapDTOMock.Object, mapDomainMock.Object, dateMock.Object);
 
 
             // Arrange mock

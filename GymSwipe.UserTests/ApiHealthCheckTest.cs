@@ -11,7 +11,7 @@ namespace GymSwipe.UserTests
         {
             _client = factory.GetClient();
         }
-
+        //Returns anything
         [Fact]
         public async Task ApiIsHealthy()
         {
@@ -27,9 +27,6 @@ namespace GymSwipe.UserTests
             Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
             Assert.True(response.Content.Headers.ContentLength > 0);
         }
-
-
-
 
     }
 }

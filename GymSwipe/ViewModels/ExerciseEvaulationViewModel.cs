@@ -55,6 +55,7 @@ namespace GymSwipe.ViewModels
             CurrentRecord = new ExerciseRecordDTO();
             _displayInfoHelper = displayInfoHelper;
         }
+        //Try and regsiter, get error validations as string, show user
         public async Task RegisterRecord(ExerciseRecordDTO record)
         {
             try
@@ -79,6 +80,7 @@ namespace GymSwipe.ViewModels
         }
         public async Task InitalizeAsync()
         {
+            //Make sure page has loaded with an Id
             if(_playListId == null)
             {
                 await _displayInfoHelper.DisplayStandardAlert($"Error: \"Page was loaded with no playlist reference. Returning\"");
@@ -92,6 +94,7 @@ namespace GymSwipe.ViewModels
             }
             await LoadExercises();
         }
+        //Retrieves session playlist
         public async Task LoadExercises()
         {
             Excercises.Clear();
@@ -102,12 +105,15 @@ namespace GymSwipe.ViewModels
         {
              //await _exerciseRecordsFacade.AddRecord(CurrentRecord);
             CurrentExercise = await _exerciseRecordsFacade.GetNextExercise(ex);
+            //No more left, try and save
             if(CurrentExercise == null)
             {
                 try
                 {
+                    //Done
                     await _exerciseRecordsFacade.SaveRecords(await _exerciseRecordsFacade.GetActiveRecords());
                     await Task.Yield();
+                    await _exerciseRecordsFacade.StopEvaluation();
                     await Shell.Current.Navigation.PopToRootAsync();
                     return;
                 }
@@ -125,7 +131,7 @@ namespace GymSwipe.ViewModels
             await ResetRecordBinding();
             CurrentExercise = await _exerciseRecordsFacade.GetPreviousExercise(ex);
         }
-
+        //Still bind towards exercise
         private async Task ResetRecordBinding()
         {
             CurrentRecord = new ExerciseRecordDTO

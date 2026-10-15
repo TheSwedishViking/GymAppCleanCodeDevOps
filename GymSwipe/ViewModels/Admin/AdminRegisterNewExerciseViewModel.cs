@@ -37,6 +37,7 @@ namespace GymSwipe.ViewModels.Admin
             RegisterNewExerciseCommand = new Command(async () => await TryRegisterNewExercise());
             _displayInfoHelper = displayInfoHelper;
         }
+        //Move from a list to another
         public async Task AddAreaToExercise(TargetAreaDTO target)
         {
             Available.Remove(target);
