@@ -32,16 +32,19 @@ namespace GymSwipe.UserTests.Unit
         [Fact]
         public async Task CreateAStandardExerciseWithNormalParamters_ExpectedZeroErrors()
         {
+            var legs = new TargetAreaDTO
+            {
+                Id=25,
+                Name = "Legs"
+            };
+            await _trainingAreaSut.AddTargetArea(legs);
             //A
             var newEx = new ExerciseDTO
             {
                 Name = "Lunge",
                 TargetAreaNames = new List<TargetAreaDTO>
                 {
-                    new TargetAreaDTO
-                    {
-                        Name ="Legs"
-                    }
+                   legs
                 },
                 VideoSourceLink= "https://www.youtube.com/watch?v=gGdGFtwCNBE&list=RDgGdGFtwCNBE&start_radio=1"
             };
@@ -53,19 +56,18 @@ namespace GymSwipe.UserTests.Unit
         [Fact]
         public async Task CreateExercise_AddAndThenGet_ReturnsValid()
         {
+            var core = new TargetAreaDTO
+            {
+                Id = 20,
+                Name = "Core"
+            };
+            await _trainingAreaSut.AddTargetArea(core);
             var ex = new ExerciseDTO
             {
                 Name = "Plank",
                 TargetAreaNames = new List<TargetAreaDTO>
                 {
-                    new TargetAreaDTO
-                    {
-                        Name ="Core"
-                    },
-                    new TargetAreaDTO
-                    {
-                        Name="Shoulders"
-                    }
+                   core,
                 }
             };
 
