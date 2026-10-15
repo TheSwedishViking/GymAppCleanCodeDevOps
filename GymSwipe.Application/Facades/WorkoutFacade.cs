@@ -78,7 +78,6 @@ namespace GymSwipe.ApplicationLayer.Facades
             {
                 return null;
             }
-
             return _currentExercise;
         }
         public async Task<PlaylistExerciseDTO> GetPreviousExercise(PlaylistExerciseDTO current)
@@ -90,15 +89,8 @@ namespace GymSwipe.ApplicationLayer.Facades
             }
             return _currentExercise;
         }
-
-        public async Task PauseWorkout()
-        {
-            stopwatch.Stop();
-        }
-
         public async Task<GymPlaylistDTO> GetPlaylistById(int id)
         {
-
             var playlist = await _playlistService.GetPlaylist(id);
             if (playlist == null)
             {
@@ -110,8 +102,9 @@ namespace GymSwipe.ApplicationLayer.Facades
 
         public async Task CompleteWorkout()
         {
+            //Stop and reset watch
             stopwatch.Stop();
-
+            stopwatch.Reset();
             var elapsedTime = _timeSetter.SetTime(stopwatch);
 
             var calories = _calorieCountingService.CalculateCalories(

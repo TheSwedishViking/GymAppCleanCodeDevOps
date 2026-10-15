@@ -68,7 +68,6 @@ namespace GymSwipe.ViewModels
                 OnPropertyChanged(nameof(CurrentRecords));
             }
         }
-
         public ICommand StartPlaylistCommand { get; }
         public ICommand NextExerciseCommand { get; }
         public ICommand PreviousExerciseCommand { get; }

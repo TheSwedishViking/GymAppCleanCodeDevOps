@@ -48,7 +48,6 @@ namespace GymSwipe.ViewModels
 
         public async Task TryRegisterNewUser()
         {
-
             var first = _validator.UserNameValidator(CurrentUser.Firstname);
             if (first is null)
             {

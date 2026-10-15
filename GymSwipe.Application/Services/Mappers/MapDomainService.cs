@@ -114,7 +114,6 @@ namespace GymSwipe.ApplicationLayer.Services.Mappers
             {
                 Id = exerciseTargetArea.Id,
                 ExerciseCategoryName = exerciseTargetArea.Name,
-                //ImageOfTargetArea = exerciseTargetArea.Name
             };
         }
     }
