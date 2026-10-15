@@ -19,7 +19,6 @@ namespace GymSwipe.API.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] RequestCreateGymUserDTO request)
         {
-
             if (request == null)
             {
                 return BadRequest();

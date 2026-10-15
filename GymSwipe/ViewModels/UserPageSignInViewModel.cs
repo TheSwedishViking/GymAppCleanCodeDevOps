@@ -36,11 +36,17 @@ namespace GymSwipe.ViewModels
 
         private HttpClient _httpClient;
         private readonly IDisplayInfoHelper _displayInfoHelper;
-        public UserPageSignInViewModel(HttpClient httpClient, LoggedInUser loggedInUser, IDisplayInfoHelper displayInfoHelper, IMapDomainService mapDomainService)
+        public UserPageSignInViewModel(HttpClient httpClient, 
+            LoggedInUser loggedInUser,
+            IDisplayInfoHelper displayInfoHelper,
+            IMapDomainService mapDomainService,
+            IUserRegisterFacade userRegisterFacade
+            )
         {
             SignInCommand = new Command(async () => await TryLoginUser());
             _mapDomainService = mapDomainService;
             _displayInfoHelper = displayInfoHelper;
+            _userRegister = userRegisterFacade;
             _httpClient = httpClient;
             _loggedIn = loggedInUser;
         }

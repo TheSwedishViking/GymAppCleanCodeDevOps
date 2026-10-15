@@ -12,24 +12,28 @@ namespace GymSwipe.ApplicationLayer.Services.Mappers
     {
         private IExerciseRepository _exerciseRepository;
         private IGymPlaylistRepository _gymPlaylistRepository;
+        private ITraningAreaRepo _traningAreaRepo;
         public MapDomainService(
             IExerciseRepository exerciseRepository, 
-            IGymPlaylistRepository gymPlaylistRepository
+            IGymPlaylistRepository gymPlaylistRepository,
+            ITraningAreaRepo traningAreaRepo
             )
         {
             _exerciseRepository = exerciseRepository;
             _gymPlaylistRepository = gymPlaylistRepository;
+            _traningAreaRepo = traningAreaRepo;
 
         }
         public async Task<Exercise> MapExerciseDomain(ExerciseDTO exercise)
         {
-            var targetAreas = (await Task.WhenAll(exercise.TargetAreaNames.Select(MapTargetAreaDomain)));
+            var ids = exercise.TargetAreaNames.Select(e => e.Id);
+            var areas = (await Task.WhenAll(ids.Select(_traningAreaRepo.GetAreaById))).ToList();
             return new Exercise
             {
                 Id = exercise.Id,
                 VideoSourceLink = exercise.VideoSourceLink,
                 Name = exercise.Name,
-                TargetAreas = targetAreas
+                TargetAreas = areas
             };
         }
 
@@ -50,8 +54,7 @@ namespace GymSwipe.ApplicationLayer.Services.Mappers
 
         public async Task<GymUser> MapGymUserDomain(GymUserDTO gymUser)
         {
-            return new GymUser
-            {
+           var user = new GymUser { 
                 Id = gymUser.Id,
                 Firstname = gymUser.Firstname,
                 Surname = gymUser.Surname,
@@ -59,10 +62,10 @@ namespace GymSwipe.ApplicationLayer.Services.Mappers
                 Gender = gymUser.Gender,
                 HeightCm = gymUser.HeightCm,
                 WeightKg = gymUser.WeightKg,
-                //FriendCode = gymUser.FriendCode,
-
                 //UserPlaylists = gymUser.pla
             };
+            user.RestoreFriendCode(gymUser.FriendCode);
+            return user;
         }
 
         public async Task<GymPlaylist> MapPlaylistDomain(GymPlaylistDTO gymPlaylist)

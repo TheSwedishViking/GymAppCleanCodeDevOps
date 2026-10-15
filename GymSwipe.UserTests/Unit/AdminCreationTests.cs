@@ -15,15 +15,17 @@ namespace GymSwipe.UserTests.Unit
         private readonly StandardLocalInMemoryFixture _fixture;
         private readonly IServiceScope _scope;
         private readonly IAdminAddExerciseFacade _admingExerciseSut;
-        private readonly IAdminAddTrainingAreaFacade _trainingAreaSut;
+        private readonly IAdminAddTrainingAreaFacade _adminAddTrainingAreaSut;
         private readonly IExerciseService _exerciseServiceSut;
+        private readonly ITraningAreaService _traningAreaSut;
         public AdminCreationTests(StandardLocalInMemoryFixture fixture)
         {
             _fixture = fixture;
             _scope = _fixture.ServiceProvider.CreateScope();
             _admingExerciseSut = _scope.ServiceProvider.GetRequiredService<IAdminAddExerciseFacade>();
-            _trainingAreaSut = _scope.ServiceProvider.GetRequiredService<IAdminAddTrainingAreaFacade>();
+            _adminAddTrainingAreaSut = _scope.ServiceProvider.GetRequiredService<IAdminAddTrainingAreaFacade>();
 
+            _traningAreaSut = _scope.ServiceProvider.GetRequiredService<ITraningAreaService>();
             _exerciseServiceSut = _scope.ServiceProvider.GetRequiredService<IExerciseService>();
         }
 
@@ -32,16 +34,14 @@ namespace GymSwipe.UserTests.Unit
         [Fact]
         public async Task CreateAStandardExerciseWithNormalParamters_ExpectedZeroErrors()
         {
+            var chest = await _traningAreaSut.GetTargetAreaByName("Chest");
             //A
             var newEx = new ExerciseDTO
             {
-                Name = "Lunge",
+                Name = "Chest Flys",
                 TargetAreaNames = new List<TargetAreaDTO>
                 {
-                    new TargetAreaDTO
-                    {
-                        Name ="Legs"
-                    }
+                   chest
                 },
                 VideoSourceLink= "https://www.youtube.com/watch?v=gGdGFtwCNBE&list=RDgGdGFtwCNBE&start_radio=1"
             };
@@ -53,28 +53,20 @@ namespace GymSwipe.UserTests.Unit
         [Fact]
         public async Task CreateExercise_AddAndThenGet_ReturnsValid()
         {
+            var chest = await _traningAreaSut.GetTargetAreaByName("Chest");
             var ex = new ExerciseDTO
             {
-                Name = "Plank",
+                Name = "Kneel",
                 TargetAreaNames = new List<TargetAreaDTO>
                 {
-                    new TargetAreaDTO
-                    {
-                        Name ="Core"
-                    },
-                    new TargetAreaDTO
-                    {
-                        Name="Shoulders"
-                    }
+                   chest,
                 }
             };
 
             var validNoErrorsReturned = await _admingExerciseSut.AddExercise(ex);
             Assert.Empty(validNoErrorsReturned);
 
-
-            var find = await _exerciseServiceSut.GetExerciseByName("plank");
-
+            var find = await _exerciseServiceSut.GetExerciseByName("Kneel");
             Assert.NotNull(find);
         }
         [Fact]
@@ -106,7 +98,7 @@ namespace GymSwipe.UserTests.Unit
                 Name = "Quadriceps"
             };
 
-            var erros = await _trainingAreaSut.AddTargetArea(targetAreaDTO);
+            var erros = await _adminAddTrainingAreaSut.AddTargetArea(targetAreaDTO);
 
             Assert.Empty(erros);
         }
@@ -118,7 +110,7 @@ namespace GymSwipe.UserTests.Unit
                 Name = ""
             };
 
-            var erros = await _trainingAreaSut.AddTargetArea(targetAreaDTO);
+            var erros = await _adminAddTrainingAreaSut.AddTargetArea(targetAreaDTO);
 
             Assert.NotEmpty(erros);
         }
@@ -130,7 +122,7 @@ namespace GymSwipe.UserTests.Unit
                 Name = "Chest"
             };
 
-            var erros = await _trainingAreaSut.AddTargetArea(targetAreaDTO);
+            var erros = await _adminAddTrainingAreaSut.AddTargetArea(targetAreaDTO);
 
             Assert.NotEmpty(erros);
         }

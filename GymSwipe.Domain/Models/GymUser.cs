@@ -44,7 +44,6 @@ namespace GymSwipe.Domain.Models
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-
         public void SetFriendCode()
         {
             string friendCode = "";
@@ -66,5 +65,9 @@ namespace GymSwipe.Domain.Models
             FriendCode = friendCode;
         }
 
+        public void RestoreFriendCode(string friendCode)
+        {
+            FriendCode = friendCode;
+        }
     }
 }
