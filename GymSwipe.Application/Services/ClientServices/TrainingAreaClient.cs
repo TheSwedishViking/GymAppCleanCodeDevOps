@@ -18,7 +18,10 @@ namespace GymSwipe.ApplicationLayer.Services.ClientServices
         public async Task<TargetAreaDTO> GetTargetAreaDTOById(int id)
         {
             var respone = await _http.GetFromJsonAsync<TargetAreaDTO>($"api/TrainingArea/get-area-by-id/{id}");
-
+            if(respone == null)
+            {
+                throw new Exception("Response empty or null!");
+            }
             return respone;
         }
 

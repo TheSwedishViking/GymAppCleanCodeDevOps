@@ -32,6 +32,12 @@ namespace GymSwipe.UserTests
             Assert.NotNull(area);
         }
 
+        [Fact]
+        public async Task Request_TargetArea_CanNotFind_ThrowsException()
+        {
+            var area = Assert.ThrowsAsync<KeyNotFoundException>(() => _fixture.TrainingClient.GetTargetAreaDTOById(214));
+        }
+
         [Theory]
         [InlineData(0, HttpStatusCode.BadRequest)]
         [InlineData(251, HttpStatusCode.NotFound)]
