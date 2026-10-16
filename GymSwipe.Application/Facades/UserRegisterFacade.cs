@@ -1,15 +1,8 @@
 ﻿using GymSwipe.ApplicationLayer.DTOs;
 using GymSwipe.ApplicationLayer.DTOs.RequestDTOs;
-using GymSwipe.ApplicationLayer.Interfaces.Display;
 using GymSwipe.ApplicationLayer.Interfaces.Facades;
 using GymSwipe.ApplicationLayer.Interfaces.Validators;
-using GymSwipe.ApplicationLayer.Services.Validators;
-using GymSwipe.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Json;
-using System.Text;
 
 namespace GymSwipe.ApplicationLayer.Facades
 {
@@ -28,7 +21,7 @@ namespace GymSwipe.ApplicationLayer.Facades
         public async Task<List<string>> CheckIfEmailIsUnique(string email)
         {
             List<string> errors = new List<string>();
-            var correct =  _inputVali.UserEmailIsValid(email);
+            var correct = _inputVali.UserEmailIsValid(email);
             if (correct.IsValid == false)
             {
                 errors.Add("Email not valid");
@@ -47,7 +40,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             response.EnsureSuccessStatusCode();
             //Get valid user from API if we could save
             var user = await response.Content.ReadFromJsonAsync<GymUserDTO>();
-            if(user == null)
+            if (user == null)
             {
                 return null;
             }
@@ -56,7 +49,7 @@ namespace GymSwipe.ApplicationLayer.Facades
 
         public async Task<string> GetCorrectFormatedEmail(string email)
         {
-            var correctFormat =  _inputVali.UserEmailIsValid(email);
+            var correctFormat = _inputVali.UserEmailIsValid(email);
             return correctFormat.Email;
         }
 
@@ -66,18 +59,27 @@ namespace GymSwipe.ApplicationLayer.Facades
             return found;
         }
 
-        public async Task<List<string>> ValidateEmail(string email)
+        public async Task<List<string>> ValidateEmail(string email) // Could be broken down more with services
         {
             List<string> errors = new List<string>();
+
+            var correctFormat = _inputVali.UserEmailIsValid(email);
+            if (correctFormat.IsValid == false)
+            {
+                errors.Add("Bad email format");
+                return errors;
+            }
+
             bool existingEmail = await _httpClient.GetFromJsonAsync<bool>("api/User/Unique-Email/" + email);
             if (existingEmail)
             {
                 errors.Add($"An account with {email} not found! Register a new one");
+                return errors;
             }
             var found = await _httpClient.GetFromJsonAsync<GymUserDTO>("api/User/Get-UserDto-By-Email/" + email);
             if (found == null)
             {
-              errors.Add("User not found");
+                errors.Add("User not found");
             }
             return errors;
         }
@@ -88,7 +90,7 @@ namespace GymSwipe.ApplicationLayer.Facades
             var first = _inputVali.UserNameValidator(createGymUserDTO.Firstname);
             if (first is null)
             {
-                errors.Add( "Invalid first name. Use 2-20 letters.");
+                errors.Add("Invalid first name. Use 2-20 letters.");
             }
             var last = _inputVali.UserNameValidator(createGymUserDTO.Surname);
             if (last is null)
@@ -103,7 +105,7 @@ namespace GymSwipe.ApplicationLayer.Facades
 
             if (correctEmail.IsValid == false)
             {
-               errors.Add("Email not valid");
+                errors.Add("Email not valid");
             }
             var validHeight = await _inputProp.ValidateUserHeight(createGymUserDTO.HeightCm);
             if (validHeight.Success == false)

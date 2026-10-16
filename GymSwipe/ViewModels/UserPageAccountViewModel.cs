@@ -110,7 +110,7 @@ namespace GymSwipe.ViewModels
                 _currentPage = 0;
 
             if (_currentPage * PageSize >= _allPlaylists.Count)
-                _currentPage = Math.Max(0, (_allPlaylists.Count - 1) / PageSize);
+                _currentPage = Math.Max(0, (_allPlaylists.Count - 1) / PageSize); // last avaliable page shown
 
             ShowCurrentPage();
         }

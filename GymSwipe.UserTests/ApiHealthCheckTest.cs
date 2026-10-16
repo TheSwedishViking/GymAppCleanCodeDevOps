@@ -26,6 +26,7 @@ namespace GymSwipe.UserTests
             response.EnsureSuccessStatusCode();
             Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
             Assert.True(response.Content.Headers.ContentLength > 0);
+
         }
 
     }

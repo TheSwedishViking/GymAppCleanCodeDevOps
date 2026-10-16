@@ -29,6 +29,11 @@ namespace GymSwipe.UserTests
             _validatorService = _scope.ServiceProvider.GetRequiredService<UserInputValidatorService>();
             _propertiesValidator = _scope.ServiceProvider.GetRequiredService<UserInputPropertiesValidator>();
         }
+
+
+
+
+
         [Fact]
         public async Task CreateUser()
         {
@@ -60,6 +65,14 @@ namespace GymSwipe.UserTests
             //Validate that friendcode has been created
             Assert.True(!string.IsNullOrEmpty(createdUser.FriendCode));
         }
+
+
+
+
+
+
+
+
 
         [InlineData("Peter", "Stormare", true)]
         [InlineData("peter", "stormare", true)]
