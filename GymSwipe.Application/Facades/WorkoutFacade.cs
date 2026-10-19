@@ -110,8 +110,8 @@ namespace GymSwipe.ApplicationLayer.Facades
         {
             //Stop and reset watch
             stopwatch.Stop();
-            stopwatch.Reset();
             var elapsedTime = _timeSetter.SetTime(stopwatch);
+            stopwatch.Reset();
 
             var calories = _calorieCountingService.CalculateCalories(
                 _playlist.LatestElapsedTime
