@@ -9,30 +9,33 @@ on:
       - main
 
 jobs:
- env:
-    WEBHOOK: ${{secrets.DISCORD_WEBHOOK}}
-    SBOMFILE:  ${{ steps.gensbom.outputs.filename}}
-    generateSBOM:
+  GenerateSBOM:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout le repo
-      uses: actions/checkout@v4
-    - name: Generate le SBOM
-      uses: advanced-security/generate-sbom-action@v1
-      id: gensbom
-    - name: Upload le artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: sbom
-        path: ${{env.}}
-    - name: Send le SBOM over to Discord via webhook
-      env:
-      run: |
-          echo "Sending SBOM over to discord! (perchance)!
+        - name: Checkout le repo 👀 
+          uses: actions/checkout@v4
           
-      
-      
-      
+        - name: Generate le SBOM 📃
+          uses: advanced-security/generate-sbom-action@v1
+          id: gensbom
+          
+        - name: Upload le artifact ⬆️
+          uses: actions/upload-artifact@v4
+          with:
+            name: sbom
+            path: ${{ steps.gensbom.outputs.fileName }}
+            
+        - name: Send le SBOM over to Discord via webhook 🪻
+          env:
+            WEBHOOK: ${{secrets.DISCORD_WEBHOOK}}
+            SBOM_FILE: ${{ steps.gensbom.outputs.fileName }}
+            REPO: ${{github.repository}}
+          run: |
+              echo "Sending SBOM over to discord! (perchance)!"
+              curl -sS -f \
+              -F "payload_json={"content": "SBOM for $REPO🍋🍋🍋 (run ${{ github.run_number }})"}" \
+              -F "file=@${SBOM_FILE}" \$WEBHOOK"
+              
   BuildJob:
     runs-on: ubuntu-latest
     steps:
