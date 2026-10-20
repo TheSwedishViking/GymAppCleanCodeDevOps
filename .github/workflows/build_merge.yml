@@ -9,16 +9,30 @@ on:
       - main
 
 jobs:
-  generateSBOM:
+ env:
+    WEBHOOK: ${{secrets.DISCORD_WEBHOOK}}
+    SBOMFILE:  ${{ steps.gensbom.outputs.filename}}
+    generateSBOM:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: advanced-security/generate-sbom-action@v1
+    - name: Checkout le repo
+      uses: actions/checkout@v4
+    - name: Generate le SBOM
+      uses: advanced-security/generate-sbom-action@v1
       id: gensbom
-    - uses: actions/upload-artifact@v4
+    - name: Upload le artifact
+      uses: actions/upload-artifact@v4
       with:
         name: sbom
-        path: ${{ steps.gensbom.outputs.filename}}
+        path: ${{env.}}
+    - name: Send le SBOM over to Discord via webhook
+      env:
+      run: |
+          echo "Sending SBOM over to discord! (perchance)!
+          
+      
+      
+      
   BuildJob:
     runs-on: ubuntu-latest
     steps:
