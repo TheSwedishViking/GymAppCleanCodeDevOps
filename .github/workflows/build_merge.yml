@@ -9,11 +9,11 @@ on:
       - main
 
 jobs:
-  GenerateSBOM:
+  generateSBOM:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: advanced-security/genereate-sbom-action@v1
+    - uses: advanced-security/generate-sbom-action@v1
       id: gensbom
     - uses: actions/upload-artifact@v4
       with:
