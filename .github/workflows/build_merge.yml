@@ -31,7 +31,7 @@ jobs:
             SBOM_FILE: ${{ steps.gensbom.outputs.fileName }}
             REPO: ${{github.repository}}
           run: |
-              echo "Sending SBOM over to discord! (perchance)!"
+              echo "Sending SBOM over to discord!"
               curl -sS -f \
               -F "payload_json={"content": "SBOM for $REPO🍋🍋🍋 (run ${{ github.run_number }})"}" \
               -F "file=@${SBOM_FILE}" \$WEBHOOK"
