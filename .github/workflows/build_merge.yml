@@ -33,8 +33,9 @@ jobs:
           run: |
               echo "Sending SBOM over to discord!"
               curl -sS -f \
-              -F "payload_json={"content": "SBOM for $REPO🍋🍋🍋 (run ${{ github.run_number }})"}" \
-              -F "file=@${SBOM_FILE}" \$WEBHOOK"
+              -F "payload_json={\"content\": \"SBOM for ${{env.REPO}}🍋🍋🍋 (run ${{ github.run_number }})\"}" \
+              -F "file=@${{env.SBOM_FILE}}" \
+              ${{env.WEBHOOK}}"
               
   BuildJob:
     runs-on: ubuntu-latest
