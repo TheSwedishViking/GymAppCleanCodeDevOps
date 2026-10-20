@@ -1,4 +1,7 @@
 name: 'Build and validate before merge ‼️🫠🤸‍♀️'
+env:
+    net_v: '10.0.x'
+    slnx_path: 'GymSwipe/GymSwipe.slnx'
 on:
   workflow_dispatch: 
   pull_request: 
@@ -18,9 +21,6 @@ jobs:
         path: ${{ steps.gensbom.outputs.filename}}
   BuildJob:
     runs-on: ubuntu-latest
-    env:
-      net_v: '10.0.x'
-      slnx_path: 'GymSwipe/GymSwipe.slnx'
     steps:
       - name: Checkout the repo 👀  
         uses: actions/checkout@v4
