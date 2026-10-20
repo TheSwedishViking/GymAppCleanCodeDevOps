@@ -35,7 +35,7 @@ jobs:
               curl -sS -f \
               -F "payload_json={\"content\": \"SBOM for ${REPO}🍋🍋🍋 (run ${{ github.run_number }})\"}" \
               -F "file=@${SBOM_FILE}" \
-              ${{env.WEBHOOK}}"
+              "$WEBHOOK"
               
   BuildJob:
     runs-on: ubuntu-latest
