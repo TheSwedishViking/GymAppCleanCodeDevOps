@@ -2,6 +2,7 @@ name: 'Build and validate before merge ‼️🫠🤸‍♀️'
 env:
     net_v: '10.0.x'
     slnx_path: 'GymSwipe/GymSwipe.slnx'
+    result: ""
 on:
   workflow_dispatch: 
   pull_request: 
@@ -65,7 +66,8 @@ jobs:
         id: tests
         run: |
           echo "Running tests"
-          dotnet test ${{env.slnx_path}} --no-build --configuration Release
+          result=$(dotnet test ${{ env.slnx_path }} --no-build --configuration Release 2>&1)
+
           
   DiscordNotification:
     runs-on: ubuntu-latest
@@ -79,6 +81,6 @@ jobs:
         with:
             webhook_url: ${{secrets.DISCORD_WEBHOOK}}
             title: TEST!
-            message: "test"
+            message: ${{env.result}}
             username: Workflow Agent by Oscar
            
