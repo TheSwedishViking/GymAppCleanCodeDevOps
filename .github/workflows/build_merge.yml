@@ -16,7 +16,7 @@ jobs:
           uses: actions/checkout@v4
           
         - name: Generate le SBOM 📃
-          uses: advanced-security/generate-sbom-action@v1
+          uses: advanced-security/generate-sbom-action@<4de58072a11a6173c427904f075208ae4a88491e>
           id: gensbom
           
         - name: Upload le artifact ⬆️
