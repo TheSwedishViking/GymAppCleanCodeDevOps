@@ -36,9 +36,11 @@ jobs:
               -F "payload_json={\"content\": \"SBOM for ${REPO}🍋🍋🍋 (run ${{ github.run_number }})\"}" \
               -F "file=@${SBOM_FILE}" \
               "$WEBHOOK"
-              
   BuildJob:
     runs-on: ubuntu-latest
+    outputs:
+      buildResult: ${{steps.build.outcome}}
+      testResult: ${{steps.tests.outcome}}
     steps:
       - name: Checkout the repo 👀  
         uses: actions/checkout@v4
@@ -55,11 +57,22 @@ jobs:
         run: dotnet restore ${{env.slnx_path}}
           
       - name: Build 🛠️ 
+        id: build
         run: |
           echo "Building!"
           dotnet build ${{env.slnx_path}} --no-restore --configuration Release
       - name: Run Tests 📈📉
+        id: tests
         run: |
           echo "Running tests"
           dotnet test ${{env.slnx_path}} --no-build --configuration Release
-      
+          
+  DiscordNotification:
+    runs-on: ubuntu-latest
+    needs: BuildJob
+    steps:
+        - name: Notify on discord 🛎️
+          env:
+            BUILDRESULT: ${{needs.BuildJob.outputs.buildResult}} 
+            TESTRESULT: ${{needs.BuildJOb.outputs.testResult}}
+           
