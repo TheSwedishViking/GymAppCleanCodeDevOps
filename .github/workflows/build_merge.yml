@@ -1,14 +1,47 @@
 name: 'Build and validate before merge ‼️🫠🤸‍♀️'
+env:
+    net_v: '10.0.x'
+    slnx_path: 'GymSwipe/GymSwipe.slnx'
+    result: ""
 on:
+  workflow_dispatch: 
   pull_request: 
     branches:
       - main
+
 jobs:
+  GenerateSBOM:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout le repo 👀 
+          uses: actions/checkout@v4
+          
+        - name: Generate le SBOM 📃
+          uses: advanced-security/generate-sbom-action@4de58072a11a6173c427904f075208ae4a88491e
+          id: gensbom
+          
+        - name: Upload le artifact ⬆️
+          uses: actions/upload-artifact@v4
+          with:
+            name: sbom
+            path: ${{ steps.gensbom.outputs.fileName }}
+            
+        - name: Send le SBOM over to Discord via webhook 🪻
+          env:
+            WEBHOOK: ${{secrets.DISCORD_WEBHOOK}}
+            SBOM_FILE: ${{ steps.gensbom.outputs.fileName }}
+            REPO: ${{github.repository}}
+          run: |
+              echo "Sending SBOM over to discord!"
+              curl -sS -f \
+              -F "payload_json={\"content\": \"SBOM for ${REPO}🍋🍋🍋 (run ${{ github.run_number }})\"}" \
+              -F "file=@${SBOM_FILE}" \
+              "$WEBHOOK"
   BuildJob:
     runs-on: ubuntu-latest
-    env:
-      net_v: '10.0.x'
-      slnx_path: 'GymSwipe/GymSwipe.slnx'
+    outputs:
+      buildResult: ${{steps.build.outcome}}
+      testResult: ${{steps.tests.outcome}}
     steps:
       - name: Checkout the repo 👀  
         uses: actions/checkout@v4
@@ -25,10 +58,29 @@ jobs:
         run: dotnet restore ${{env.slnx_path}}
           
       - name: Build 🛠️ 
+        id: build
         run: |
           echo "Building!"
           dotnet build ${{env.slnx_path}} --no-restore --configuration Release
       - name: Run Tests 📈📉
+        id: tests
         run: |
           echo "Running tests"
-          dotnet test ${{env.slnx_path}} --no-build --configuration Release
+          dotnet test ${{ env.slnx_path }} --no-build --configuration Release
+          result=$(cat test-output.txt)
+          
+  DiscordNotification:
+    runs-on: ubuntu-latest
+    needs: BuildJob
+    steps:
+      - name: Notify on discord 🛎️
+        env:
+          b_result: ${{needs.BuildJob.outputs.buildResult}}
+          t_result: ${{needs.BuildJob.outputs.testResult}}
+        uses: stegzilla/discord-notify@v2
+        with:
+            webhook_url: ${{secrets.DISCORD_WEBHOOK}}
+            title: TEST!
+            message: ${{env.result}}
+            username: Workflow Agent by Oscar
+           
