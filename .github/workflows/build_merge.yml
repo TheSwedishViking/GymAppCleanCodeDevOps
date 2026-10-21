@@ -76,7 +76,7 @@ jobs:
         env:
           b_result: ${{needs.BuildJob.outputs.buildResult}}
           t_result: ${{needs.BuildJob.outputs.testResult}}
-        uses: stegzilla/discord-notify@v2
+        uses: stegzilla/discord-notify@23eb4dd9a5eab4ab63c65cbe554bdf837f9fe773
         with:
             webhook_url: ${{secrets.DISCORD_WEBHOOK}}
             title: Build & Tests result!
