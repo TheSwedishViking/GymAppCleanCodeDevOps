@@ -41,6 +41,7 @@ jobs:
     outputs:
       buildResult: ${{steps.build.outcome}}
       testResult: ${{steps.tests.outcome}}
+      testText: ${{steps.summary.outputs.ResultString}}
     steps:
       - name: Checkout the repo 👀  
         uses: actions/checkout@v4
@@ -63,9 +64,17 @@ jobs:
           dotnet build ${{env.slnx_path}} --no-restore --configuration Release
       - name: Run Tests 📈📉
         id: tests
+        shell: bash
         run: |
           echo "Running tests"
-          dotnet test ${{env.slnx_path}} --no-build --configuration Release
+          dotnet test ${{env.slnx_path}} --no-build --configuration Release | tee test_output.txt 
+          
+      - name: Count passed/failed/skipped 🧮
+        id: summary 
+        if: always() #Avoids being skipped when test fails
+        run: |
+          RESULT=$(grep -E "(Passed|Failed)!" test_output.txt)
+          echo "ResultString=$RESULT" >> "$GITHUB_OUTPUT"
           
   DiscordNotification:
     runs-on: ubuntu-latest
@@ -76,6 +85,7 @@ jobs:
         env:
           b_result: ${{needs.BuildJob.outputs.buildResult}}
           t_result: ${{needs.BuildJob.outputs.testResult}}
+          t_text: ${{needs.BuildJob.outputs.testText}}
         uses: stegzilla/discord-notify@23eb4dd9a5eab4ab63c65cbe554bdf837f9fe773
         with:
             webhook_url: ${{secrets.DISCORD_WEBHOOK}}
@@ -85,5 +95,5 @@ jobs:
               Triggered by: ${{github.actor}}
               Build result: ${{env.b_result}}
               Tests result: ${{env.t_result}}
+              Test counts: ${{env.t_text}}
             username: Workflow Agent by Oscar
-           
