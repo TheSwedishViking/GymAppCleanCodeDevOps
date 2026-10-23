@@ -1,14 +1,47 @@
 name: 'Build and validate before merge ‼️🫠🤸‍♀️'
+env:
+    net_v: '10.0.x'
+    slnx_path: 'GymSwipe/GymSwipe.slnx'
 on:
+  workflow_dispatch: 
   pull_request: 
     branches:
       - main
+
 jobs:
+  GenerateSBOM:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout le repo 👀 
+          uses: actions/checkout@v4
+          
+        - name: Generate le SBOM 📃
+          uses: advanced-security/generate-sbom-action@4de58072a11a6173c427904f075208ae4a88491e
+          id: gensbom
+          
+        - name: Upload le artifact ⬆️
+          uses: actions/upload-artifact@v4
+          with:
+            name: sbom
+            path: ${{ steps.gensbom.outputs.fileName }}
+            
+        - name: Send le SBOM over to Discord via webhook 🪻
+          env:
+            WEBHOOK: ${{secrets.DISCORD_WEBHOOK}}
+            SBOM_FILE: ${{ steps.gensbom.outputs.fileName }}
+            REPO: ${{github.repository}}
+          run: |
+              echo "Sending SBOM over to discord!"
+              curl -sS -f \
+              -F "payload_json={\"content\": \"SBOM for ${REPO}🍋🍋🍋 (run ${{ github.run_number }})\"}" \
+              -F "file=@${SBOM_FILE}" \
+              "$WEBHOOK"
   BuildJob:
     runs-on: ubuntu-latest
-    env:
-      net_v: '10.0.x'
-      slnx_path: 'GymSwipe/GymSwipe.slnx'
+    outputs:
+      buildResult: ${{steps.build.outcome}}
+      testResult: ${{steps.tests.outcome}}
+      testText: ${{steps.summary.outputs.ResultString}}
     steps:
       - name: Checkout the repo 👀  
         uses: actions/checkout@v4
@@ -25,10 +58,42 @@ jobs:
         run: dotnet restore ${{env.slnx_path}}
           
       - name: Build 🛠️ 
+        id: build
         run: |
           echo "Building!"
           dotnet build ${{env.slnx_path}} --no-restore --configuration Release
       - name: Run Tests 📈📉
+        id: tests
+        shell: bash
         run: |
           echo "Running tests"
-          dotnet test ${{env.slnx_path}} --no-build --configuration Release
+          dotnet test ${{env.slnx_path}} --no-build --configuration Release | tee test_output.txt 
+          
+      - name: Count passed/failed/skipped 🧮
+        id: summary 
+        if: always() #Avoids being skipped when test fails
+        run: |
+          RESULT=$(grep -E "(Passed|Failed)!" test_output.txt)
+          echo "ResultString=$RESULT" >> "$GITHUB_OUTPUT"   
+    #Github Output saves the step makes the variable readable in the next step
+  DiscordNotification:
+    runs-on: ubuntu-latest
+    needs: BuildJob
+    if: always()
+    steps:
+      - name: Notify on discord 🛎️
+        env:
+          b_result: ${{needs.BuildJob.outputs.buildResult}}
+          t_result: ${{needs.BuildJob.outputs.testResult}}
+          t_text: ${{needs.BuildJob.outputs.testText}}
+        uses: stegzilla/discord-notify@23eb4dd9a5eab4ab63c65cbe554bdf837f9fe773
+        with:
+            webhook_url: ${{secrets.DISCORD_WEBHOOK}}
+            title: Build & Tests result!
+            message: |
+              Run nr: ${{github.run_number}}
+              Triggered by: ${{github.actor}}
+              Build result: ${{env.b_result}}
+              Tests result: ${{env.t_result}}
+              Test counts: ${{env.t_text}}
+            username: Workflow Agent by Oscar
